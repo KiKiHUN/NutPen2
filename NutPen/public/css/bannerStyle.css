@@ -1,0 +1,43 @@
+#BannerContent{
+    display: grid;
+    border-width: 3px;
+    border-style: inset;
+    margin-bottom: 15px;
+    width: max-content;
+    /* align-self: center; */
+    padding: 10px;
+    background: rgb(19 128 43 / 37%);
+    border-color: #f5a623;
+}
+.Banner
+{
+    display: flex !important;
+    width: auto !important;
+    justify-content: center !important;
+}
+.BannerHead
+{
+    font-size: larger;
+    text-align: center;
+    color: darkorange;
+}
+.BannerDesc
+{
+    font-size: medium;
+    text-align: center;
+    color: #fff2e2;
+}
+.BannerIMG
+{
+    width: 300px;
+    height: fit-content;
+    align-self: normal;
+    display: flex;
+    margin: auto;
+    margin-bottom: 9px;
+    border-radius: 5%;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #f5a623;
+}
+

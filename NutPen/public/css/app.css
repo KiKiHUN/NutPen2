@@ -1,0 +1,17 @@
+
+.igazolasSzam
+{
+  margin-top: -25px !important;
+  color: rgb(243, 60, 35);
+}
+.hianyzik
+{
+ color: rgb(245, 104, 69);
+}
+.igazolva
+{
+ color: rgb(73, 169, 73);
+}
+input[type=number]::-webkit-inner-spin-button {
+    opacity: 1
+}
