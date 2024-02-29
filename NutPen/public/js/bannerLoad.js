@@ -11,10 +11,4 @@ $( document ).ready(function() {
        
       });
 
-      if (!localStorage.getItem("id")) {
-        localStorage.setItem("id",$("#_clientid").val());
-      }else
-      {
-        $("#_clientid").val(localStorage.getItem("id"));
-      }
 });

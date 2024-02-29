@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('banned_i_p_s', function (Blueprint $table) {
             $table->id('ID');
-            $table->string('clientID');
+            $table->string('clientID')->nullable();
+            $table->boolean('UUIDBanned')->nullable();
+            $table->string('clientIP')->nullable();
+            $table->boolean('IPBanned')->nullable();
             $table->timestamps();
         });
     }

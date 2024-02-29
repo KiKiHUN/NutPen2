@@ -34,31 +34,11 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mx-auto h-100">
-                        <li class="nav-item">
-                            <a class="nav-link " href="/vezerlopult">
-                                <i class="fa-solid fa-house-chimney"></i>
-                                Főoldal
-                                <span class="sr-only">(current)</span>
-                            </a>
-                        </li>
+                    
 
                         
                        <?php echo $__env->yieldContent('navbar'); ?>
-
-
-                       <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-cog"></i>
-                            <span>
-                                Beállítások <i class="fas fa-angle-down"></i>
-                            </span>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="/fiok">Fiók</a>
-                            <a class="dropdown-item" href="/logout">Kilépés</a>
-                        </div>
-                    </li>
+                               
                     </ul>
 
                 </div>
@@ -66,12 +46,24 @@
 
         </nav>
         <div class="container">
+            <?php if(session()->has('successmessage')): ?>
+                <div class="alert alert-success">
+                    <?php echo e(session()->get('successmessage')); ?>
+
+                </div>
+            <?php endif; ?>
+            <?php if(session()->has('failedmessage')): ?>
+                <div class="alert alert-warning">
+                    <?php echo e(session()->get('failedmessage')); ?>
+
+                </div>
+            <?php endif; ?>
             <?php echo $__env->yieldContent('content'); ?>
         </div>
         <footer class="tm-footer row tm-mt-small">
             <div class="col-12 font-weight-light">
                 <p class="text-center text-white mb-0 px-4 small">
-                    Copyright &copy; <b>2023</b> Minden Incidens fenntartva.
+                    Copyright &copy; <b>2024</b> Minden Incidens fenntartva.
 
                     Készítette: KiKi1HUN
                 </p>

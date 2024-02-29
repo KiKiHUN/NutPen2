@@ -118,6 +118,7 @@ button:focus {
 .tm-block-overflow {
   overflow: hidden;
 }
+
 .tm-block-title {
   font-size: 1.1rem;
   font-weight: 700;
@@ -131,7 +132,7 @@ button:focus {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  font-size: 90%;
+  font-size: 70%;
 }
 .nav-link > i {
   margin-bottom: 10px;
@@ -163,6 +164,10 @@ button:focus {
 .MessageModal:hover {
   cursor: pointer;
   background:#697077;
+}
+.messagediv
+{
+  max-height: 30em;
 }
 .modal-bg
 {
@@ -828,4 +833,40 @@ input[type="checkbox"]:focus {
   #lineChart {
     max-height: 350px;
   }
+}
+
+.NewUser
+{
+  width: 90%;
+  padding: 10px;
+}
+.inputcolumn
+{
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  margin-bottom: 20px;
+  border-radius: 1em;
+  font-weight: bold;
+  color: #f9f9f9;
+}
+.inputcolumn .textfield{
+  background-color: #a9a9a9;
+}
+.formCenterContent
+{
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 15px;
+  background-color: #3e617d;
+}
+.margined-send-btn
+{
+  margin-top: 2em;
+  height: 4em;
+  border-radius: 0.5em;
 }

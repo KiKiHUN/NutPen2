@@ -1,78 +1,14 @@
 
 
 <?php $__env->startSection('navbar'); ?>
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>" />
 
-    <li class="nav-item dropdown ">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            <i class="fa-solid fa-clock"></i>
-            <span>
-                Óra <i class="fas fa-angle-down"></i>
-            </span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/ora">Listázás</a>
-            <a class="dropdown-item" href="/ora/uj">Új</a>
-        </div>
-    </li>
-    <li class="nav-item dropdown ">
-        <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            <i class="fa-solid fa-pen-ruler"></i>
-            <span>
-                Tantárgy <i class="fas fa-angle-down"></i>
-            </span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/targy">Listázás</a>
-            <a class="dropdown-item" href="/targy/uj">Új</a>
-        </div>
-    </li>
-    <li class="nav-item dropdown ">
-        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            <i class="fa-solid fa-clock"></i>
-            <span>
-                Felhasználó <i class="fas fa-angle-down"></i>
-            </span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/felhasznalok">Listázás</a>
-            <a class="dropdown-item" href="/ujfelhasznalo">Új</a>
-        </div>
-    </li>
-    <li class="nav-item dropdown ">
-        <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            <i class="fa-solid fa-link"></i>
-            <span>
-                Diák-Szülő Kapcsolat <i class="fas fa-angle-down"></i>
-            </span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/kapcsolat/szulo ">Listázás</a>
-            <a class="dropdown-item" href="/kapcsolat/szulo/uj">Új</a>
-        </div>
-    </li>
-    <li class="nav-item dropdown ">
-        <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            <i class="fa-solid fa-link"></i>
-            <span>
-                Diák-Tanóra Kapcsolat <i class="fas fa-angle-down"></i>
-            </span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/kapcsolat/ora ">Listázás</a>
-            <a class="dropdown-item" href="/kapcsolat/ora/uj">Új</a>
-        </div>
-    </li>
-
-
-   
+    <?php echo $__env->make('admin.Navbar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
+    
 
     <!-- row -->
     <div class="row tm-content-row">
@@ -88,7 +24,7 @@
 
         <div class="col-12 tm-block-col">
             <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
-                <?php if($status!=1): ?>
+                <?php if($status<=1): ?>
                     <button type="submit" class="filterbtn" value="a">Admin</button>
                     <button type="submit" class="filterbtn" value="t">Tanár</button>
                     <button type="submit" class="filterbtn" value="s">Diák</button>
@@ -105,6 +41,7 @@
                                 <th class="th-sm">Vnév</th>
                                 <th class="th-sm">Knév</th>
                                 <th class="th-sm">Típus</th>
+                                <th class="th-sm">Módosítás</th>
                             </tr>
                         </thead>
                         <tbody id="myTable">
@@ -114,30 +51,123 @@
                                     <td><?php echo e($item->fname); ?></td>
                                     <td><?php echo e($item->lname); ?></td>
                                     <td><?php echo e($item->role); ?></td>
+                                    <td> <button onclick="location.href = '/felhasznalomodositas/<?php echo e($item->USerID); ?>';" >Szerkesztés</button></td>
                                 </tr>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </tbody>
                     </table>
                 <?php endif; ?>
 
-                <?php if($status == 1): ?>
+                <?php if($status == 2): ?>
                     <h2 class="tm-block-title">Új felhasználó</h2>
-                    <div>
-                        <form id="ujFelh" action="/felhasznalok/ujFelh" method="post">
+                        <form id="ujFelh" class="formCenterContent" action="/ujfelhasznalomentes" method="post">
                             <?php echo csrf_field(); ?>
-                            <label for="vnev">Vezetéknév: </label>
-                            <input type="text" id="vnev" name="vnev" value="" required>
-                            <label for="knev">Keresztnév: </label>
-                            <input type="text" id="knev" name="knev" value="" required>
-                            <label for="tipus">Típus: </label>
-                            <select id="tipus" name="tipus">
-                                <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="<?php echo e($role->ID); ?>"><?php echo e($role->Name); ?></option>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            </select>
-                            <label for="knev">Jelszó: </label>
-                            <input type="password" id="pw" name="pw" value="" required>
-                            <input type="submit" value="Mentés" class=" btn-success">
+                            <div class="NewUser">
+                                <div class="inputcolumn">
+                                    <label for="fname">Vezetéknév: </label>
+                                    <input type="text" class="textfield" id="fname" name="fname" value="" required>
+                                </div>
+                              
+                                <div class="inputcolumn">
+                                    <label for="lname">Keresztnév: </label>
+                                    <input type="text" class="textfield" id="lname" name="lname" value="" required>
+                                </div>
+
+                                <div class="inputcolumn">
+                                    <label for="role">Típus: </label>
+                                    <select id="role" class="textfield" name="role">
+                                        <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($role->ID); ?>"><?php echo e($role->Name); ?></option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </select>
+                                </div>
+
+                                <div class="inputcolumn">
+                                    <label for="sextype">Nem: </label>
+                                    <select id="sextype" class="textfield" name="sextype">
+                                        <?php $__currentLoopData = $sextypes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sextype): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($sextype->ID); ?>"><?php echo e($sextype->Name); ?></option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </select>
+                                </div>
+
+                                <div class="inputcolumn">
+                                    <label for="email">Email: </label>
+                                    <input type="email" class="textfield" id="email" name="email" value="" required>
+                                </div>
+
+                                <div class="inputcolumn">
+                                    <label for="phone">Telefonszám: </label>
+                                    <input type="text" class="textfield" id="phone" name="phone" value="" required>
+                                </div>
+
+                                <div class="inputcolumn">
+                                    <label for="pw">Jelszó: </label>
+                                    <input type="password" class="textfield" id="pw" name="pw" value="" required>
+                                </div>
+
+                                <div class="inputcolumn">
+                                    <input type="submit" value="Mentés" class=" btn-success margined-send-btn">
+                                </div>
+                            <div class="NewUser">
+                        </form>
+                    </div>
+                <?php endif; ?>
+                <?php if($status == 3): ?>
+                    <h2 class="tm-block-title">Felhasználó módisítás</h2>
+                        <form id="ujFelh" class="formCenterContent" action="/felhasznalomodositas/mentes" method="post">
+                            <?php echo csrf_field(); ?>
+                            <input type="hidden" name="UserID" id="UserID" value="<?php echo e($user->UserID); ?>">
+                            <div class="NewUser">
+                                <div class="inputcolumn">
+                                    <label for="fname">Vezetéknév: </label>
+                                    <input type="text" class="textfield" id="fname" name="fname" value="<?php echo e($user->FName); ?>" required>
+                                </div>
+                              
+                                <div class="inputcolumn">
+                                    <label for="lname">Keresztnév: </label>
+                                    <input type="text" class="textfield" id="lname" name="lname" value="<?php echo e($user->LName); ?>" required>
+                                </div>
+
+                                <div class="inputcolumn">
+                                    <label for="role">Típus: </label>
+                                    <select id="role" class="textfield" name="role">
+                                        <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($role->ID); ?>" <?php echo e($user->RoleTypeID == $role->ID ? 'selected' : ''); ?>><?php echo e($role->Name); ?></option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </select>
+                                </div>
+
+                                <div class="inputcolumn">
+                                    <label for="sextype">Nem: </label>
+                                    <select id="sextype" class="textfield" name="sextype">
+                                        <?php $__currentLoopData = $sextypes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sextype): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($sextype->ID); ?>" <?php echo e($user->SexTypeID == $sextype->ID ? 'selected' : ''); ?>><?php echo e($sextype->Name); ?></option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </select>
+                                </div>
+
+                                <div class="inputcolumn">
+                                    <label for="email">Email: </label>
+                                    <input type="email" class="textfield" id="email" name="email" value="<?php echo e($user->Email); ?>" required>
+                                </div>
+
+                                <div class="inputcolumn">
+                                    <label for="phone">Telefonszám: </label>
+                                    <input type="text" class="textfield" id="phone" name="phone" value="<?php echo e($user->Phone); ?>" required>
+                                </div>
+
+                                <div class="inputcolumn">
+                                    <label for="pw">Jelszó: (üresen hagyva nem módosul)</label>
+                                    <input type="password" class="textfield" id="pw" name="pw" value="">
+                                </div>
+                                
+
+
+                                <div class="inputcolumn">
+                                    <input type="submit" value="Mentés" class=" btn-success margined-send-btn">
+                                </div>
+                            <div class="NewUser">
                         </form>
                     </div>
                 <?php endif; ?>

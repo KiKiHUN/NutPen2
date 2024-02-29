@@ -3,75 +3,7 @@
 <?php $__env->startSection('navbar'); ?>
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>" />
 
-    
-
-    <li class="nav-item dropdown ">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            <i class="fa-solid fa-clock"></i>
-            <span>
-                Óra <i class="fas fa-angle-down"></i>
-            </span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/ora">Listázás</a>
-            <a class="dropdown-item" href="/ora/uj">Új</a>
-        </div>
-    </li>
-    <li class="nav-item dropdown ">
-        <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            <i class="fa-solid fa-pen-ruler"></i>
-            <span>
-                Tantárgy <i class="fas fa-angle-down"></i>
-            </span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/targy">Listázás</a>
-            <a class="dropdown-item" href="/targy/uj">Új</a>
-        </div>
-    </li>
-    <li class="nav-item dropdown ">
-        <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            <i class="fa-solid fa-clock"></i>
-            <span>
-                Felhasználó <i class="fas fa-angle-down"></i>
-            </span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/felhasznalok">Listázás</a>
-            <a class="dropdown-item" href="/felhasznalok/uj">Új</a>
-        </div>
-    </li>
-    <li class="nav-item dropdown ">
-        <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            <i class="fa-solid fa-link"></i>
-            <span>
-                Diák-Szülő Kapcsolat <i class="fas fa-angle-down"></i>
-            </span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/kapcsolat/szulo ">Listázás</a>
-            <a class="dropdown-item" href="/kapcsolat/szulo/uj">Új</a>
-        </div>
-    </li>
-    <li class="nav-item dropdown ">
-        <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            <i class="fa-solid fa-link"></i>
-            <span>
-                Diák-Tanóra Kapcsolat <i class="fas fa-angle-down"></i>
-            </span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/kapcsolat/ora ">Listázás</a>
-            <a class="dropdown-item" href="/kapcsolat/ora/uj">Új</a>
-        </div>
-    </li>
-
-
+    <?php echo $__env->make('admin.Navbar', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     
 <?php $__env->stopSection(); ?>
 
@@ -90,7 +22,7 @@
                 <canvas id="barChart"></canvas>
             </div>
         </div>
-        <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
+        <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col messagediv">
             <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-overflow">
                 <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel" aria-hidden="true">  <!--chatmodal--> 
                     <div class="modal-dialog" role="document">

@@ -1,78 +1,14 @@
 @extends('layout')
 
 @section('navbar')
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
-    <li class="nav-item dropdown ">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            <i class="fa-solid fa-clock"></i>
-            <span>
-                Óra <i class="fas fa-angle-down"></i>
-            </span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/ora">Listázás</a>
-            <a class="dropdown-item" href="/ora/uj">Új</a>
-        </div>
-    </li>
-    <li class="nav-item dropdown ">
-        <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            <i class="fa-solid fa-pen-ruler"></i>
-            <span>
-                Tantárgy <i class="fas fa-angle-down"></i>
-            </span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/targy">Listázás</a>
-            <a class="dropdown-item" href="/targy/uj">Új</a>
-        </div>
-    </li>
-    <li class="nav-item dropdown ">
-        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            <i class="fa-solid fa-clock"></i>
-            <span>
-                Felhasználó <i class="fas fa-angle-down"></i>
-            </span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/felhasznalok">Listázás</a>
-            <a class="dropdown-item" href="/ujfelhasznalo">Új</a>
-        </div>
-    </li>
-    <li class="nav-item dropdown ">
-        <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            <i class="fa-solid fa-link"></i>
-            <span>
-                Diák-Szülő Kapcsolat <i class="fas fa-angle-down"></i>
-            </span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/kapcsolat/szulo ">Listázás</a>
-            <a class="dropdown-item" href="/kapcsolat/szulo/uj">Új</a>
-        </div>
-    </li>
-    <li class="nav-item dropdown ">
-        <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            <i class="fa-solid fa-link"></i>
-            <span>
-                Diák-Tanóra Kapcsolat <i class="fas fa-angle-down"></i>
-            </span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="/kapcsolat/ora ">Listázás</a>
-            <a class="dropdown-item" href="/kapcsolat/ora/uj">Új</a>
-        </div>
-    </li>
-
-
-   
+    @include('admin.Navbar')
+    
 @endsection
 
 @section('content')
+    
 
     <!-- row -->
     <div class="row tm-content-row">
@@ -87,7 +23,7 @@
 
         <div class="col-12 tm-block-col">
             <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
-                @if ($status!=1)
+                @if ($status<=1)
                     <button type="submit" class="filterbtn" value="a">Admin</button>
                     <button type="submit" class="filterbtn" value="t">Tanár</button>
                     <button type="submit" class="filterbtn" value="s">Diák</button>
@@ -104,6 +40,7 @@
                                 <th class="th-sm">Vnév</th>
                                 <th class="th-sm">Knév</th>
                                 <th class="th-sm">Típus</th>
+                                <th class="th-sm">Módosítás</th>
                             </tr>
                         </thead>
                         <tbody id="myTable">
@@ -113,30 +50,123 @@
                                     <td>{{ $item->fname }}</td>
                                     <td>{{ $item->lname }}</td>
                                     <td>{{ $item->role }}</td>
+                                    <td> <button onclick="location.href = '/felhasznalomodositas/{{ $item->USerID }}';" >Szerkesztés</button></td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
                 @endif
 
-                @if ($status == 1)
+                @if ($status == 2)
                     <h2 class="tm-block-title">Új felhasználó</h2>
-                    <div>
-                        <form id="ujFelh" action="/felhasznalok/ujFelh" method="post">
+                        <form id="ujFelh" class="formCenterContent" action="/ujfelhasznalomentes" method="post">
                             @csrf
-                            <label for="vnev">Vezetéknév: </label>
-                            <input type="text" id="vnev" name="vnev" value="" required>
-                            <label for="knev">Keresztnév: </label>
-                            <input type="text" id="knev" name="knev" value="" required>
-                            <label for="tipus">Típus: </label>
-                            <select id="tipus" name="tipus">
-                                @foreach ($roles as $role)
-                                    <option value="{{ $role->ID }}">{{ $role->Name }}</option>
-                                @endforeach
-                            </select>
-                            <label for="knev">Jelszó: </label>
-                            <input type="password" id="pw" name="pw" value="" required>
-                            <input type="submit" value="Mentés" class=" btn-success">
+                            <div class="NewUser">
+                                <div class="inputcolumn">
+                                    <label for="fname">Vezetéknév: </label>
+                                    <input type="text" class="textfield" id="fname" name="fname" value="" required>
+                                </div>
+                              
+                                <div class="inputcolumn">
+                                    <label for="lname">Keresztnév: </label>
+                                    <input type="text" class="textfield" id="lname" name="lname" value="" required>
+                                </div>
+
+                                <div class="inputcolumn">
+                                    <label for="role">Típus: </label>
+                                    <select id="role" class="textfield" name="role">
+                                        @foreach ($roles as $role)
+                                            <option value="{{ $role->ID }}">{{ $role->Name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="inputcolumn">
+                                    <label for="sextype">Nem: </label>
+                                    <select id="sextype" class="textfield" name="sextype">
+                                        @foreach ($sextypes as $sextype)
+                                            <option value="{{ $sextype->ID }}">{{ $sextype->Name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="inputcolumn">
+                                    <label for="email">Email: </label>
+                                    <input type="email" class="textfield" id="email" name="email" value="" required>
+                                </div>
+
+                                <div class="inputcolumn">
+                                    <label for="phone">Telefonszám: </label>
+                                    <input type="text" class="textfield" id="phone" name="phone" value="" required>
+                                </div>
+
+                                <div class="inputcolumn">
+                                    <label for="pw">Jelszó: </label>
+                                    <input type="password" class="textfield" id="pw" name="pw" value="" required>
+                                </div>
+
+                                <div class="inputcolumn">
+                                    <input type="submit" value="Mentés" class=" btn-success margined-send-btn">
+                                </div>
+                            <div class="NewUser">
+                        </form>
+                    </div>
+                @endif
+                @if ($status == 3)
+                    <h2 class="tm-block-title">Felhasználó módisítás</h2>
+                        <form id="ujFelh" class="formCenterContent" action="/felhasznalomodositas/mentes" method="post">
+                            @csrf
+                            <input type="hidden" name="UserID" id="UserID" value="{{ $user->UserID }}">
+                            <div class="NewUser">
+                                <div class="inputcolumn">
+                                    <label for="fname">Vezetéknév: </label>
+                                    <input type="text" class="textfield" id="fname" name="fname" value="{{ $user->FName }}" required>
+                                </div>
+                              
+                                <div class="inputcolumn">
+                                    <label for="lname">Keresztnév: </label>
+                                    <input type="text" class="textfield" id="lname" name="lname" value="{{ $user->LName }}" required>
+                                </div>
+
+                                <div class="inputcolumn">
+                                    <label for="role">Típus: </label>
+                                    <select id="role" class="textfield" name="role">
+                                        @foreach ($roles as $role)
+                                            <option value="{{ $role->ID }}" {{ $user->RoleTypeID == $role->ID ? 'selected' : '' }}>{{ $role->Name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="inputcolumn">
+                                    <label for="sextype">Nem: </label>
+                                    <select id="sextype" class="textfield" name="sextype">
+                                        @foreach ($sextypes as $sextype)
+                                            <option value="{{ $sextype->ID }}" {{ $user->SexTypeID == $sextype->ID ? 'selected' : '' }}>{{ $sextype->Name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="inputcolumn">
+                                    <label for="email">Email: </label>
+                                    <input type="email" class="textfield" id="email" name="email" value="{{ $user->Email }}" required>
+                                </div>
+
+                                <div class="inputcolumn">
+                                    <label for="phone">Telefonszám: </label>
+                                    <input type="text" class="textfield" id="phone" name="phone" value="{{ $user->Phone }}" required>
+                                </div>
+
+                                <div class="inputcolumn">
+                                    <label for="pw">Jelszó: (üresen hagyva nem módosul)</label>
+                                    <input type="password" class="textfield" id="pw" name="pw" value="">
+                                </div>
+                                
+
+
+                                <div class="inputcolumn">
+                                    <input type="submit" value="Mentés" class=" btn-success margined-send-btn">
+                                </div>
+                            <div class="NewUser">
                         </form>
                     </div>
                 @endif

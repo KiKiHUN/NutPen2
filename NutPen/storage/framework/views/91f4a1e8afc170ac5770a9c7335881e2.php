@@ -27,7 +27,6 @@
                         <div class="col-12">
                             <form action="/loginCheck" method="post" class="tm-login-form">
                                 <?php echo csrf_field(); ?>
-                                <input type="hidden" name="_clientid" id="_clientid" value="<?php echo e($ClientID); ?>">
                                 <div class="form-group">
                                     <label for="username">Azonosító</label>
                                     <input name="ID" type="text" class="form-control validate" id="ID"

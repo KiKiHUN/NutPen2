@@ -46,9 +46,30 @@ Route::middleware(['blockIP'])->group(function () {
     });
 
     Route::group(['middleware' => 'auth:admin'], function () {
-        Route::get('/ujfelhasznalo',[App\Http\Controllers\Admin\AdminFunctionsController::class,'NewUserPage']);
+        //felhasznalo
         Route::get('/felhasznalok',[App\Http\Controllers\Admin\AdminFunctionsController::class,'UsersPage']);
         Route::get('/felhasznalok/{filter}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'UsersPageFilter']);
+
+        Route::get('/ujfelhasznalo',[App\Http\Controllers\Admin\AdminFunctionsController::class,'NewUserPage']);
+        Route::get('/felhasznalomodositas/{UserID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditUserPage']);
+        Route::post('/felhasznalomodositas/mentes',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditUser']);
+        Route::post('/ujfelhasznalomentes',[App\Http\Controllers\Admin\AdminFunctionsController::class,'AddNewUser']);
+        
+
+        //bannolás
+        Route::get('/kitiltottak',[App\Http\Controllers\Admin\AdminFunctionsController::class,'BannedUSers']);
+
+        Route::get('/ujkitiltas',[App\Http\Controllers\Admin\AdminFunctionsController::class,'NewBanning']);
+        Route::post('/ujkitiltasmentes',[App\Http\Controllers\Admin\AdminFunctionsController::class,'SaveNewBanning']);
+        Route::post('/kitiltasmodositas',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditBannings']);
+
+        //osztályok
+        Route::get('/osztalyok',[App\Http\Controllers\Admin\AdminFunctionsController::class,'SchoolClasses']);
+
+        Route::get('/ujosztaly',[App\Http\Controllers\Admin\AdminFunctionsController::class,'NewClass']);
+        Route::get('/osztalymodositas/{classID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditClassPage']);
+        Route::post('/ujosztalymentes',[App\Http\Controllers\Admin\AdminFunctionsController::class,'SaveClass']);
+        Route::post('/osztalymodositas',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditClass']);
     });
    
 

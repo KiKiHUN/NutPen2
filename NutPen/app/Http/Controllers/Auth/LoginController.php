@@ -21,33 +21,50 @@ use App\CustomClasses\PwHasher;
 
 class LoginController extends Controller
 {
-
-    public function LoginCall()
+    public static function LoggedInBycookie()
+    {
+        if(Auth::guard('admin')->check()||
+        Auth::guard('headUser')->check()||
+        Auth::guard('teacher')->check()||
+        Auth::guard('student')->check()||
+        Auth::guard('studparent')->check())
+        {
+            return true;
+        }else
+        {
+            return false;
+        }
+    }
+    
+    public function LoginCall(Request $request)
     {
         $allowed=DatabaseController::ChechkIfAllowedToLogin();
-        if (
-            Auth::guard('admin')->check()||
-            Auth::guard('headUser')->check()||
-            Auth::guard('teacher')->check()||
-            Auth::guard('student')->check()||
-            Auth::guard('studparent')->check()
-            ) 
+        if (self::LoggedInBycookie()) 
         {
             return redirect('/vezerlopult');
         }
         if ((Session::get('voltproba'))) {
-            return view('login',['voltProba'=>true,'enabledToLogin'=>$allowed,'ClientID'=>Str::uuid()->toString()]);
+            if(!$request->hasCookie('id'))
+            {
+                return response(view('login',['voltProba'=>true,'enabledToLogin'=>$allowed]))->cookie('id',Str::uuid()->toString(),2147483647);
+            }
+            return view('login',['voltProba'=>true,'enabledToLogin'=>$allowed]);
         }else
         {
-            return view('login',['voltProba'=>false,'enabledToLogin'=>$allowed,'ClientID'=>Str::uuid()->toString()]);
+            if(!$request->hasCookie('id'))
+            {
+                return response(view('login',['voltProba'=>false,'enabledToLogin'=>$allowed]))->cookie('id',Str::uuid()->toString(),2147483647);
+            }
+            return view('login',['voltProba'=>false,'enabledToLogin'=>$allowed]);
+
         }
     }
 
     public function LoginAttempt(Request $request)
     {
 
-        $key = $this->throttleKey($request['_clientid']);
-        $limitedTime = $this->ensureIsNotRateLimited($key);
+        $key = $this->throttleKey($request->cookie('id'));
+        $limitedTime = $this->ensureIsNotRateLimited($key,$request->getClientIp());
         RateLimiter::hit($key, 300);
        
         if ($limitedTime == -1) {
@@ -109,16 +126,22 @@ class LoginController extends Controller
         }
     }
     
-    public function ensureIsNotRateLimited($key)
+    public function ensureIsNotRateLimited($key,$IP)
     {
         if (!RateLimiter::tooManyAttempts($key, 5)) {
             return -1;
         }
         if (RateLimiter::tooManyAttempts($key, 10)) {
-            $banned = new BannedIP();
-            $banned->IP = $key;
-            $banned->save();
-            Log::channel('bannedIPs')->warning($key." Banned");
+           
+            if (!BannedIP::EditUUIDBannIfExist($key,1)) {
+                if (!BannedIP::AddNewBann($key,1,$IP,0)) {
+                    Log::channel('bannedIPs')->warning("Error banning:".$key." ID");
+                }else {
+                    Log::channel('bannedIPs')->warning($key." Banned");
+                }
+            }else {
+                Log::channel('bannedIPs')->warning($key." Banned");
+            }
         }
         $seconds=RateLimiter::availableIn($key);
         Log::channel('loginAttempts')->warning("Too many attempts: key=" . $key." Remaining time: ".$seconds." sec");
