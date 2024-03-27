@@ -1,5 +1,7 @@
 
 
+
+
 <?php $__env->startSection('navbar'); ?>
 
 <?php $__env->stopSection(); ?>
@@ -11,7 +13,9 @@
 
     </div>
 <?php endif; ?>
-    <div class="Internal">
+
+
+    <div class="Internal">  
        
         <div class="Banner">
 
@@ -31,7 +35,7 @@
                             <form action="/registeradmin" method="post" class="tm-login-form">
                                 <?php echo csrf_field(); ?>
                                 <div class="form-group">
-                                    <label for="username">Azonosító</label>
+                                    <label for="ID">Azonosító</label>
                                     <input name="ID" type="text" class="form-control validate" id="ID"
                                         value="a00000" required />
                                 </div>
@@ -41,28 +45,49 @@
                                         value="" required />
                                 </div>
                                 <div class="form-group">
-                                    <label for="username">Vezetéknév</label>
+                                    <label for="fname">Vezetéknév</label>
                                     <input name="fname" type="text" class="form-control validate" id="fname"
                                         value="" required />
                                 </div>
                                 <div class="form-group">
-                                    <label for="username">Keresztnév</label>
+                                    <label for="lname">Keresztnév</label>
                                     <input name="lname" type="text" class="form-control validate" id="lname"
                                         value="" required />
                                 </div>
                                 <div class="form-group">
-                                    <label for="username">Email</label>
+                                    <label for="email">Email</label>
                                     <input name="email" type="text" class="form-control validate" id="email"
                                         value="" required />
                                 </div>
                                 <div class="form-group">
-                                    <label for="username">Telefonszám</label>
+                                    <label for="phone">Telefonszám</label>
                                     <input name="phone" type="text" class="form-control validate" id="phone"
                                         value="" required />
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="cars">Nem:</label>
+                                    <label for="postacode">Irányítószám</label>
+                                    <input name="postacode" type="number" class="form-control validate" id="postacode"
+                                        value="" required />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="fulladdress">Cím</label>
+                                    <input name="fulladdress" type="text" class="form-control validate" id="fulladdress"
+                                        value="" required />
+                                </div>
+
+                              
+                               
+                                <div class="form-group">
+                                    <label for="bday">Születési dátum</label>
+                                    <input type="date" id="bday" value="2017-06-01" name="bday"/>
+                                </div>
+                                     
+                                      
+
+                                <div class="form-group">
+                                    <label for="sextype">Nem:</label>
 
                                     <select class="form-control validate" name="sextype" id="sextype">
                                         <?php $__currentLoopData = $sexes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sex): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -87,5 +112,7 @@
 <?php $__env->stopSection(); ?>
 
 
+<?php $__env->startSection('script'); ?>
 
+<?php $__env->stopSection(); ?>
 <?php echo $__env->make('layout', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\NutPen2\NutPen\resources\views/admin/admin_register.blade.php ENDPATH**/ ?>

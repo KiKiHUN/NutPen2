@@ -24,12 +24,12 @@
 
         <div class="col-12 tm-block-col">
             <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
-                <?php if($status<=1): ?>
+                <?php if($status==1): ?>
                     <button type="submit" class="filterbtn" value="a">Admin</button>
                     <button type="submit" class="filterbtn" value="t">Tanár</button>
-                    <button type="submit" class="filterbtn" value="s">Diák</button>
-                    <button type="submit" class="filterbtn" value="p">Szülő</button>
-                    <button type="submit" class="filterbtn" value="h">Fő emberek</button>
+                    <button type="submit" class="filterbtn" value="d">Diák</button>
+                    <button type="submit" class="filterbtn" value="s">Szülő</button>
+                    <button type="submit" class="filterbtn" value="f">Fő emberek</button>
                 <?php endif; ?>
                
                 <?php if($status == 0): ?>
@@ -40,18 +40,16 @@
                                 <th class="th-sm">Azonosító</th>
                                 <th class="th-sm">Vnév</th>
                                 <th class="th-sm">Knév</th>
-                                <th class="th-sm">Típus</th>
                                 <th class="th-sm">Módosítás</th>
                             </tr>
                         </thead>
                         <tbody id="myTable">
                             <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
-                                    <td><?php echo e($item->USerID); ?></td>
+                                    <td><?php echo e($item->UserID); ?></td>
                                     <td><?php echo e($item->fname); ?></td>
                                     <td><?php echo e($item->lname); ?></td>
-                                    <td><?php echo e($item->role); ?></td>
-                                    <td> <button onclick="location.href = '/felhasznalomodositas/<?php echo e($item->USerID); ?>';" >Szerkesztés</button></td>
+                                    <td> <button onclick="location.href = '/felhasznalomodositas/<?php echo e($item->UserID); ?>';" >Szerkesztés</button></td>
                                 </tr>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </tbody>
@@ -77,7 +75,7 @@
                                     <label for="role">Típus: </label>
                                     <select id="role" class="textfield" name="role">
                                         <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <option value="<?php echo e($role->ID); ?>"><?php echo e($role->Name); ?></option>
+                                            <option value="<?php echo e($role->Name); ?>"><?php echo e($role->Name); ?></option>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
                                 </div>
@@ -102,8 +100,30 @@
                                 </div>
 
                                 <div class="inputcolumn">
+                                    <label for="postalcode">Irányítószám</label>
+                                    <input name="postalcode" type="number" class="textfield" id="postalcode"
+                                        value="" required />
+                                </div>
+
+                                <div class="inputcolumn">
+                                    <label for="fulladdress">Cím</label>
+                                    <input name="fulladdress" type="text" class="textfield" id="fulladdress"
+                                        value="" required />
+                                </div>
+
+                                <div class="inputcolumn">
+                                    <label for="bday">Születési dátum</label>
+                                    <input type="date" id="bday" class="textfield" value="2017-06-01" name="bday"/>
+                                </div>
+
+                                <div class="inputcolumn">
                                     <label for="pw">Jelszó: </label>
                                     <input type="password" class="textfield" id="pw" name="pw" value="" required>
+                                </div>
+
+                                <div id="additional-fields">
+
+
                                 </div>
 
                                 <div class="inputcolumn">
@@ -150,6 +170,11 @@
                                 <div class="inputcolumn">
                                     <label for="email">Email: </label>
                                     <input type="email" class="textfield" id="email" name="email" value="<?php echo e($user->Email); ?>" required>
+                                </div>
+
+                                <div class="inputcolumn">
+                                    <label for="phone">Telefonszám: </label>
+                                    <input type="text" class="textfield" id="phone" name="phone" value="<?php echo e($user->Phone); ?>" required>
                                 </div>
 
                                 <div class="inputcolumn">

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('school_classes', function (Blueprint $table) {
             $table->id('ID');
             $table->string('Name',20);
-            $table->string('ClassMasterID',6);
+            $table->string('ClassMasterID',8);
             $table->foreign('ClassMasterID')->references('UserID')->on('teachers')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });

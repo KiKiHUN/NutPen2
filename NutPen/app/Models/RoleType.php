@@ -39,4 +39,45 @@ class RoleType extends Model
     {
         return $this->hasManyThrough(CalendarEvent::class,WhoCanSeeEvent::class);
     }
+
+
+    static function AddNewRole($name)
+    {
+      try {
+        $c=new self;
+        $c->Name=$name;
+        $c->save();
+      } catch (\Throwable $th) {
+        return false;
+      }
+      return true;
+    }
+
+    static function EditRole($roleID,$name) 
+    {
+      $c=self::GetRoleIfExist($roleID);
+      if (!$c) {
+       return false;
+      }
+      
+      try {
+        $c->Name=$name;
+        $c->save();
+      } catch (\Throwable $th) {
+       return false;
+      }
+      return true;
+      
+    }
+    static function GetRoleIfExist($roleID) 
+    {
+        $c=self::where([
+          'ID' => $roleID
+        ])->first();
+        if ($c) {
+          return $c;
+        }else {
+          return null;
+        }
+    }
 }

@@ -31,8 +31,12 @@ $('.MessageModal').click(function() {
       }
     }else 
     {
+      if (baseSenderID === userID) {
+        $('#sendReply').text('Üzenet frisítése'); 
+      } else {
+        $('#sendReply').text('Üzenet küldése'); 
+      }
       ReplyDisplayName="Nincs válasz üzenet :(";
-      $('#sendReply').text('Üzenet küldése'); 
       $("#modal-target").addClass("modal-msg msg-color-nothing");
     }
     $('#replyNameTag').text(ReplyDisplayName);

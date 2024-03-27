@@ -22,12 +22,14 @@ class SchoolClass extends Model
     }
     public function GetStudents()
     {
-      return $this->hasManyThrough(Student::class,StudentsClass::class);
+      return $this->hasManyThrough(Student::class,StudentsClass::class,"ClassID","UserID","ID","StudentID");
     }
     public function GetLessons()
     {
       return $this->hasManyThrough(Lesson::class,ClassesLessons::class);
     }
+
+
 
     static function AddNewClass($name,$teacherID)
     {
@@ -35,11 +37,17 @@ class SchoolClass extends Model
         $c=new self;
         $c->Name=$name;
         $c->ClassMasterID=$teacherID;
-        $c->save();
+        if ($c->save()) {
+          return true;
+        }else {
+          return false;
+        }
+        
+       
       } catch (\Throwable $th) {
         return false;
       }
-      return true;
+     
     }
 
     static function EditClass($classID,$name,$teacher) 

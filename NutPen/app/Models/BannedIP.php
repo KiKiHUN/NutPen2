@@ -41,7 +41,7 @@ class BannedIP extends Model
         }
         return true;
     }
-    static function AddNewBann($UUID,$IP,$UUIDbanned,$IPbanned) 
+    static function AddNewBann($UUID,$UUIDbanned,$IP,$IPbanned) 
     {   
         $banned = new BannedIP();
         $banned->clientID = $UUID;

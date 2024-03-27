@@ -39,28 +39,20 @@
         aria-haspopup="true" aria-expanded="false">
         <i class="fa-solid fa-clock"></i>
         <span>
-            Óra <i class="fas fa-angle-down"></i>
+            Tanóra/Tantárgy <i class="fas fa-angle-down"></i>
         </span>
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="/ora">Listázás</a>
-        <a class="dropdown-item" href="/ora/uj">Új</a>
+        <a class="dropdown-item" href="/tanorak">Tanórák</a>
+        <a class="dropdown-item" href="/ujtanora">Új tanóra</a>
+        <a class="dropdown-item" href="/tantargyak">Tantárgyak</a>
+        <a class="dropdown-item" href="/ujtantargy">Új tantárgy</a>
+        <a class="dropdown-item" href="/ertekelestipusok">Értékelés típusok</a>
+        <a class="dropdown-item" href="/ertekelesek">Értékelések</a>
     </div>
 </li>
 
-<li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-        aria-haspopup="true" aria-expanded="false">
-        <i class="fa-solid fa-pen-ruler"></i>
-        <span>
-            Tantárgy <i class="fas fa-angle-down"></i>
-        </span>
-    </a>
-    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="/targy">Listázás</a>
-        <a class="dropdown-item" href="/targy/uj">Új</a>
-    </div>
-</li>
+
 <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false">
@@ -70,8 +62,10 @@
         </span>
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="/felhasznalok">Listázás</a>
-        <a class="dropdown-item" href="/ujfelhasznalo">Új</a>
+        <a class="dropdown-item" href="/felhasznalok">Felhasználók</a>
+        <a class="dropdown-item" href="/ujfelhasznalo">Új felhasználó</a>
+        <a class="dropdown-item" href="/rangok">Rangok</a>
+        <a class="dropdown-item" href="/ujrang">Új rang</a>
     </div>
 </li>
 <li class="nav-item dropdown ">
@@ -79,27 +73,17 @@
         aria-haspopup="true" aria-expanded="false">
         <i class="fa-solid fa-link"></i>
         <span>
-            Diák-Szülő Kapcsolat <i class="fas fa-angle-down"></i>
+              Kapcsolatok <i class="fas fa-angle-down"></i>
         </span>
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="/kapcsolat/szulo ">Listázás</a>
-        <a class="dropdown-item" href="/kapcsolat/szulo/uj">Új</a>
+        <a class="dropdown-item" href="/kapcsolat/szulodiak">Diák-szülő</a>
+        <a class="dropdown-item" href="/kapcsolat/szulo/uj">Diák-Osztály</a>
+        <a class="dropdown-item" href="/kapcsolat/szulo/uj">Diák-HáziFeladat</a>
+        <a class="dropdown-item" href="/kapcsolat/szulo/uj">Osztály-tanóra</a>
     </div>
 </li>
-<li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-        aria-haspopup="true" aria-expanded="false">
-        <i class="fa-solid fa-link"></i>
-        <span>
-            Diák-Tanóra Kapcsolat <i class="fas fa-angle-down"></i>
-        </span>
-    </a>
-    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="/kapcsolat/ora ">Listázás</a>
-        <a class="dropdown-item" href="/kapcsolat/ora/uj">Új</a>
-    </div>
-</li>
+
 
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"

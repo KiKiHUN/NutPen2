@@ -24,6 +24,8 @@ return new class extends Migration
             $table->string('Phone',20);
             $table->unsignedBigInteger('RoleTypeID');
             $table->dateTime('LastLogin');
+            $table->boolean('AllowMessages')->default(true);
+            $table->boolean('BannedFromMessages')->default(false);
             $table->boolean('Enabled')->default(true);
             $table->boolean('DefaultPassword')->default(true);
 

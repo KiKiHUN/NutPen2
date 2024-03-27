@@ -31,6 +31,9 @@ class RegisterController extends Controller
             $a->LName=$request->lname;
             $a->email=$request->email;
             $a->Phone=$request->phone;
+            $a->PostalCode=$request->postacode;
+            $a->FullAddress=$request->fulladdress;
+            $a->BDay=$request->bday;
             $a->RoleTypeID=1;
             $a->SexTypeID=$request->sextype;
             $a->LastLogin=Carbon::now();

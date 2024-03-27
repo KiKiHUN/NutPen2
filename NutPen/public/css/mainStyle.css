@@ -840,9 +840,45 @@ input[type="checkbox"]:focus {
   width: 90%;
   padding: 10px;
 }
+element.style {
+  width: 100% !important;
+ }
+
+ 
+
+ .weektable {
+  max-width: 100%;
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+ .weektable th {
+  background-color: #003af8;
+}
+
+.day-checkbox{
+  transform: scale(1.5);
+}
+
+input[type="time"] {
+  width: 100px;
+}
+
+
+
+
+
 .inputcolumn
 {
-  width: 100%;
+  width: 100% !important;
   display: flex;
   flex-flow: column;
   margin-bottom: 20px;

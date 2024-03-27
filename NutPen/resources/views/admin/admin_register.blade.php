@@ -1,5 +1,7 @@
 @extends('layout')
 
+
+
 @section('navbar')
 
 @endsection
@@ -10,7 +12,9 @@
         {{ session()->get('message') }}
     </div>
 @endif
-    <div class="Internal">
+
+
+    <div class="Internal">  
        
         <div class="Banner">
 
@@ -30,7 +34,7 @@
                             <form action="/registeradmin" method="post" class="tm-login-form">
                                 @csrf
                                 <div class="form-group">
-                                    <label for="username">Azonosító</label>
+                                    <label for="ID">Azonosító</label>
                                     <input name="ID" type="text" class="form-control validate" id="ID"
                                         value="a00000" required />
                                 </div>
@@ -40,28 +44,49 @@
                                         value="" required />
                                 </div>
                                 <div class="form-group">
-                                    <label for="username">Vezetéknév</label>
+                                    <label for="fname">Vezetéknév</label>
                                     <input name="fname" type="text" class="form-control validate" id="fname"
                                         value="" required />
                                 </div>
                                 <div class="form-group">
-                                    <label for="username">Keresztnév</label>
+                                    <label for="lname">Keresztnév</label>
                                     <input name="lname" type="text" class="form-control validate" id="lname"
                                         value="" required />
                                 </div>
                                 <div class="form-group">
-                                    <label for="username">Email</label>
+                                    <label for="email">Email</label>
                                     <input name="email" type="text" class="form-control validate" id="email"
                                         value="" required />
                                 </div>
                                 <div class="form-group">
-                                    <label for="username">Telefonszám</label>
+                                    <label for="phone">Telefonszám</label>
                                     <input name="phone" type="text" class="form-control validate" id="phone"
                                         value="" required />
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="cars">Nem:</label>
+                                    <label for="postacode">Irányítószám</label>
+                                    <input name="postacode" type="number" class="form-control validate" id="postacode"
+                                        value="" required />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="fulladdress">Cím</label>
+                                    <input name="fulladdress" type="text" class="form-control validate" id="fulladdress"
+                                        value="" required />
+                                </div>
+
+                              
+                               
+                                <div class="form-group">
+                                    <label for="bday">Születési dátum</label>
+                                    <input type="date" id="bday" value="2017-06-01" name="bday"/>
+                                </div>
+                                     
+                                      
+
+                                <div class="form-group">
+                                    <label for="sextype">Nem:</label>
 
                                     <select class="form-control validate" name="sextype" id="sextype">
                                         @foreach ($sexes as $sex)
@@ -86,3 +111,6 @@
 @endsection
 
 
+@section('script')
+
+@endsection

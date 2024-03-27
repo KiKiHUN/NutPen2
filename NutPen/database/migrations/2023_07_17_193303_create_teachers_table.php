@@ -16,17 +16,20 @@ return new class extends Migration
             $table->string('password',60);
             $table->string('FName',50);
             $table->string('LName',50);
+            $table->string('Email',100);
             $table->unsignedSmallInteger('SexTypeID');
             $table->unsignedSmallInteger('PostalCode');
             $table->string('FullAddress');
             $table->date('BDay');
-            $table->integer('TeachID')->unique();
-            $table->string('Email',100);
             $table->string('Phone',20);
             $table->unsignedBigInteger('RoleTypeID');
             $table->dateTime('LastLogin');
+            $table->boolean('AllowMessages')->default(true);
+            $table->boolean('BannedFromMessages')->default(false);
             $table->boolean('Enabled')->default(true);
             $table->boolean('DefaultPassword')->default(true);
+            
+            $table->integer('TeachID')->unique();
 
             $table->foreign('RoleTypeID')->references('ID')->on('role_types')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('SexTypeID')->references('ID')->on('sex_types')->onDelete('cascade')->onUpdate('cascade');

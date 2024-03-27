@@ -54,6 +54,14 @@ Route::middleware(['blockIP'])->group(function () {
         Route::get('/felhasznalomodositas/{UserID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditUserPage']);
         Route::post('/felhasznalomodositas/mentes',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditUser']);
         Route::post('/ujfelhasznalomentes',[App\Http\Controllers\Admin\AdminFunctionsController::class,'AddNewUser']);
+
+        //rang
+        Route::get('/rangok',[App\Http\Controllers\Admin\AdminFunctionsController::class,'Roles']);
+
+        Route::get('/ujrang',[App\Http\Controllers\Admin\AdminFunctionsController::class,'NewRole']);
+        Route::get('/rangmodositas/{rangID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditRolePage']);
+        Route::post('/ujrangmentes',[App\Http\Controllers\Admin\AdminFunctionsController::class,'SaveRole']);
+        Route::post('/rangmodositas',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditRole']);
         
 
         //bannolás
@@ -63,13 +71,61 @@ Route::middleware(['blockIP'])->group(function () {
         Route::post('/ujkitiltasmentes',[App\Http\Controllers\Admin\AdminFunctionsController::class,'SaveNewBanning']);
         Route::post('/kitiltasmodositas',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditBannings']);
 
+
         //osztályok
         Route::get('/osztalyok',[App\Http\Controllers\Admin\AdminFunctionsController::class,'SchoolClasses']);
+        Route::get('/osztaly/diakok/{classID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'ClassStudents']);
 
         Route::get('/ujosztaly',[App\Http\Controllers\Admin\AdminFunctionsController::class,'NewClass']);
         Route::get('/osztalymodositas/{classID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditClassPage']);
         Route::post('/ujosztalymentes',[App\Http\Controllers\Admin\AdminFunctionsController::class,'SaveClass']);
         Route::post('/osztalymodositas',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditClass']);
+        Route::get('/osztalyok/diakhozzad/{classID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'AddStudentToClass']);
+        Route::post('/osztalyok/diakhozzad/mentes',[App\Http\Controllers\Admin\AdminFunctionsController::class,'SaveStudentToClass']);
+        Route::get('/osztaly/{classID}/diaktorles/{studentID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'RemoveStudentFromClass']);
+
+        //tantárgyak
+        Route::get('/tantargyak',[App\Http\Controllers\Admin\AdminFunctionsController::class,'Subjects']);
+        Route::get('/tantargy/orak/{tantargyid}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'SubjectLessons']);
+
+        Route::get('/ujtantargy',[App\Http\Controllers\Admin\AdminFunctionsController::class,'NewSubject']);
+        Route::get('/tantargymodositas/{tantargyid}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditSubjectPage']);
+        Route::post('/ujtantargymentes',[App\Http\Controllers\Admin\AdminFunctionsController::class,'SaveSubject']);
+        Route::post('/tantargymodositas',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditSubject']);
+
+        //tanorak
+        Route::get('/tanorak',[App\Http\Controllers\Admin\AdminFunctionsController::class,'Lessons']);
+        Route::get('/osztalyok/tanora/{tanoraid}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'LessonsClasses']);
+
+        Route::get('/ujtanora',[App\Http\Controllers\Admin\AdminFunctionsController::class,'NewLesson']);
+        Route::get('/tanoramodositas/{tanoraid}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditLessonPage']);
+        Route::post('/ujtanoramentes',[App\Http\Controllers\Admin\AdminFunctionsController::class,'SaveLesson']);
+        Route::post('/tanoramodositas',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditLesson']);
+        Route::get('/naptar/tanorak/{tanoraid}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'CalendarLesson']);
+
+        Route::get('/tanorak/osztalyhozzad/{lessonID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'AddClassToLesson']);
+        Route::post('/tanorak/osztalyhozzad/mentes',[App\Http\Controllers\Admin\AdminFunctionsController::class,'SaveClassToLesson']);
+        Route::get('/tanora/{lessonID}/osztalytorles/{classID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'RemoveClassFromLesson']);
+
+        
+         //kapcsolatok
+
+
+         //ertekelesek
+         Route::get('/ertekelestipusok',[App\Http\Controllers\Admin\AdminFunctionsController::class,'RatingTypes']);
+         Route::get('/ujertekelestipus',[App\Http\Controllers\Admin\AdminFunctionsController::class,'NewRatingType']);
+         Route::get('/ertekelestipusmodositas/{gradeID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditRatinTypegPage']);
+         Route::get('/ertekelestipustorles/{gradeID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'RemoveRatingType']);
+         Route::post('/ujertekelestipusmentes',[App\Http\Controllers\Admin\AdminFunctionsController::class,'SaveRatingType']);
+         Route::post('/ertekelestipusmodositas',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditRatingType']);
+         Route::get('/ertekelesek/tanora/{lessonID}/osztaly/{classID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'RatingsLessons']);
+         Route::get('/tanorak/ujertekeles/{lessonID}/osztaly/{classID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'AddNewRatingToLessonClass']);
+         Route::post('/tanorak/ertekelesekmentes',[App\Http\Controllers\Admin\AdminFunctionsController::class,'SaveNewRatingToLessonClass']);
+
+         Route::get('/ertekelesek',[App\Http\Controllers\Admin\AdminFunctionsController::class,'RecentRatings']);
+         Route::get('/ertekelesmodositas/{gradeID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditStudentRatingPage']);
+         Route::get('/ertekelestorles/{gradeID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'RemoveStudentGrade']);
+         Route::post('/ertekelesmodositas',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditStudentRating']);
     });
    
 

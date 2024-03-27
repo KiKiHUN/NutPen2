@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('lessons', function (Blueprint $table) {
             $table->id('ID');
             $table->unsignedBigInteger('SubjectID');
-            $table->dateTime('StartDateTime');
-            $table->dateTime('EndDateTime');
-            $table->string('TeacherID',6);
+            $table->date('StartDate');
+            $table->date('EndDate');
+            $table->integer('Minutes');
+            $table->string('WeeklyTimes');
+            $table->string('TeacherID',8);
             $table->boolean('Active')->default(true);
 
             $table->foreign('TeacherID')->references('UserID')->on('teachers')->onDelete('cascade')->onUpdate('cascade');
