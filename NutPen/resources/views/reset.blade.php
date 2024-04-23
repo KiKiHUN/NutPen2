@@ -81,7 +81,7 @@
         document.getElementById('formkuld').onsubmit = function() {
             if (document.getElementById('jelszo1').value == document.getElementById('jelszo2').value) {
                 if (document.getElementById('jelszo1').value.length < 8) {
-                    document.getElementById('hiba').innerText = "Legalább 8 karaktenek kell lennie";
+                    document.getElementById('hiba').innerText = "A jelszónak legalább 8 karaktenek kell lennie";
                     return false;
                 } else {
                     return true;

@@ -30,11 +30,11 @@ class Teacher extends Authenticatable
       protected $keyType="string";
       public function GetRole()
       {
-        return $this->belongsTo(RoleType::class);
+        return $this->belongsTo(RoleType::class,"RoleTypeID");
       }
       public function GetSexType()
       {
-        return $this->belongsTo(SexType::class);
+        return $this->belongsTo(SexType::class,"SexTypeID");
       }
       public function GetOwnClasses()
       {

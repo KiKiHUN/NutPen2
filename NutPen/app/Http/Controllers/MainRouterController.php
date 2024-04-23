@@ -6,6 +6,8 @@ use App\Models\Admin;
 use App\Models\Grade;
 use App\Models\HeadUser;
 use App\Models\Message;
+use App\Models\RoleType;
+use App\Models\SexType;
 use App\Models\Student;
 use App\Models\StudParent;
 use App\Models\Teacher;
@@ -92,41 +94,57 @@ class MainRouterController extends Controller
     
     public function Profile()
     {
-       
-         $azonositoValaszto = mb_substr(Auth::user()->UserID, 0, 1);
- 
-         switch ($azonositoValaszto) {
-            case 's':
-                 $user=DB::table('students')->join('role_types', function ($join) {
-                     $join->on('students.RoleTypeID', '=', 'role_types.ID')->where('students.UserID', '=', Auth::user()->UserID);
-                 })->first();
-                 return View('info',['user'=>$user]);
-                 break;
-            case 'h':
-                $user=DB::table('head_users')->join('role_types', function ($join) {
-                    $join->on('head_users.RoleTypeID', '=', 'role_types.ID')->where('head_users.UserID', '=', Auth::user()->UserID);
-                })->first();
-                return View('info',['user'=>$user]);
-                break;
-            case 'p':
-                 $user=DB::table('stud_parents')->join('role_types', function ($join) {
-                     $join->on('stud_parents.RoleTypeID', '=', 'role_types.ID')->where('stud_parents.UserID', '=', Auth::user()->UserID);
-                 })->first();
- 
-                 return View('info',['user'=>$user]);
-                 break;
-            case 't':
-                 $user=DB::table('teachers')->join('role_types', function ($join) {
-                     $join->on('teachers.RoleTypeID', '=', 'role_types.ID')->where('teachers.UserID', '=', Auth::user()->UserID);
-                 })->first();
-                 return View('info',['user'=>$user]);
-                 break;
-            case 'a':
-                 $user=DB::table('admins')->join('role_types', function ($join) {
-                     $join->on('admins.RoleTypeID', '=', 'role_types.ID')->where('admins.UserID', '=', Auth::user()->UserID);
-                 })->first();
-                 return View('info',['user'=>$user]);
-                 break;
-         }
+          $UserID=Auth::user()->UserID;
+          $u=null;
+          $aditionalAttrinutes=null;
+
+          $azonositoValaszto = mb_substr($UserID, 0, 1);
+          switch ($azonositoValaszto) {
+          case 'a':
+               $user = Admin::with(["GetRole","GetSexType"])->where([
+                    'UserID' => $UserID
+               ])->first();
+               
+               break;
+          case 's':
+               $user = Student::with(["GetRole","GetSexType"])->where([
+                    'UserID' => $UserID
+               ])->first();
+               $aditionalAttrinutes = [
+                    'bPlace' => $user->BPlace,
+                    'studentCardNum' => $user->StudentCardNum,
+                    'studentTeachID' => $user->StudentTeachID,
+                    'remainingVerifications'=>$user->RemainedParentVerification
+               ];
+               break;
+          case 't':
+               $user = Teacher::with(["GetRole","GetSexType"])->where([
+                    'UserID' => $UserID
+               ])->first();
+               $aditionalAttrinutes = [
+                    'teachID' => $user->TeachID
+               ];
+               break;
+          case 'p':
+               $user = StudParent::with(["GetRole","GetSexType"])->where([
+                    'UserID' => $UserID
+               ])->first();
+               break;
+          case 'h':
+               $user = HeadUser::with(["GetRole","GetSexType"])->where([
+                    'UserID' => $UserID
+               ])->first();
+               break;
+          }
+          $additionalAttributesJson = json_encode($aditionalAttrinutes);
+     
+          if ($user)
+          {
+          return view('info',['user'=>$user,'aditionals'=>$additionalAttributesJson]);
+          }else {
+          return redirect()->back()->with('failedmessage', "Azonosító nem található");
+          }
+
+        
     }
 }

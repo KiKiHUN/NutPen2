@@ -17,7 +17,7 @@ class RegisterController extends Controller
     {
         if (DatabaseController::IsFirstRun()) {
             DatabaseController::DefaultValues();
-            return view('admin.admin_register',['sexes'=>SexType::getSexes()]);
+            return view('userviews.admin.admin_register',['sexes'=>SexType::getSexes()]);
         }else {
             return redirect('/');
         }

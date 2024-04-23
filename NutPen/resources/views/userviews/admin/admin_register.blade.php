@@ -31,17 +31,20 @@
                     
                     <div class="row mt-2">
                         <div class="col-12">
-                            <form action="/admin/registeradmin" method="post" class="tm-login-form">
+                           
+                            <form action="/registeradmin" id="formkuld" method="post" class="tm-login-form">
                                 @csrf
                                 <div class="form-group">
                                     <label for="ID">Azonosító</label>
                                     <input name="ID" type="text" class="form-control validate" id="ID"
-                                        value="a00000" required />
+                                        value="a00000" disabled required />
                                 </div>
+                               
                                 <div class="form-group mt-3">
                                     <label for="password">Jelszó</label>
                                     <input name="password" type="password" class="form-control validate" id="password"
                                         value="" required />
+                                        <p id="hiba" style="color: red"></p>
                                 </div>
                                 <div class="form-group">
                                     <label for="fname">Vezetéknév</label>
@@ -112,5 +115,15 @@
 
 
 @section('script')
-
+<script>
+    document.getElementById('formkuld').onsubmit = function() {
+        if (document.getElementById('password').value.length < 8) {
+            document.getElementById('hiba').innerText = "Legalább 8 karaktenek kell lennie a jelszónak";
+            return false;
+        } else {
+            return true;
+        }
+        return false;
+    };
+</script>
 @endsection

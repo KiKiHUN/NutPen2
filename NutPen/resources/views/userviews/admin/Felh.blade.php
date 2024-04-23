@@ -55,6 +55,7 @@
 
                 @if ($status == 2)
                     <h2 class="tm-block-title">Új felhasználó</h2>
+                    <p id="hiba" style="color: red"></p>
                         <form id="ujFelh" class="formCenterContent" action="/admin/ujfelhasznalomentes" method="post">
                             @csrf
                             <div class="NewUser">
@@ -199,4 +200,15 @@
 @section('script')
     <script src="{{ asset('/js/gorgeto.js') }}" type="text/javascript" defer></script>
     <script src="{{ asset('/js/adminJS.js') }}" type="text/javascript" defer></script>
+    <script>
+        document.getElementById('ujFelh').onsubmit = function() {
+            if (document.getElementById('pw').value.length < 8) {
+                document.getElementById('hiba').innerText = "A jelszónak legalább 8 karaktenek kell lennie";
+                return false;
+            } else {
+                return true;
+            }
+            return false;
+        };
+    </script>
 @endsection

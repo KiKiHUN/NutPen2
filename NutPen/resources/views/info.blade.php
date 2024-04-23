@@ -18,7 +18,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" href="/fiok">Fiók</a>
-            <a class="dropdown-item" href="/logout">Kilépés</a>
+            <a class="dropdown-item" href="/kijelentkezes">Kilépés</a>
         </div>
     </li>
 @endsection
@@ -33,14 +33,29 @@
     <div class="row tm-content-row">
         <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
             <div class="tm-bg-primary-dark tm-block">
-                <p class="text-white mt-5 mb-5">Felhasználó típus: <b>{{ $user->Name }}</b></p>
+                
+                <p class="text-white mt-5 mb-5" id="role" value="{{ $user->GetRole->Name  }}" >Felhasználó típus: <b>{{ $user->GetRole->Name  }}</b></p>
                 <p class="text-white mt-5 mb-5">Vezetéknév: <b>{{ $user->LName }}</b></p>
                 <p class="text-white mt-5 mb-5">Keresztnév: <b>{{ $user->FName }}</b></p>
-                <p class="text-white mt-5 mb-5">Azonsoító: <b>{{ $user->ID }}</b></p>
+                <p class="text-white mt-5 mb-5">Azonsoító: <b>{{ $user->UserID }}</b></p>
+
+                <div id="additional-attributes" data-attributes="{{ $aditionals }}"></div>
+                <p class="text-white mt-5 mb-5">Email: <b>{{ $user->Email }}</b></p>
+                <p class="text-white mt-5 mb-5">Telefonszám: <b>{{ $user->Phone }}</b></p>
+                <p class="text-white mt-5 mb-5">Nem: <b>{{ $user->GetSexType->Name }}</b></p>
+                <div id="additional-fields">
+       
+                </div>
+
                 <form action="/jelszoVisszaallitas" method="get">
                     <input type="submit" class="btn btn-danger" value="Jelszó módosítása">
                 </form>
             </div>
         </div>
     </div>
+@endsection
+
+@section('script')
+    <script src="{{ asset('/js/info.js') }}" type="text/javascript" defer></script>
+   
 @endsection

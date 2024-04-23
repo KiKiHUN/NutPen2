@@ -96,7 +96,7 @@ class DatabaseController extends Controller
         DB::statement("SET foreign_key_checks=1");
 
         $r=new RoleType();
-        $r->Name="admin";
+        $r->Name="Admin";
         $r->Description="Minden kezelő";
         $r->save();
 
