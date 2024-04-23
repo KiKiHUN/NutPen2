@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="/css/bootstrap.min.css">
  
+  <link href="/FA_6.2.0_web/css/all.css" rel="stylesheet">
   <script src="/js/jquery-3.3.1.min.js"></script>
   <script src="/js/jquery-calendar.min.js"></script>
   <script src="/js/bootstrap.min.js"></script>
@@ -158,7 +159,7 @@
     <div class="container-fluid px-4">
             <div class="row">
                 <div class="col-xs-12">
-                    <h1>Wow ! That calendar works !</h1>
+                    <h1>Naptár</h1>
                     <div id="calendar"></div>
                 </div>
             </div>

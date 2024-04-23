@@ -42,7 +42,7 @@ class Lesson extends Model
     }
     public function GetHomeworks()
     {
-        return $this->hasMany(HomeWork::class);
+        return $this->hasMany(HomeWork::class,"LessonID");
     }
 
     static function AddNewLesson($subjectID,$startDate,$endDate,$minutes,$weeklyTimes,$teacherID,$active)

@@ -25,7 +25,8 @@ class Student extends Authenticatable
         'Phone',
         'RoleTypeID',
         'LastLogin',
-        'DefaultPassword'
+        'DefaultPassword',
+        'RemainedParentVerification'
       ];
       protected $primaryKey = 'UserID';
       public $incrementing = false;

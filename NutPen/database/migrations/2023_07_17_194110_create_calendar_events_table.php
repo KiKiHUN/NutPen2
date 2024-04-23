@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('calendar_events', function (Blueprint $table) {
             $table->id('ID');
-            $table->string('CreatedByID',6);
+            $table->string('CreatedByID',8);
             $table->dateTime('StartDateTime');
             $table->dateTime('EndDateTime');
             $table->boolean('Enabled')->default(true);

@@ -16,7 +16,7 @@
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
         <a class="dropdown-item" href="/kitiltottak">ID vagy IP bannolások</a>
-        <a class="dropdown-item" href="/ujkitiltas">Új kitiltás</a>
+        <a class="dropdown-item" href="/figyelmeztetesek">Figyelmeztetések</a>
     </div>
 </li>
 
@@ -30,7 +30,7 @@
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
         <a class="dropdown-item" href="/osztalyok">Listázás</a>
-        <a class="dropdown-item" href="/ujosztaly">Új</a>
+        <a class="dropdown-item" href="/ujosztaly">Új osztály</a>
     </div>
 </li>
 
@@ -49,6 +49,7 @@
         <a class="dropdown-item" href="/ujtantargy">Új tantárgy</a>
         <a class="dropdown-item" href="/ertekelestipusok">Értékelés típusok</a>
         <a class="dropdown-item" href="/ertekelesek">Értékelések</a>
+        <a class="dropdown-item" href="/hazifeladatok">Házi feladatok</a>
     </div>
 </li>
 

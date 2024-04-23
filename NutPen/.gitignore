@@ -18,3 +18,5 @@ yarn-error.log
 /.idea
 /.vscode
 /storage/framework/cache
+/storage/framework/
+\storage\framework

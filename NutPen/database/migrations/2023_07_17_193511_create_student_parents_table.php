@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('student_parents', function (Blueprint $table) {
-            $table->string('StudentID',6);
-            $table->string('ParentID',6);
+            $table->string('StudentID',8);
+            $table->string('ParentID',8);
             $table->foreign('ParentID')->references('UserID')->on('stud_parents')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('StudentID')->references('UserID')->on('students')->onDelete('cascade')->onUpdate('cascade');
             $table->unique(['StudentID', 'ParentID'])->primary();

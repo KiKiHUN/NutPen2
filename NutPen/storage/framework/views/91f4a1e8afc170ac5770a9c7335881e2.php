@@ -63,6 +63,22 @@
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('script'); ?>
+    <script>
+        switch (screen.orientation.type) {
+            case "landscape-primary":
+            break;
+            case "landscape-secondary":
+            break;
+            case "portrait-secondary":
+            case "portrait-primary":
+            alert("A jobb használhatóság érdekében fordítsa el az eszközét.")
+            break;
+            default:
+            console.log("The orientation API isn't supported in this browser :(");
+        }
+
+        
+    </script>
     <script src="/js/bannerLoad.js"></script>
 <?php $__env->stopSection(); ?>
 

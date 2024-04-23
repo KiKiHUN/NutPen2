@@ -35,6 +35,14 @@ button:focus {
   display: flex;
   align-items: center;
 }
+.MainWarnings
+{
+  color: rgb(231, 245, 36);
+}
+.MainGrades
+{
+  color: rgb(94, 255, 228);
+}
 .Internal
 {
     margin-top: 1rem;
@@ -48,6 +56,80 @@ button:focus {
     border: 3px solid rgba(26, 47, 70, 0.283);
     padding: 20%;
 }
+.NewItemButton
+{
+  background-color: green;
+  margin-bottom: 10px;
+  float: right;
+  border-radius: 0.3em;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #2db118;
+}
+.RemoveButton
+{
+  background-color: rgb(128, 0, 0);
+  float: right;
+  border-radius: 0.3em;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #ff3535;
+  color: wheat;
+}
+.EditButton
+{
+  background-color: rgb(0, 81, 255);
+  float: right;
+  border-radius: 0.3em;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #35aeff;
+  color: rgb(0, 0, 0);
+}
+.DownloadButton
+{
+  background-color: rgb(183, 0, 255);
+  float: right;
+  border-radius: 0.3em;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #f263ff;
+  color: rgb(0, 0, 0);
+  width: 60%;
+  height: 3em;
+}
+.OtherFunctionButton
+{
+  background-color: rgb(0, 255, 200);
+  float: right;
+  border-radius: 0.3em;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #a5ffe4;
+  color: rgb(0, 0, 0);
+}
+.UploadFunctionButton
+{
+  margin-top: 15px;
+  background-color: rgb(0, 183, 255);
+  float: right;
+  border-radius: 0.3em;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #a5ffe4;
+  color: rgb(0, 0, 0);
+  width: 50%;
+  height: 3em;
+}
+.btnplacer
+{
+  justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
 .tm-site-icon {
   color: #656565;
 }
@@ -124,6 +206,22 @@ button:focus {
   font-weight: 700;
   color: #fff;
   margin-bottom: 30px;
+}
+
+.grade-button {
+  display: inline-block;
+  padding: 2px 5px;
+  margin: 1px;
+  background-color: #007bff8c;
+  color: #ffffff;
+  border: 1px solid #007bff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.grade-button:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
 }
 .nav-link {
   color: #fff;
@@ -469,6 +567,12 @@ thead {
   background-color: transparent;
   border: 2px solid #f5a623;
 }
+#fullscreentoggle
+{
+  cursor: pointer;
+  font-size: large;
+  margin-left: 1em;
+}
 .custom-file-input {
   cursor: pointer;
 }
@@ -480,7 +584,9 @@ thead {
   border-top: 1px solid #415a70;
   padding: 15px 25px;
   vertical-align: middle;
+  align-content: center;
 }
+
 .tm-table-small td,
 .tm-table-small th {
   padding-left: 12px;
@@ -617,8 +723,13 @@ input[type="checkbox"]:focus {
     margin-left: 1%;
     margin-right: 1%;
   background-color: #567086;
-  padding-top: 10px;
+  padding-top: 0.1em;
+  height: 25px;
   padding-bottom: 10px;
+  border-radius: 5px;
+  border-color: #000;
+  border-style: double;
+  border-bottom: 0;
   -webkit-box-shadow: 0 -3px 5px 0 rgba(69, 92, 113, 0.59);
   -moz-box-shadow: 0 -3px 5px 0 rgba(69, 92, 113, 0.59);
   box-shadow: 0 -3px 5px 0 rgba(69, 92, 113, 0.59);
@@ -702,6 +813,13 @@ input[type="checkbox"]:focus {
   color: #aacbea;
 }
 
+@media (min-width: 576px){
+  .container, .container-sm 
+  {
+    max-width:100%;
+  }
+   
+}
 @media (min-width: 1200px) {
   .navbar-expand-xl .navbar-nav .nav-link {
     padding-left: 28px;
@@ -709,6 +827,10 @@ input[type="checkbox"]:focus {
   }
   .navbar-collapse {
     height: 100%;
+  }
+  .container
+  {
+    max-width: 80%;
   }
 }
 @media (min-width: 992px) {

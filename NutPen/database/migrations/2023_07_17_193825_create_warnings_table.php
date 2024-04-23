@@ -16,11 +16,10 @@ return new class extends Migration
             $table->dateTime('DateTime');
             $table->string('Name');
             $table->string('Description');
-            $table->string('TeacherID',6);
-            $table->string('StudentID',6);
+            $table->string('WhoGaveID',8);
+            $table->string('StudentID',8);
 
             $table->foreign('StudentID')->references('UserID')->on('students')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('TeacherID')->references('UserID')->on('teachers')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

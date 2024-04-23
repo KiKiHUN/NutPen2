@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id('ID');
-            $table->string('SenderID',6);
-            $table->string('TargetID',6);
+            $table->string('SenderID',8);
+            $table->string('TargetID',8);
             $table->string('Message');
             $table->dateTime('SentDateTime');
             $table->boolean('Flagged')->default(false);

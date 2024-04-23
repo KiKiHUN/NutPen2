@@ -20,15 +20,24 @@ class BlockIpMiddleware
     {
         if($request->hasCookie('id'))
         {
-            $IsBanedByID=BannedIP::where([
-                'clientID' => $request->cookie('id')
-            ])->first();
+            try {
+                $IsBanedByID=BannedIP::where([
+                    'clientID' => $request->cookie('id')
+                ])->first();
+                
+            } catch (\Illuminate\Database\QueryException $ex) {
+                // Log the exception or handle it as per your application's requirements
+                // For example, you can return an error response
+                abort(500, "Adatbázis nem érhető el");
+            }catch (\Throwable $th) {
+                //throw $th;
+            }
+           
             if ($IsBanedByID) {
                 if ($IsBanedByID->UUIDBanned) {
                     abort(403, "Hehe Bannhammer lecsapott ");
                 }
             }
-           
             $IsBanedByIP=BannedIP::where([
                 'clientIP' => $request->getClientIp()
             ])->first();

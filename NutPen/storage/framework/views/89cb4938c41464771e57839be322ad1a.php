@@ -23,8 +23,8 @@
                     </div>
                     <hr>
                     <div class="modal-msg reply-msg">
-                        <label for="replyText">Válaszolás:</label>
-                        <input type="text" class="form-control msg-reply-text" id="replyText" placeholder="Kezdj el írni...">
+                        <label for="userMSGText">Üzenet:</label>
+                        <input type="text" class="form-control msg-reply-text" id="userMSGText" placeholder="Kezdj el írni...">
                     </div>
                   <button type="button" class="btn btn-primary" id="sendReply">Elküld</button>
                 </div>
@@ -67,55 +67,60 @@
             </button>
         </div>
         <div class="tm-notification-items">
-            <?php $__currentLoopData = $messages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $msg): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <div class="MessageModal media tm-notification-item" id="msg_<?php echo e($msg->ID); ?>" 
-                data-basemsg="<?php echo e(json_encode($msg->basemsg->Message)); ?>" 
-                data-basesenderid="<?php echo e(json_encode($msg->basemsg->SenderID)); ?>"
-                data-reply="<?php echo e($msg->reply ? json_encode($msg->reply->Message) : "null"); ?>"
-                data-replysenderid="<?php echo e($msg->reply ? json_encode($msg->reply->SenderID) : "null"); ?>"
-                >
-
-                <?php if((!$msg->reply&&$msg->basemsg->TargetID==$user->UserID)||($msg->reply&&$msg->reply->TargetID==$user->UserID)): ?>
-                    <?php if(!$msg->reply): ?>
-                        <input type="hidden" id="OtherUserID" value="<?php echo e($msg->basemsg->SenderID); ?>">
-                        <div class="tm-gray-circle msg-received"><img src="img/chat.png" alt="Avatar Image" class="rounded-circle msgcircleimg"></div>
-                        <div class="media-body">
-                            <p class="mb-2">
-                                <b><?php echo e($msg->basemsg->SenderID); ?> </b>  küldött egy üzenetet<br>
-                            <span class="tm-small tm-text-color-secondary">Ekkor: <?php echo e($msg->basemsg->SentDateTime); ?> </span>
-                        </div>
+            <?php if(count($messages)==0): ?>
+                Nincs üzenet
+            <?php else: ?>
+                <?php $__currentLoopData = $messages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $msg): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <div class="MessageModal media tm-notification-item" id="msg_<?php echo e($msg->ID); ?>" 
+                    data-basemsg="<?php echo e(json_encode($msg->basemsg->Message)); ?>" 
+                    data-basesenderid="<?php echo e(json_encode($msg->basemsg->SenderID)); ?>"
+                    data-reply="<?php echo e($msg->reply ? json_encode($msg->reply->Message) : "null"); ?>"
+                    data-replysenderid="<?php echo e($msg->reply ? json_encode($msg->reply->SenderID) : "null"); ?>"
+                    >
+    
+                    <?php if((!$msg->reply&&$msg->basemsg->TargetID==$user->UserID)||($msg->reply&&$msg->reply->TargetID==$user->UserID)): ?>
+                        <?php if(!$msg->reply): ?>
+                            <input type="hidden" id="OtherUserID" value="<?php echo e($msg->basemsg->SenderID); ?>">
+                            <div class="tm-gray-circle msg-received"><img src="img/chat.png" alt="Avatar Image" class="rounded-circle msgcircleimg"></div>
+                            <div class="media-body">
+                                <p class="mb-2">
+                                    <b><?php echo e($msg->basemsg->SenderID); ?> </b>  küldött egy üzenetet<br>
+                                <span class="tm-small tm-text-color-secondary">Ekkor: <?php echo e($msg->basemsg->SentDateTime); ?> </span>
+                            </div>
+                        <?php else: ?>
+                            <input type="hidden" id="OtherUserID" value="<?php echo e($msg->reply->SenderID); ?>">
+                            <div class="tm-gray-circle msg-received"><img src="img/chat.png" alt="Avatar Image" class="rounded-circle msgcircleimg"></div>
+                            <div class="media-body">
+                                <p class="mb-2">
+                                    <b><?php echo e($msg->reply->SenderID); ?> </b>  küldött egy üzenetet<br>
+                                <span class="tm-small tm-text-color-secondary">Ekkor:<?php echo e($msg->reply->SentDateTime); ?> </span>
+                            </div>
+                        <?php endif; ?>        
                     <?php else: ?>
-                        <input type="hidden" id="OtherUserID" value="<?php echo e($msg->reply->SenderID); ?>">
-                        <div class="tm-gray-circle msg-received"><img src="img/chat.png" alt="Avatar Image" class="rounded-circle msgcircleimg"></div>
-                        <div class="media-body">
-                            <p class="mb-2">
-                                <b><?php echo e($msg->reply->SenderID); ?> </b>  küldött egy üzenetet<br>
-                            <span class="tm-small tm-text-color-secondary">Ekkor:<?php echo e($msg->reply->SentDateTime); ?> </span>
-                        </div>
-                    <?php endif; ?>        
-                <?php else: ?>
-                    <?php if(!$msg->reply): ?>
-                    <input type="hidden" id="OtherUserID" value="<?php echo e($msg->basemsg->TargetID); ?>">
-                    <div class="tm-gray-circle msg-sent"><img src="img/chat.png" alt="Avatar Image" class="rounded-circle msgcircleimg"></div>
-                    <div class="media-body">
-                        <p class="mb-2">
-                            <b><?php echo e($msg->basemsg->TargetID); ?> </b>-nak/nek küldtél egy üzenetet<br>
-                        <span class="tm-small tm-text-color-secondary">Ekkor: <?php echo e($msg->basemsg->SentDateTime); ?> </span>
-                    </div>
-                    <?php else: ?>
-                        <input type="hidden" id="OtherUserID" value="<?php echo e($msg->reply->TargetID); ?>">
+                        <?php if(!$msg->reply): ?>
+                        <input type="hidden" id="OtherUserID" value="<?php echo e($msg->basemsg->TargetID); ?>">
                         <div class="tm-gray-circle msg-sent"><img src="img/chat.png" alt="Avatar Image" class="rounded-circle msgcircleimg"></div>
                         <div class="media-body">
                             <p class="mb-2">
-                                <b><?php echo e($msg->reply->TargetID); ?> </b>-nak/nek küldtél egy üzenetet<br>
-                            <span class="tm-small tm-text-color-secondary">Ekkor:  <?php echo e($msg->reply->SentDateTime); ?>  </span>
+                                <b><?php echo e($msg->basemsg->TargetID); ?> </b>-nak/nek küldtél egy üzenetet<br>
+                            <span class="tm-small tm-text-color-secondary">Ekkor: <?php echo e($msg->basemsg->SentDateTime); ?> </span>
                         </div>
-                    <?php endif; ?>        
-
-                   
-                <?php endif; ?>
-            </div>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php else: ?>
+                            <input type="hidden" id="OtherUserID" value="<?php echo e($msg->reply->TargetID); ?>">
+                            <div class="tm-gray-circle msg-sent"><img src="img/chat.png" alt="Avatar Image" class="rounded-circle msgcircleimg"></div>
+                            <div class="media-body">
+                                <p class="mb-2">
+                                    <b><?php echo e($msg->reply->TargetID); ?> </b>-nak/nek küldtél egy üzenetet<br>
+                                <span class="tm-small tm-text-color-secondary">Ekkor:  <?php echo e($msg->reply->SentDateTime); ?>  </span>
+                            </div>
+                        <?php endif; ?>        
+    
+                       
+                    <?php endif; ?>
+                </div>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            <?php endif; ?>
+            
         </div>
     </div>
 </div><?php /**PATH C:\xampp\htdocs\NutPen2\NutPen\resources\views/message.blade.php ENDPATH**/ ?>

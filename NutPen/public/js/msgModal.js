@@ -5,6 +5,13 @@ $('.MessageModal').click(function() {
     var baseSenderID = JSON.parse($(this).data('basesenderid'));
     var replySenderID = JSON.parse($(this).data('replysenderid'));
 
+    $('#baseMessageContent').html('<p>' + basemsg + '</p>');
+    if (reply) {
+      $('#replyContent').html('<p>' + reply + '</p>');
+    } else {
+      $('#replyContent').html('<p></p>');
+    }
+
     var senderDisplayName = "";
     $("#modal-sender").removeClass();
     if (baseSenderID === userID) {
@@ -23,6 +30,7 @@ $('.MessageModal').click(function() {
       if (replySenderID === userID) {
         $('#sendReply').text('Üzenet frisítése'); 
         ReplyDisplayName="Te küldted:";
+        $('#userMSGText').val(reply); 
         $("#modal-target").addClass("modal-msg msg-color-user");
       } else {
         $('#sendReply').text('Üzenet küldése'); 
@@ -33,6 +41,7 @@ $('.MessageModal').click(function() {
     {
       if (baseSenderID === userID) {
         $('#sendReply').text('Üzenet frisítése'); 
+        $('#userMSGText').val(basemsg); 
       } else {
         $('#sendReply').text('Üzenet küldése'); 
       }
@@ -46,12 +55,7 @@ $('.MessageModal').click(function() {
     var otherUserID = $(this).find('#OtherUserID').val();
     $('#ReplyOtherUserID').val(otherUserID);
     
-    $('#baseMessageContent').html('<p>' + basemsg + '</p>');
-    if (reply) {
-      $('#replyContent').html('<p>' + reply + '</p>');
-    } else {
-      $('#replyContent').html('<p></p>');
-    }
+    
 
     // Show the modal
     $('#messageModal').modal('show');
@@ -97,7 +101,7 @@ $('#sendNewMSG').click(function() {
 
 
 $('#sendReply').click(function() {
-  var replyMessage = $('#replyText').val();
+  var replyMessage = $('#userMSGText').val();
   var UserID = $('#UserID').val();
   var OtherUSerID = $('#ReplyOtherUserID').val();
 

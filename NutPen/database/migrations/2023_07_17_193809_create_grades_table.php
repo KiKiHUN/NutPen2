@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('ID');
             $table->dateTime('DateTime');
             $table->unsignedBigInteger('LessonID');
-            $table->string('StudentID',6);
+            $table->string('StudentID',8);
             $table->unsignedBigInteger('GradeTypeID');
 
             $table->foreign('StudentID')->references('UserID')->on('students')->onDelete('cascade')->onUpdate('cascade');

@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\Grade;
 use App\Models\HeadUser;
 use App\Models\Message;
 use App\Models\Student;
 use App\Models\StudParent;
 use App\Models\Teacher;
+use App\Models\Warning;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -20,13 +22,30 @@ class MainRouterController extends Controller
          $msg=Message::getTopXMessagesByID(Auth::user()->UserID,10);
          switch ($firstCharacter) {
             case 's':
-                 $user = Student::where(['UserID' => Auth::user()->UserID])->first();
-                 if ( $this->DefaultCheck($user)) {
-                    return redirect('/jelszoVisszaallitas');
-                 }
-                
-                 return View('diak.diak_dashboard',['user'=>$user,'messages'=>$msg]);
-                 break;
+               $user = Student::where(['UserID' => Auth::user()->UserID])->first();
+               if ( $this->DefaultCheck($user)) {
+               return redirect('/jelszoVisszaallitas');
+               }
+               
+               $oneWeekAgo = now()->subWeek();
+               $warnings=Warning::where('StudentID','=',Auth::user()->UserID)->where('DateTime','>=',$oneWeekAgo)->get();
+               $wariningswithUsers = [];
+
+               // Loop through each student in the class
+               foreach ($warnings as $warning) {
+                    
+                    $whogave=Warning::GetWhoGave($warning->ID);
+                    $wariningswithUsers[$warning->ID] = [
+                         'ID' => $warning->ID,
+                         'name' => $warning->Name,
+                         'whogavename' => $whogave->LName." ". $whogave->FName,
+                         'whogaveID' => $warning->WhoGaveID
+                    ];
+               }
+               $ratings=Grade::with(['GetLesson.GetSubject','GetGradeType'])->where('StudentID','=',Auth::user()->UserID)->where('DateTime','>=',$oneWeekAgo)->get();
+               
+               return View('userviews.student.dashboard',['user'=>$user,'messages'=>$msg,'newwarnings'=>$wariningswithUsers,'newratings'=>$ratings]);
+               break;
             case 'p':
                  $user = StudParent::where(['UserID' => Auth::user()->UserID])->first();
                  if ( $this->DefaultCheck($user)) {
@@ -46,14 +65,14 @@ class MainRouterController extends Controller
                  if ( $this->DefaultCheck($user)) {
                     return redirect('/jelszoVisszaallitas');
                  }
-                 return View('admin.admin_dashboard',['user'=>$user,'messages'=>$msg]);
+                 return View('userviews.admin.admin_dashboard',['user'=>$user,'messages'=>$msg]);
                  break;
             case 'h':
                 $user = HeadUser::where(['UserID' => Auth::user()->UserID])->first();
                 if ( $this->DefaultCheck($user)) {
                     return redirect('/jelszoVisszaallitas');
                  }
-                return View('admin.admin_dashboard',['user'=>$user,'messages'=>$msg]);
+                return View('userviews.admin.admin_dashboard',['user'=>$user,'messages'=>$msg]);
                 break;
          }
     }

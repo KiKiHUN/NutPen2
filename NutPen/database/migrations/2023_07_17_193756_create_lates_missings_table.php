@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('lates_missings', function (Blueprint $table) {
             $table->id('ID');
             $table->unsignedBigInteger('LessonID');
-            $table->string('StudentID',6);
+            $table->string('StudentID',8);
             $table->unsignedSmallInteger('MissedMinute');
             $table->dateTime('DateTime');
             $table->boolean('Verified');
-            $table->string('VerifiedByID',6);
+            $table->string('VerifiedByID',8);
             $table->unsignedBigInteger('VerificationTypeID');
 
 

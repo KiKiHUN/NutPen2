@@ -1,7 +1,13 @@
 $('.filterbtn').click(function() {
-    window.location = '/felhasznalok/' + $(this).attr("value");
+    window.location = '/admin/felhasznalok/' + $(this).attr("value");
 });
+
+
 $('#SaveBannBTN').click(function() {
+    if (banneds.length==0) {
+        alert("Nincs mit módosítani");
+        return;
+    }
     let json = JSON.stringify(banneds);
 
     console.log(json);
@@ -11,7 +17,7 @@ $('#SaveBannBTN').click(function() {
         }
     });
     $.ajax({
-        url: '/kitiltasmodositas', 
+        url: '/admin/kitiltasmodositas', 
         method: 'POST',
         contentType: 'application/json',
         data: json,
@@ -22,6 +28,7 @@ $('#SaveBannBTN').click(function() {
         }else
         {
             alert(response.message);
+            banneds.length = 0
         }
         },
         error: function(xhr, status, error) {
@@ -135,35 +142,51 @@ $('.CHK_IPbanning').click(function() {
 
     if( $('#role').length )         // use this if you are using id to check
     {
+        var additionalAttributes = $('#additional-attributes').data('attributes');
+      
         // Define the additional fields for each role
-    const additionalFields = {
-        Diák: [
-            { name: 'Születéshely', type: 'text', defaultValue: '' },
-            { name: 'Diákigazolvány szám', type: 'number', defaultValue: '' },
-            { name: 'Tanítási azonosító', type: 'number', defaultValue: '' },
-            { name: 'Fennmaradó igazolások száma', type: 'number', defaultValue: 3 }
-            ],
-        Tanár: [
-            { name: 'Tanítási azonosító', type: 'number', defaultValue: '' }
-            ]
-    };
-
+        const additionalFields = {
+            Diák: [
+                { id:'bPlace', name: 'Születéshely', type: 'text', defaultValue: '' },
+                { id:'studentCardNum',name: 'Diákigazolvány szám', type: 'number', defaultValue: '' },
+                { id:'studentTeachID',name: 'Tanítási azonosító', type: 'number', defaultValue: '' },
+                { id:'remainingVerifications',name: 'Fennmaradó igazolások száma', type: 'number', defaultValue: 3 }
+                ],
+            Tanár: [
+                { id:'teachID', name: 'Tanítási azonosító', type: 'number', defaultValue: '' }
+                ]
+        };
+        
+       
     // Function to update additional fields based on selected role
     function updateAdditionalFields() {
         var selectedRole = $('#role option:selected').text();
         var fields = additionalFields[selectedRole];
 
+        if (additionalAttributes!=null) {
+            // Update additionalFields with received values if not empty
+           Object.keys(additionalAttributes).forEach(key => {
+               const value = additionalAttributes[key];
+                   const field = fields.find(f => f.id === key);
+                   if (field) {
+                       field.defaultValue = value;
+                   }
+           });
+       }
         // Clear previous additional fields
         $('#additional-fields').empty();
-        for (let index = 0; index < fields.length; index++) {
-            var inputType = (fields[index].type === 'number') ? 'number' : 'text';
-            $('#additional-fields').append(
-                '<div class="inputcolumn">'+
-                    '<label for="lname">'+fields[index].name+': </label>'+
-                    '<input type="'+inputType+'" class="textfield" id="aditional'+index+'" name="aditional'+index+'" value="' + fields[index].defaultValue + '" required>'+
-                '</div>'
-            );
+        if (fields) {
+            for (let index = 0; index < fields.length; index++) {
+                var inputType = (fields[index].type === 'number') ? 'number' : 'text';
+                $('#additional-fields').append(
+                    '<div class="inputcolumn">'+
+                        '<label for="lname">'+fields[index].name+': </label>'+
+                        '<input type="'+inputType+'" class="textfield" id="aditional'+index+'" name="aditional'+index+'" value="' + fields[index].defaultValue + '" required>'+
+                    '</div>'
+                );
+            }
         }
+       
        
     }
 

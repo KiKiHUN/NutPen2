@@ -23,8 +23,8 @@
                     </div>
                     <hr>
                     <div class="modal-msg reply-msg">
-                        <label for="replyText">Válaszolás:</label>
-                        <input type="text" class="form-control msg-reply-text" id="replyText" placeholder="Kezdj el írni...">
+                        <label for="userMSGText">Üzenet:</label>
+                        <input type="text" class="form-control msg-reply-text" id="userMSGText" placeholder="Kezdj el írni...">
                     </div>
                   <button type="button" class="btn btn-primary" id="sendReply">Elküld</button>
                 </div>
@@ -67,55 +67,60 @@
             </button>
         </div>
         <div class="tm-notification-items">
-            @foreach ($messages as $msg)
-            <div class="MessageModal media tm-notification-item" id="msg_{{ $msg->ID }}" 
-                data-basemsg="{{ json_encode($msg->basemsg->Message) }}" 
-                data-basesenderid="{{ json_encode($msg->basemsg->SenderID) }}"
-                data-reply="{{ $msg->reply ? json_encode($msg->reply->Message) : "null" }}"
-                data-replysenderid="{{ $msg->reply ? json_encode($msg->reply->SenderID) : "null" }}"
-                >
-
-                @if ((!$msg->reply&&$msg->basemsg->TargetID==$user->UserID)||($msg->reply&&$msg->reply->TargetID==$user->UserID))
-                    @if (!$msg->reply)
-                        <input type="hidden" id="OtherUserID" value="{{ $msg->basemsg->SenderID }}">
-                        <div class="tm-gray-circle msg-received"><img src="img/chat.png" alt="Avatar Image" class="rounded-circle msgcircleimg"></div>
-                        <div class="media-body">
-                            <p class="mb-2">
-                                <b>{{ $msg->basemsg->SenderID }} </b>  küldött egy üzenetet<br>
-                            <span class="tm-small tm-text-color-secondary">Ekkor: {{ $msg->basemsg->SentDateTime }} </span>
-                        </div>
+            @if (count($messages)==0)
+                Nincs üzenet
+            @else
+                @foreach ($messages as $msg)
+                <div class="MessageModal media tm-notification-item" id="msg_{{ $msg->ID }}" 
+                    data-basemsg="{{ json_encode($msg->basemsg->Message) }}" 
+                    data-basesenderid="{{ json_encode($msg->basemsg->SenderID) }}"
+                    data-reply="{{ $msg->reply ? json_encode($msg->reply->Message) : "null" }}"
+                    data-replysenderid="{{ $msg->reply ? json_encode($msg->reply->SenderID) : "null" }}"
+                    >
+    
+                    @if ((!$msg->reply&&$msg->basemsg->TargetID==$user->UserID)||($msg->reply&&$msg->reply->TargetID==$user->UserID))
+                        @if (!$msg->reply)
+                            <input type="hidden" id="OtherUserID" value="{{ $msg->basemsg->SenderID }}">
+                            <div class="tm-gray-circle msg-received"><img src="img/chat.png" alt="Avatar Image" class="rounded-circle msgcircleimg"></div>
+                            <div class="media-body">
+                                <p class="mb-2">
+                                    <b>{{ $msg->basemsg->SenderID }} </b>  küldött egy üzenetet<br>
+                                <span class="tm-small tm-text-color-secondary">Ekkor: {{ $msg->basemsg->SentDateTime }} </span>
+                            </div>
+                        @else
+                            <input type="hidden" id="OtherUserID" value="{{ $msg->reply->SenderID }}">
+                            <div class="tm-gray-circle msg-received"><img src="img/chat.png" alt="Avatar Image" class="rounded-circle msgcircleimg"></div>
+                            <div class="media-body">
+                                <p class="mb-2">
+                                    <b>{{ $msg->reply->SenderID }} </b>  küldött egy üzenetet<br>
+                                <span class="tm-small tm-text-color-secondary">Ekkor:{{ $msg->reply->SentDateTime }} </span>
+                            </div>
+                        @endif        
                     @else
-                        <input type="hidden" id="OtherUserID" value="{{ $msg->reply->SenderID }}">
-                        <div class="tm-gray-circle msg-received"><img src="img/chat.png" alt="Avatar Image" class="rounded-circle msgcircleimg"></div>
-                        <div class="media-body">
-                            <p class="mb-2">
-                                <b>{{ $msg->reply->SenderID }} </b>  küldött egy üzenetet<br>
-                            <span class="tm-small tm-text-color-secondary">Ekkor:{{ $msg->reply->SentDateTime }} </span>
-                        </div>
-                    @endif        
-                @else
-                    @if (!$msg->reply)
-                    <input type="hidden" id="OtherUserID" value="{{ $msg->basemsg->TargetID }}">
-                    <div class="tm-gray-circle msg-sent"><img src="img/chat.png" alt="Avatar Image" class="rounded-circle msgcircleimg"></div>
-                    <div class="media-body">
-                        <p class="mb-2">
-                            <b>{{ $msg->basemsg->TargetID }} </b>-nak/nek küldtél egy üzenetet<br>
-                        <span class="tm-small tm-text-color-secondary">Ekkor: {{ $msg->basemsg->SentDateTime }} </span>
-                    </div>
-                    @else
-                        <input type="hidden" id="OtherUserID" value="{{ $msg->reply->TargetID }}">
+                        @if (!$msg->reply)
+                        <input type="hidden" id="OtherUserID" value="{{ $msg->basemsg->TargetID }}">
                         <div class="tm-gray-circle msg-sent"><img src="img/chat.png" alt="Avatar Image" class="rounded-circle msgcircleimg"></div>
                         <div class="media-body">
                             <p class="mb-2">
-                                <b>{{ $msg->reply->TargetID }} </b>-nak/nek küldtél egy üzenetet<br>
-                            <span class="tm-small tm-text-color-secondary">Ekkor:  {{ $msg->reply->SentDateTime }}  </span>
+                                <b>{{ $msg->basemsg->TargetID }} </b>-nak/nek küldtél egy üzenetet<br>
+                            <span class="tm-small tm-text-color-secondary">Ekkor: {{ $msg->basemsg->SentDateTime }} </span>
                         </div>
-                    @endif        
-
-                   
-                @endif
-            </div>
-            @endforeach
+                        @else
+                            <input type="hidden" id="OtherUserID" value="{{ $msg->reply->TargetID }}">
+                            <div class="tm-gray-circle msg-sent"><img src="img/chat.png" alt="Avatar Image" class="rounded-circle msgcircleimg"></div>
+                            <div class="media-body">
+                                <p class="mb-2">
+                                    <b>{{ $msg->reply->TargetID }} </b>-nak/nek küldtél egy üzenetet<br>
+                                <span class="tm-small tm-text-color-secondary">Ekkor:  {{ $msg->reply->SentDateTime }}  </span>
+                            </div>
+                        @endif        
+    
+                       
+                    @endif
+                </div>
+                @endforeach
+            @endif
+            
         </div>
     </div>
 </div>

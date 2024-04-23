@@ -12,9 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('home_work_students', function (Blueprint $table) {
-            $table->string('StudentID',6);
+            $table->string('StudentID',8);
             $table->unsignedBigInteger('HomeWorkID');
             $table->boolean('Done')->default(false);
+            $table->dateTime('SubmitDateTime');
             $table->string('FilePath')->nullable();
             $table->string('Answer')->nullable();
 

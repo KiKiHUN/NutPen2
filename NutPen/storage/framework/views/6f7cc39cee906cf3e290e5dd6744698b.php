@@ -26,6 +26,8 @@
             <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
                 <?php if($status == 0): ?>
                     <h2 class="tm-block-title">Összes bannolt ID és IP</h2>
+                    <button onclick="location.href = '/ujkitiltas';" >Új kitiltás</button>
+                    
                     <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                         <thead>
                             <tr>
@@ -63,7 +65,7 @@
                     <button id="SaveBannBTN" class=" btn-success margined-send-btn">Mentés</button>
                 <?php endif; ?>
 
-                <?php if($status == 1): ?>
+                <?php if($status == 2): ?>
                     <h2 class="tm-block-title">Új kitiltás</h2>
                     
                         <form id="ujFelh" class="formCenterContent" action="/ujkitiltasmentes" method="post">

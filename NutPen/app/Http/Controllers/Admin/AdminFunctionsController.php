@@ -10,6 +10,8 @@ use App\Models\ClassesLessons;
 use App\Models\Grade;
 use App\Models\GradeType;
 use App\Models\HeadUser;
+use App\Models\HomeWork;
+use App\Models\HomeWorkStudent;
 use App\Models\Lesson;
 use App\Models\RoleType;
 use App\Models\SchoolClass;
@@ -19,44 +21,56 @@ use App\Models\StudentsClass;
 use App\Models\StudParent;
 use App\Models\Subject;
 use App\Models\Teacher;
-use Carbon\Carbon;
+use App\Models\Warning;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
-use Mockery\Matcher\Subset;
+use Illuminate\Support\Facades\Auth;
 
 class AdminFunctionsController extends Controller
 {
     //users
         function UsersPage()
         {
-            return view('admin/felh',['status'=>1]);
+            return view('userviews/admin/felh',['status'=>1]);
         }
 
         function NewUserPage()
         {
-            return view('admin/felh',['status'=>2,'roles'=>RoleType::all(),'sextypes'=>SexType::all()]);
+            return view('userviews/admin/felh',['status'=>2,'roles'=>RoleType::all(),'sextypes'=>SexType::all()]);
         }
 
         function EditUserPage($UserID) {
             $u=null;
+            $aditionalAttrinutes=null;
+
             $azonositoValaszto = mb_substr($UserID, 0, 1);
             switch ($azonositoValaszto) {
                 case 'a':
                     $user = Admin::where([
                         'UserID' => $UserID
                     ])->first();
+                   
                     break;
                 case 's':
                     $user = Student::where([
                         'UserID' => $UserID
                     ])->first();
+                    $aditionalAttrinutes = [
+                        'bPlace' => $user->BPlace,
+                        'studentCardNum' => $user->StudentCardNum,
+                        'studentTeachID' => $user->StudentTeachID,
+                        'remainingVerifications'=>$user->RemainedParentVerification
+                    ];
                     break;
                 case 't':
                     $user = Teacher::where([
                         'UserID' => $UserID
                     ])->first();
+                    $aditionalAttrinutes = [
+                        'teachID' => $user->TeachID
+                    ];
                     break;
                 case 'p':
                     $user = StudParent::where([
@@ -69,9 +83,11 @@ class AdminFunctionsController extends Controller
                     ])->first();
                     break;
             }
+            $additionalAttributesJson = json_encode($aditionalAttrinutes);
+           
             if ($user)
             {
-                return view('admin/felh',['status'=>3,'roles'=>RoleType::all(),'sextypes'=>SexType::all(),'user'=>$user]);
+                return view('userviews/admin/felh',['status'=>3,'roles'=>RoleType::all(),'sextypes'=>SexType::all(),'user'=>$user,'aditionals'=>$additionalAttributesJson]);
             }else {
                 return redirect()->back()->with('failedmessage', "Azonosító nem található");
             }
@@ -126,7 +142,7 @@ class AdminFunctionsController extends Controller
                 }
                 try { 
                     $user->save();
-                    return redirect('/felhasznalok/'.$azonositoValaszto)->with('successmessage', "Sikeres mentés.");
+                    return redirect('/admin/felhasznalok/'.$azonositoValaszto)->with('successmessage', "Sikeres mentés.");
                 } catch (\Throwable $th) {
                     dd($th);
                     return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
@@ -260,7 +276,7 @@ class AdminFunctionsController extends Controller
                     $f->LastLogin=now();
                     $f->save();
                     $a='Sikeres mentés. Azonosító: '.$ID;
-                    return redirect('/felhasznalok')->with('successmessage', $a);
+                    return redirect('/admin/felhasznalok')->with('successmessage', $a);
                 } catch (\Throwable $th) {
                     dd($th);
                     return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
@@ -326,7 +342,7 @@ class AdminFunctionsController extends Controller
                     }
                     break;
             }
-            return view('admin/felh',['status'=>0,'users'=>$users]);
+            return view('userviews/admin/felh',['status'=>0,'users'=>$users]);
         }
 
         function allUsersPage() 
@@ -373,22 +389,22 @@ class AdminFunctionsController extends Controller
                 $users[]=$u;
             }
             dd($users);
-            return view('admin/felh',['status'=>0,'users'=>$users]);
+            return view('userviews/admin/felh',['status'=>0,'users'=>$users]);
         }
     //users
 
     //roles
         function Roles()
         {
-            return view('admin/role',['status'=>0,'roles'=>RoleType::all()]);
+            return view('userviews/admin/role',['status'=>0,'roles'=>RoleType::all()]);
         }
 
         function EditRolePage($roleID)  {
             $role=RoleType::GetRoleIfExist($roleID);
             if (!$role) {
-                return redirect('/rangok')->with('failedmessage', "ID nem található");
+                return redirect('/admin/rangok')->with('failedmessage', "ID nem található");
             }
-            return view('admin/role',['status'=>3,'role'=>$role]);
+            return view('userviews/admin/role',['status'=>3,'role'=>$role]);
         }
 
         function EditRole(Request $request) 
@@ -400,12 +416,12 @@ class AdminFunctionsController extends Controller
             if (!RoleType::EditRole($request->classID,$name)) {
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
             }
-            return redirect('/rangok')->with('successmessage', "sikeres mentés");
+            return redirect('/admin/rangok')->with('successmessage', "sikeres mentés");
         }
 
         function NewRole()
         {
-            return view('admin/role',['status'=>2]);
+            return view('userviews/admin/role',['status'=>2]);
         }
 
         function SaveRole(Request $request) 
@@ -417,7 +433,7 @@ class AdminFunctionsController extends Controller
             if (!RoleType::AddNewRole($name)) {
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
             }
-            return redirect('/rangok')->with('successmessage', "sikeres mentés");
+            return redirect('/admin/rangok')->with('successmessage', "sikeres mentés");
 
         }
     //roles
@@ -425,7 +441,7 @@ class AdminFunctionsController extends Controller
     //banning
         function BannedUSers()
         {
-            return view('admin/bannedUsers',['status'=>0,'users'=>BannedIP::all()->toArray()]);
+            return view('userviews/admin/bannedUsers',['status'=>0,'users'=>BannedIP::all()->toArray()]);
         }
 
         function EditBannings(Request $request) 
@@ -444,7 +460,7 @@ class AdminFunctionsController extends Controller
 
         function NewBanning()
         {
-            return view('admin/bannedUsers',['status'=>1,'roles'=>RoleType::all(),'sextypes'=>SexType::all()]);
+            return view('userviews/admin/bannedUsers',['status'=>2,'roles'=>RoleType::all(),'sextypes'=>SexType::all()]);
         }
 
         function SaveNewBanning(Request $request) 
@@ -477,7 +493,7 @@ class AdminFunctionsController extends Controller
             if (!BannedIP::AddNewBann($UUID,$IP,$UUIDbanned,$IPbanned)) {
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
             }
-            return redirect('/kitiltottak')->with('successmessage', "sikeres mentés");
+            return redirect('/admin/kitiltottak')->with('successmessage', "sikeres mentés");
         }
     //banning
 
@@ -485,7 +501,7 @@ class AdminFunctionsController extends Controller
         function SchoolClasses()
         {
             $classesWithTeachers=SchoolClass::with("GetTeacher")->get();
-            return view('admin/school_Classes',['status'=>0,'classes'=>$classesWithTeachers]);
+            return view('userviews/admin/school_Classes',['status'=>0,'classes'=>$classesWithTeachers]);
         }
 
         function ClassStudents($classID) 
@@ -500,7 +516,7 @@ class AdminFunctionsController extends Controller
                 $users[]=$u;
             }
 
-            return view('admin/school_Classes',['status'=>4,'users'=>$users,'classID'=>$classID]);
+            return view('userviews/admin/school_Classes',['status'=>4,'users'=>$users,'classID'=>$classID,'className'=> $class->Name]);
         }
 
         function RemoveStudentFromClass($classID,$studentID) 
@@ -509,7 +525,7 @@ class AdminFunctionsController extends Controller
             if (!StudentsClass::RemoveStudentFromClass($classID,$studentID)) {
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
             }
-            return redirect('/osztaly/diakok/'.$classID)->with('successmessage', "sikeres mentés");
+            return redirect('/admin/osztaly/diakok/'.$classID)->with('successmessage', "sikeres mentés");
         }
         
 
@@ -518,7 +534,7 @@ class AdminFunctionsController extends Controller
             $class=SchoolClass::with('GetStudents')->where('ID', '=', $classID)->first();
             $studentIdsInClass = $class->GetStudents->pluck('UserID')->toArray();
             $studentsNotInClass = Student::whereNotIn('UserID', $studentIdsInClass)->get();
-            return view('admin/school_Classes',['status'=>5,'students'=>$studentsNotInClass,'classID'=>$classID]);
+            return view('userviews/admin/school_Classes',['status'=>5,'students'=>$studentsNotInClass,'classID'=>$classID]);
         }
 
         function SaveStudentToClass(Request $request) 
@@ -539,7 +555,7 @@ class AdminFunctionsController extends Controller
             if (!StudentsClass::AddNewStudent($ClassID,$StudentID)) {
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
             }
-            return redirect('/osztalyok/diakhozzad/'.$ClassID)->with('successmessage', "sikeres mentés");
+            return redirect('/admin/osztalyok/diakhozzad/'.$ClassID)->with('successmessage', "sikeres mentés");
         }
         
        
@@ -547,9 +563,9 @@ class AdminFunctionsController extends Controller
         function EditClassPage($classID)  {
             $class=SchoolClass::GetCllassIfExist($classID);
             if (!$class) {
-                return redirect('/osztalyok')->with('failedmessage', "ID nem található");
+                return redirect('/admin/osztalyok')->with('failedmessage', "ID nem található");
             }
-            return view('admin/school_Classes',['status'=>3,'teachers'=>Teacher::query()->orderBy('FName', 'desc')->get(),'class'=>$class]);
+            return view('userviews/admin/school_Classes',['status'=>3,'teachers'=>Teacher::query()->orderBy('FName', 'desc')->get(),'class'=>$class]);
         }
 
         function EditClass(Request $request) 
@@ -565,12 +581,12 @@ class AdminFunctionsController extends Controller
             if (!SchoolClass::EditClass($request->classID,$name,$classMasterID)) {
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
             }
-            return redirect('/osztalyok')->with('successmessage', "sikeres mentés");
+            return redirect('/admin/osztalyok')->with('successmessage', "sikeres mentés");
         }
 
         function NewClass()
         {
-            return view('admin/school_Classes',['status'=>2,'teachers'=>Teacher::query()->orderBy('FName', 'desc')->get()]);
+            return view('userviews/admin/school_Classes',['status'=>2,'teachers'=>Teacher::query()->orderBy('FName', 'desc')->get()]);
         }
 
         function SaveClass(Request $request) 
@@ -587,7 +603,7 @@ class AdminFunctionsController extends Controller
             if (!SchoolClass::AddNewClass($name,$classMasterID)) {
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
             }
-            return redirect('/osztalyok')->with('successmessage', "sikeres mentés");
+            return redirect('/admin/osztalyok')->with('successmessage', "sikeres mentés");
 
         }
     //classes
@@ -595,22 +611,22 @@ class AdminFunctionsController extends Controller
     //subjects
         function Subjects()
         {
-            return view('admin/subject',['status'=>0,'subjects'=>Subject::all()]);
+            return view('userviews/admin/subject',['status'=>0,'subjects'=>Subject::all()]);
         }
 
         function SubjectLessons($sujectID) 
         {
             $sub=Subject::with('GetLessons')->where('ID', '=', $sujectID)->first();
 
-            return view('admin/lesson',['status'=>0,'lessons'=>$sub->GetLessons]);
+            return view('userviews/admin/lesson',['status'=>0,'lessons'=>$sub->GetLessons]);
         }
 
         function EditSubjectPage($sujectID)  {
             $subject=Subject::GetSubjectIfExist($sujectID);
             if (!$subject) {
-                return redirect('/tantargyak')->with('failedmessage', "ID nem található");
+                return redirect('/admin/tantargyak')->with('failedmessage', "ID nem található");
             }
-            return view('admin/subject',['status'=>3,'subject'=>$subject]);
+            return view('userviews/admin/subject',['status'=>3,'subject'=>$subject]);
         }
 
         function EditSubject(Request $request) 
@@ -626,12 +642,12 @@ class AdminFunctionsController extends Controller
             if (!Subject::EditSubject($request->subjectID,$name,$desc)) {
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
             }
-            return redirect('/tantargyak')->with('successmessage', "sikeres mentés");
+            return redirect('/admin/tantargyak')->with('successmessage', "sikeres mentés");
         }
 
         function NewSubject()
         {
-            return view('admin/subject',['status'=>2]);
+            return view('userviews/admin/subject',['status'=>2]);
         }
 
         function SaveSubject(Request $request) 
@@ -647,7 +663,7 @@ class AdminFunctionsController extends Controller
             if (!Subject::AddNewSubject($name,$desc)) {
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
             }
-            return redirect('/tantargyak')->with('successmessage', "sikeres mentés");
+            return redirect('/admin/tantargyak')->with('successmessage', "sikeres mentés");
 
         }
     //subjects
@@ -656,13 +672,13 @@ class AdminFunctionsController extends Controller
         function Lessons()
         {
             $lessonsWithTeachersAndSubject=Lesson::with(["GetTeacher","GetSubject"])->get();
-            return view('admin/lesson',['status'=>0,'lessons'=>$lessonsWithTeachersAndSubject]);
+            return view('userviews/admin/lesson',['status'=>0,'lessons'=>$lessonsWithTeachersAndSubject]);
         }
 
         function LessonsClasses($lessonID) 
         {
-            $lesson=Lesson::with('GetClasses')->where('ID', '=', $lessonID)->first();
-            return view('admin/lesson',['status'=>4,'classes'=>$lesson->GetClasses,"lessonID"=>$lessonID]);
+            $lesson=Lesson::with(['GetClasses','GetSubject','GetTeacher'])->where('ID', '=', $lessonID)->first();
+            return view('userviews/admin/lesson',['status'=>4,'classes'=>$lesson->GetClasses,"subjectName"=>$lesson->GetSubject->Name,"teacherName"=>($lesson->GetTeacher->FName." ".$lesson->GetTeacher->LName),"lessonID"=>$lessonID]);
         }
 
         function RemoveClassFromLesson($lessonID,$classID) 
@@ -670,7 +686,7 @@ class AdminFunctionsController extends Controller
             if (!ClassesLessons::RemoveClassFromLesson($lessonID,$classID)) {
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
             }
-            return redirect('/tanora/osztalyok/'.$lessonID)->with('successmessage', "sikeres mentés");
+            return redirect('/admin/tanora/osztalyok/'.$lessonID)->with('successmessage', "sikeres mentés");
         }
         
 
@@ -680,7 +696,7 @@ class AdminFunctionsController extends Controller
             $classIdsInLesson = $lesson->GetClasses->pluck('ID')->toArray();
             
             $classIdsNotInLesson = SchoolClass::with('GetTeacher')->whereNotIn('ID', $classIdsInLesson)->get();
-            return view('admin/lesson',['status'=>5,'classes'=>$classIdsNotInLesson,'lessonID'=>$lessonID]);
+            return view('userviews/admin/lesson',['status'=>5,'classes'=>$classIdsNotInLesson,'lessonID'=>$lessonID]);
         }
 
         function SaveClassToLesson(Request $request) 
@@ -701,7 +717,7 @@ class AdminFunctionsController extends Controller
             if (!ClassesLessons::AddClassToLesson($lessonID,$classID)) {
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
             }
-            return redirect('/osztalyok/diakhozzad/'.$classID)->with('successmessage', "sikeres mentés");
+            return redirect('/admin/osztalyok/diakhozzad/'.$classID)->with('successmessage', "sikeres mentés");
         }
         
 
@@ -712,9 +728,9 @@ class AdminFunctionsController extends Controller
             $teachers=Teacher::query()->orderBy('FName', 'desc')->get();
             $subjects=Subject::all();
             if (!$lesson) {
-                return redirect('/tanorak')->with('failedmessage', "ID nem található");
+                return redirect('/admin/tanorak')->with('failedmessage', "ID nem található");
             }
-            return view('admin/lesson',['status'=>3,'lesson'=>$lesson,'teachers'=>$teachers,'subjects'=>$subjects]);
+            return view('userviews/admin/lesson',['status'=>3,'lesson'=>$lesson,'teachers'=>$teachers,'subjects'=>$subjects]);
         }
 
         function EditLesson(Request $request) 
@@ -774,7 +790,7 @@ class AdminFunctionsController extends Controller
             if (!Lesson::EditLesson($request->lessonID,intval($sub),$start,$end,intval($min),$timetable,$teach,$active)) {
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
             }
-            return redirect('/tanorak')->with('successmessage', "sikeres mentés");
+            return redirect('/admin/tanorak')->with('successmessage', "sikeres mentés");
         }
 
         function NewLesson()
@@ -782,7 +798,7 @@ class AdminFunctionsController extends Controller
             $teachers=Teacher::query()->orderBy('FName', 'desc')->get();
             $subjects=Subject::all();
 
-            return view('admin/lesson',['status'=>2,'teachers'=>$teachers,'subjects'=>$subjects]);
+            return view('userviews/admin/lesson',['status'=>2,'teachers'=>$teachers,'subjects'=>$subjects]);
         }
 
         function SaveLesson(Request $request) 
@@ -842,7 +858,7 @@ class AdminFunctionsController extends Controller
             if (!Lesson::AddNewLesson(intval($sub),$start,$end,intval($min),$timetable,$teach,$active)) {
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
             }
-            return redirect('/tanorak')->with('successmessage', "sikeres mentés");
+            return redirect('/admin/tanorak')->with('successmessage', "sikeres mentés");
 
         }
 
@@ -899,19 +915,19 @@ class AdminFunctionsController extends Controller
 
         function NewRatingType()
         {
-            return view('admin/rating',['status'=>2]);
+            return view('userviews/admin/rating',['status'=>2]);
         }
         function RatingTypes()
         {
-            return view('admin/rating',['status'=>0,'ratings'=>GradeType::all()]);
+            return view('userviews/admin/rating',['status'=>0,'ratings'=>GradeType::all()]);
         }
 
         function EditRatinTypegPage($gradeID)  {
             $gradetype=GradeType::GetGradeIfExist($gradeID);
             if (!$gradetype) {
-                return redirect('/ertekelestipusok')->with('failedmessage', "ID nem található");
+                return redirect('/admin/ertekelestipusok')->with('failedmessage', "ID nem található");
             }
-            return view('admin/rating',['status'=>3,'rating'=>$gradetype]);
+            return view('userviews/admin/rating',['status'=>3,'rating'=>$gradetype]);
         }
 
         function EditRatingType(Request $request) 
@@ -928,7 +944,7 @@ class AdminFunctionsController extends Controller
             if (!GradeType::EditGrade($request->ratingID,$name,$value)) {
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
             }
-            return redirect('/ertekelestipusok')->with('successmessage', "sikeres mentés");
+            return redirect('/admin/ertekelestipusok')->with('successmessage', "sikeres mentés");
         }
 
       
@@ -941,14 +957,14 @@ class AdminFunctionsController extends Controller
             $class=SchoolClass::with('GetStudents')->where('ID', '=', $classID)->first();
             // Initialize an empty array to store grades
             $gradesByStudent = [];
-
+            $lesson=Lesson::with('GetSubject')->where('ID', $lessonID)->first();
             // Loop through each student in the class
             foreach ($class->GetStudents as $student) {
                 // Get grades for the student for the given lesson
                 $grades = Grade::with('GetGradeType')->where('StudentID', $student->UserID)
                             ->where('LessonID', $lessonID)
                             ->get();
-                
+               
                 // Add grades to the array grouped by StudentID
                 $gradesByStudent[$student->UserID] = [
                     'UserID' => $student->UserID,
@@ -956,7 +972,7 @@ class AdminFunctionsController extends Controller
                     'grades' => $grades
                 ];
             }
-            return view('admin/rating',['status'=>4,'gradesByStudent'=>$gradesByStudent,"classname"=>$class->Name,'lessonID'=>$lessonID,'classID'=>$classID]);
+            return view('userviews/admin/rating',['status'=>4,'gradesByStudent'=>$gradesByStudent,"classname"=>$class->Name,'subjectName'=>$lesson->GetSubject->Name,'lessonID'=>$lessonID,'classID'=>$classID]);
         }
 
         function  AddNewRatingToLessonClass($lessonID,$classID)
@@ -964,7 +980,7 @@ class AdminFunctionsController extends Controller
             $class=SchoolClass::with('GetStudents')->where('ID', '=', $classID)->first();
 
 
-            return view('admin/rating',['status'=>5,'students'=>$class->GetStudents,"classname"=>$class->Name,'classID'=>$classID,'lessonID'=>$lessonID,'grades'=>GradeType::all()]);
+            return view('userviews/admin/rating',['status'=>5,'students'=>$class->GetStudents,"classname"=>$class->Name,'classID'=>$classID,'lessonID'=>$lessonID,'grades'=>GradeType::all()]);
         }
 
         
@@ -998,7 +1014,7 @@ class AdminFunctionsController extends Controller
                 }
             }
             DB::commit();
-            return redirect('/ertekelesek/tanora/'.$request->lessonID.'/osztaly/'.$request->classID)->with('successmessage', "sikeres mentés");
+            return redirect('/admin/ertekelesek/tanora/'.$request->lessonID.'/osztaly/'.$request->classID)->with('successmessage', "sikeres mentés");
         }
     
         function SaveRatingType(Request $request) 
@@ -1015,7 +1031,7 @@ class AdminFunctionsController extends Controller
             if (!GradeType::AddNewGrade($name,$value)) {
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
             }
-            return redirect('/ertekelestipusok')->with('successmessage', "sikeres mentés");
+            return redirect('/admin/ertekelestipusok')->with('successmessage', "sikeres mentés");
 
         }
 
@@ -1024,13 +1040,13 @@ class AdminFunctionsController extends Controller
             if (!GradeType::RemoveGrade($ratingID)) {
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
             }
-            return redirect('/ertekelestipusok')->with('successmessage', "sikeres mentés");
+            return redirect('/admin/ertekelestipusok')->with('successmessage', "sikeres mentés");
         }
 
 
         function RecentRatings()
         {
-            return view('admin/rating',['status'=>7,'ratings'=>Grade::with(['GetStudent','GetLesson','GetGradeType'])->latest()->take(20)->get()]);
+            return view('userviews/admin/rating',['status'=>6,'ratings'=>Grade::with(['GetStudent','GetLesson.GetSubject','GetLesson.GetTeacher','GetGradeType'])->latest()->take(20)->get()]);
         }
 
         function RemoveStudentGrade($ratingID) 
@@ -1038,16 +1054,16 @@ class AdminFunctionsController extends Controller
             if (!Grade::RemoveGrade($ratingID)) {
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
             }
-            return redirect('/ertekelesek')->with('successmessage', "sikeres mentés");
+            return redirect('/admin/ertekelesek')->with('successmessage', "sikeres mentés");
         }
 
         function EditStudentRatingPage($gradeID)  
         {
             $grade=Grade::GetGradeWithStudentIfExist($gradeID);
             if (!$grade) {
-                return redirect('/ertekelesek')->with('failedmessage', "ID nem található");
+                return redirect('/admin/ertekelesek')->with('failedmessage', "ID nem található");
             }
-            return view('admin/rating',['status'=>6,'rating'=>$grade,'grades'=>GradeType::all()]);
+            return view('userviews/admin/rating',['status'=>7,'rating'=>$grade,'grades'=>GradeType::all()]);
         }
 
         function EditStudentRating(Request $request) 
@@ -1059,14 +1075,256 @@ class AdminFunctionsController extends Controller
             if (!Grade::EditGrade($request->ratingID,$gradeTypeID)) {
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
             }
-            return redirect('/ertekelesek')->with('successmessage', "sikeres mentés");
+            return redirect('/admin/ertekelesek')->with('successmessage', "sikeres mentés");
         }
 
     //ratings
+
+    //warnings
+        function Warnings()
+        {
+            $wariningswithUsers = [];
+
+            // Loop through each student in the class
+            foreach (Warning::with(['GetStudent'])->get() as $warning) {
+                
+                $whogave=Warning::GetWhoGave($warning->ID);
+                $wariningswithUsers[$warning->ID] = [
+                    'ID' => $warning->ID,
+                    'name' => $warning->Name,
+                    'description' => $warning->Description,
+                    'datetime' => $warning->DateTime,
+                    'whogavename' => $whogave->LName." ". $whogave->FName,
+                    'whogaveID' => $warning->WhoGaveID,
+                    'studentID'=>$warning->StudentID,
+                    'studentname'=>$warning->GetStudent->LName." ". $warning->GetStudent->FName
+                ];
+            }
+            return view('userviews/admin/warning',['status'=>0,'warnings'=>$wariningswithUsers]);
+        }
+
+        function EditWarningPage($warningID)  
+        {
+            $warning=Warning::GetWarningIfExist($warningID);
+            if (!$warning) {
+                return redirect('/admin/figyelmeztetesek')->with('failedmessage', "ID nem található");
+            }
+            return view('userviews/admin/warning',['status'=>3,'warning'=>$warning,'students'=>Student::all( )]);
+        }
+
+        function EditWarning(Request $request) 
+        {
+            $name="";
+            $description="";
+            $studentID="";
+            if ($request->description!=null) {
+                $description=$request->description;
+            }
+            if ($request->studentID!=null) {
+                $studentID=$request->studentID;
+            }
+            if ($request->name!=null) {
+                $name=$request->name;
+            }
+            if (!Warning::EditWarning($request->warningID,$name,$description,$studentID)) {
+                return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+            }
+            return redirect('/admin/figyelmeztetesek')->with('successmessage', "sikeres mentés");
+        }
+
+        function NewWarning()
+        {
+            return view('userviews/admin/warning',['status'=>2,'students'=>Student::all()]);
+        }
+
+        function SaveWarning(Request $request) 
+        {
+            $name="";
+            $description="";
+            $studentID="";
+            if ($request->description!=null) {
+                $description=$request->description;
+            }
+            if ($request->studentID!=null) {
+                $studentID=$request->studentID;
+            }
+            if ($request->name!=null) {
+                $name=$request->name;
+            }
+            if (!Warning::AddNewWarning($name,$description,Auth::user()->UserID,$studentID)) {
+                return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+            }
+            return redirect('/admin/figyelmeztetesek')->with('successmessage', "sikeres mentés");
+
+        }
+
+        function RemoveWarning($warningID) 
+        {
+            if (!Warning::RemoveWarning($warningID)) {
+                return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+            }
+            return redirect('/admin/figyelmeztetesek')->with('successmessage', "sikeres mentés");
+        }
+        
+    //warnings
+
+    //homeworks
+        function HomeWorks()
+        {
+            return view('userviews/admin/homework',['status'=>0,'homeworks'=>HomeWork::with(['GetLesson.GetTeacher','GetLesson.GetSubject','GetLesson.GetClasses'])->get()]);
+        }
+        function StudentsHomeWorks($homewokID)
+        {
+
+            return view('userviews/admin/homework',['status'=>4,'homeworks'=>HomeWorkStudent::with(['GetStudent','GetHomework'])->where([
+                'HomeWorkID' => $homewokID
+            ])->get()]);
+            
+        }
+        function RemoveStudentHomeWork($homewokID,$studentID) 
+        {
+            if (!HomeWorkStudent::RemoveStudentHomework($homewokID,$studentID)) {
+                return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+            }
+            return redirect('/admin/hazifeladatok')->with('successmessage', "sikeres mentés");
+        }
+
+        function DownloadHomeWork($homewokID,$studentID) 
+        {
+            $c=null;
+            if ( !($c=HomeWorkStudent::GetHomeworkIfExist($homewokID,$studentID)) ) {
+                return redirect()->back()->with('failedmessage', "Letöltés sikeretlen");
+            }
+            if ($c->FileName==""||$c->FileName==" "||$c->FileName==null) {
+                return redirect()->back()->with('failedmessage', "Hibás fájlnév az adatbázisban.");
+            }
+
+            $folderPath = '\public\homeworks\id_'.$homewokID;
+            $folderStructurePath = storage_path().'\app'. $folderPath;
+    
+            $file= $folderStructurePath."\\".$c->FileName;
+
+            if ( file_exists($file)) {
+                return response()->download( $file);
+            }else
+            {
+                return redirect()->back()->with('failedmessage', "Fájl nem található");
+            }
+        } 
+
+        function HomeWorkClasses($homewokID) 
+        {
+            $homeworks=HomeWork::with('GetLesson.GetClasses')->where([
+                'ID' => $homewokID
+            ])->first();
+            $classes=[];
+           
+            foreach ($homeworks->GetLesson->GetClasses as  $class) {
+                $classes[]=$class;
+            }
+            return view('userviews/admin/school_Classes',['status'=>0,'classes'=>$classes]);
+        }
+        function EditHomeWorkPage($homewokID)  
+        {
+            $homework=HomeWork::GetHomeworkIfExist($homewokID);
+            if (!$homework) {
+                return redirect('/admin/hazifeladatok')->with('failedmessage', "ID nem található");
+            }
+            return view('userviews/admin/homework',['status'=>3,'homework'=>$homework,'lessons'=>Lesson::with(['GetSubject','GetClasses','GetTeacher'])->get()]);
+        }
+
+        function EditHomeWork(Request $request) 
+        {
+            $name="";
+            $description="";
+            $lessonID="";
+            $start=null;
+            $end=null;
+            $active=false;
+            if ($request->description!=null) {
+                $description=$request->description;
+            }
+            if ($request->lessonID!=null) {
+                $lessonID=$request->lessonID;
+            }
+            if ($request->name!=null) {
+                $name=$request->name;
+            }
+            if (isset($request->startDate)) {
+                $start=$request->startDate;
+            }else {
+                return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+            }
+            if (isset($request->endDate)) {
+                $end=$request->endDate;
+            }else {
+                return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+            }
+            if (isset($request->activated)) {
+                $active=true;
+            }
+            if (!HomeWork::EditHomeWork($request->homeworkID,$lessonID,$name,$description,$start,$end,$active)) {
+                return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+            }
+            return redirect('/admin/hazifeladatok')->with('successmessage', "sikeres mentés");
+        }
+
+        function NewHomeWork()
+        {
+            return view('userviews/admin/homework',['status'=>2,'lessons'=>Lesson::with(['GetSubject','GetClasses','GetTeacher'])->get()]);
+        }
+
+        function SaveHomeWork(Request $request) 
+        {
+            $name="";
+            $description="";
+            $lessonID="";
+            $start=null;
+            $end=null;
+            $active=false;
+            if ($request->description!=null) {
+                $description=$request->description;
+            }
+            if ($request->lessonID!=null) {
+                $lessonID=$request->lessonID;
+            }
+            if ($request->name!=null) {
+                $name=$request->name;
+            }
+            if (isset($request->startDate)) {
+                $start=$request->startDate;
+            }else {
+                return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+            }
+            if (isset($request->endDate)) {
+                $end=$request->endDate;
+            }else {
+                return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+            }
+            if (isset($request->activated)) {
+                $active=true;
+            }
+            if (!HomeWork::AddNewHomework($lessonID,$name,$description,$start,$end,$active)) {
+                return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+            }
+            return redirect('/admin/hazifeladatok')->with('successmessage', "sikeres mentés");
+
+        }
+
+        function RemoveHomeWork($homewokID) 
+        {
+            if (!Warning::RemoveWarning($homewokID)) {
+                return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+            }
+            return redirect('/admin/hazifeladatok')->with('successmessage', "sikeres mentés");
+        }
+
+    //homeworks
 }
 
 
-class OneUser {
+class OneUser 
+{
     public $UserID=0;
     public $fname;
     public $lname;

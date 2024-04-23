@@ -26,7 +26,7 @@ class SchoolClass extends Model
     }
     public function GetLessons()
     {
-      return $this->hasManyThrough(Lesson::class,ClassesLessons::class);
+      return $this->hasManyThrough(Lesson::class,ClassesLessons::class,"ClassID","ID","ID","LessonID");
     }
 
 
