@@ -17,9 +17,9 @@ return new class extends Migration
             $table->string('StudentID',8);
             $table->unsignedSmallInteger('MissedMinute');
             $table->dateTime('DateTime');
-            $table->boolean('Verified');
-            $table->string('VerifiedByID',8);
-            $table->unsignedBigInteger('VerificationTypeID');
+            $table->boolean('Verified')->default(0);
+            $table->string('VerifiedByID',8)->nullable();
+            $table->unsignedBigInteger('VerificationTypeID')->nullable();
 
 
             $table->foreign('StudentID')->references('UserID')->on('students')->onDelete('cascade')->onUpdate('cascade');

@@ -3,7 +3,7 @@
 @section('navbar')
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
-    @include('userviews.student.Navbar')
+    @include('userviews.parent.Navbar')
     
 @endsection
 
@@ -23,14 +23,17 @@
                 <div class="MainWarnings">
                     @if ($newwarnings)
                         @foreach ( $newwarnings as $warning)
-                            <h5>Figyelmzettése van {{ $warning["whogavename"] }}({{ $warning["whogaveID"] }}) dolgozótól! : {{ $warning["name"] }}</h5>
+                            <h5>{{ $warning["childName"] }} diáknak figyelmzettése van {{ $warning["whogavename"] }}({{ $warning["whogaveID"] }}) dolgozótól! : {{ $warning["name"] }}</h5>
                         @endforeach
                     @endif
                 </div> 
                 <div class="MainGrades">
+                   
                     @if ($newratings)
-                        @foreach ( $newratings as $rating)
-                            <h5>Értékelése van {{ $rating->GetLesson->GetSubject->Name }} tárgyból! : {{ $rating->GetGradeType->Name }}</h5>
+                        @foreach ( $newratings as $ratingsperchild)
+                            @foreach ($ratingsperchild as $rating)
+                            <h5>{{ $rating->GetStudent->LName }} diáknak értékelése van {{ $rating->GetLesson->GetSubject->Name }} tárgyból! : {{ $rating->GetGradeType->Name }}</h5>
+                            @endforeach
                         @endforeach
                     @endif
                 </div>

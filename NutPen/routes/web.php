@@ -62,6 +62,12 @@ Route::middleware(['blockIP'])->group(function () {
         Route::get('/admin/rangmodositas/{rangID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditRolePage']);
         Route::post('/admin/ujrangmentes',[App\Http\Controllers\Admin\AdminFunctionsController::class,'SaveRole']);
         Route::post('/admin/rangmodositas',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditRole']);
+
+         //diak-szulo
+         Route::get('/admin/kapcsolat/szulodiak',[App\Http\Controllers\Admin\AdminFunctionsController::class,'StudParConns']);
+         Route::get('/admin/kapcsolat/ujszulodiak',[App\Http\Controllers\Admin\AdminFunctionsController::class,'NewStudPar']);
+         Route::get('/admin/kapcsolat/szulodiaktorles/{studentID}/{parentID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'RemoveStudPar']);
+         Route::post('/admin/kapcsolat/ujszulodiakmentes',[App\Http\Controllers\Admin\AdminFunctionsController::class,'SaveStudPar']);
         
 
         //bannolás
@@ -114,14 +120,35 @@ Route::middleware(['blockIP'])->group(function () {
         Route::get('/admin/ertekelestipustorles/{gradeID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'RemoveRatingType']);
         Route::post('/admin/ujertekelestipusmentes',[App\Http\Controllers\Admin\AdminFunctionsController::class,'SaveRatingType']);
         Route::post('/admin/ertekelestipusmodositas',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditRatingType']);
+        
         Route::get('/admin/ertekelesek/tanora/{lessonID}/osztaly/{classID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'RatingsLessons']);
         Route::get('/admin/tanorak/ujertekeles/{lessonID}/osztaly/{classID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'AddNewRatingToLessonClass']);
         Route::post('/admin/tanorak/ertekelesekmentes',[App\Http\Controllers\Admin\AdminFunctionsController::class,'SaveNewRatingToLessonClass']);
+
         Route::get('/admin/ertekelesek',[App\Http\Controllers\Admin\AdminFunctionsController::class,'RecentRatings']);
         Route::get('/admin/ertekelesmodositas/{gradeID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditStudentRatingPage']);
         Route::get('/admin/ertekelestorles/{gradeID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'RemoveStudentGrade']);
         Route::post('/admin/ertekelesmodositas',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditStudentRating']);
 
+        //hiányzások
+        Route::get('/admin/igazolastipusok',[App\Http\Controllers\Admin\AdminFunctionsController::class,'VerifTypes']);
+        Route::get('/admin/ujigazolastipus',[App\Http\Controllers\Admin\AdminFunctionsController::class,'NewVerifType']);
+        Route::post('/admin/ujigazolastipusmentes',[App\Http\Controllers\Admin\AdminFunctionsController::class,'SaveVerifType']);
+        Route::get('/admin/igazolastipusmodositas/{verifID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditVerifTypegPage']);
+        Route::post('/admin/igazolastipusmodositas',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditVerifType']);
+
+        Route::get('/admin/hianyzasok',[App\Http\Controllers\Admin\AdminFunctionsController::class,'RecentMissings']);
+        Route::get('/admin/hianyzasmodositas/{missID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditStudentMissingPage']);
+        Route::get('/admin/hianyzastorles/{missID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'RemoveStudentMissing']);
+        Route::post('/admin/hianyzasmodositas',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditStudentMissing']);
+
+        Route::get('/admin/hianyzasok/tanora/{lessonID}/osztaly/{classID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'MissingsLessons']);
+        Route::get('/admin/tanorak/ujhianyzas/{lessonID}/osztaly/{classID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'AddNewissingToLessonClass']);
+        Route::post('/admin/tanorak/hianyzasmentes',[App\Http\Controllers\Admin\AdminFunctionsController::class,'SaveNewissingToLessonClass']);
+
+
+
+        
         //figyelmeztetések
         Route::get('/admin/figyelmeztetesek',[App\Http\Controllers\Admin\AdminFunctionsController::class,'Warnings']);
         Route::get('/admin/ujfigyelmeztetes',[App\Http\Controllers\Admin\AdminFunctionsController::class,'NewWarning']);
@@ -147,6 +174,7 @@ Route::middleware(['blockIP'])->group(function () {
             Route::get('/diak/ertekelesek',[App\Http\Controllers\Student\StudentFunctionsController::class,'OwnRatings']);
             Route::get('/diak/hazifeladatok',[App\Http\Controllers\Student\StudentFunctionsController::class,'HomeWorks']);
             Route::get('/diak/figyelmeztetesek',[App\Http\Controllers\Student\StudentFunctionsController::class,'Warnings']);
+            Route::get('/diak/kesesek',[App\Http\Controllers\Student\StudentFunctionsController::class,'Missings']);
             Route::get('/diak/tanorak',[App\Http\Controllers\Student\StudentFunctionsController::class,'Lessons']);
             Route::get('/diak/tantargyak',[App\Http\Controllers\Student\StudentFunctionsController::class,'Subjects']);
             Route::get('/diak/osztaly',[App\Http\Controllers\Student\StudentFunctionsController::class,'SchoolClasseWithStudents']);
@@ -171,16 +199,16 @@ Route::middleware(['blockIP'])->group(function () {
         Route::get('/tanar/hazifeladat/letoltes/{homewokID}',[App\Http\Controllers\Teacher\TeacherFunctionController::class,'DownloadHomeWork']);
     });
     Route::group(['middleware' => 'auth:studparent'], function () {
-        Route::get('/szulo/ertekelesek',[App\Http\Controllers\StudParent\StudParentController::class,'Ratings']);
-        Route::get('/szulo/tanora/hazifeladatok/{lessonID}',[App\Http\Controllers\StudParent\StudParentController::class,'HomeWorks']);
-        Route::get('/szulo/figyelmeztetesek',[App\Http\Controllers\StudParent\StudParentController::class,'Warnings']);
-        Route::get('/szulo/tanorak',[App\Http\Controllers\StudParent\StudParentController::class,'Lessons']);
-        Route::get('/szulo/tantargyak',[App\Http\Controllers\StudParent\StudParentController::class,'Subjects']);
-        Route::get('/szulo/osztaly',[App\Http\Controllers\StudParent\StudParentController::class,'SchoolClasseWithStudents']);
-        Route::get('/szulo/osztaly/osztalytarsak/{classID}',[App\Http\Controllers\StudParent\StudParentController::class,'ClassStudents']);
+        
+        Route::get('/szulo/diakok',[App\Http\Controllers\StudParent\StudParentController::class,'Students']);
+        Route::get('/szulo/ertekelesek/{studID}',[App\Http\Controllers\StudParent\StudParentController::class,'Ratings']);
+        Route::get('/szulo/figyelmeztetesek/{studID}',[App\Http\Controllers\StudParent\StudParentController::class,'Warnings']);
+        Route::get('/szulo/kesesek/{studID}',[App\Http\Controllers\StudParent\StudParentController::class,'Missings']);
+        Route::get('/szulo/tanorak/{studID}',[App\Http\Controllers\StudParent\StudParentController::class,'Lessons']);
+        Route::get('/szulo/hazifeladatok/{studID}',[App\Http\Controllers\StudParent\StudParentController::class,'HomeWorks']);
+        Route::get('/szulo/hianyzasigazolas/{missID}',[App\Http\Controllers\StudParent\StudParentController::class,'EditMissings']);
+
         Route::get('/szulo/naptar/tanorak/{tanoraid}',[App\Http\Controllers\StudParent\StudParentController::class,'CalendarLesson']);
-        Route::get('/szulo/tantargy/orak/{tantargyid}',[App\Http\Controllers\StudParent\StudParentController::class,'SubjectLessons']);
-        Route::post('/szulo/hazifeladat/feltoltes',[App\Http\Controllers\StudParent\StudParentController::class,'UploadHomeWork'] );
         Route::get('/szulo/hazifeladat/letoltes/{homewokID}',[App\Http\Controllers\StudParent\StudParentController::class,'DownloadHomeWork']);
     });
     Route::group(['middleware' => 'auth:headUser'], function () {

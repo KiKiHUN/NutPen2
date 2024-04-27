@@ -260,6 +260,7 @@
                                             <th class="th-sm">Név</th>
                                             <th class="th-sm">Osztályfőnök</th>
                                             <th class="th-sm">Osztály értékelései</th>
+                                            <th class="th-sm">Osztály hiányzásai</th>
                                             <th class="th-sm">Diákok listázása</th>
                                             <th class="th-sm">Osztály-Tanóra</th>
                                         </tr>
@@ -270,6 +271,7 @@
                                                 <td>{{ $item->Name }}</td>
                                                 <td>{{ $item->GetTeacher->FName." ".$item->GetTeacher->LName }}</td>
                                                 <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/admin/ertekelesek/tanora/{{  $lessonID }}/osztaly/{{ $item->ID }}';" >Értékelések</button></div></td>
+                                                <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/admin/hianyzasok/tanora/{{  $lessonID }}/osztaly/{{ $item->ID }}';" >Hiányzások</button></div></td>
                                                 <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/admin/osztaly/diakok/{{ $item->ID }}';" >Diákok listázása</button></div></td>
                                                 <td><div class="btnplacer"><button class="RemoveButton" onclick="location.href = '/admin/tanora/{{ $lessonID }}/osztalytorles/{{ $item->ID }}';" >Kapcsolat bontása</button></div></td>
                                             </tr>

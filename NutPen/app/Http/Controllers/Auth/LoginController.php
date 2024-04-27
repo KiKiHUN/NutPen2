@@ -65,7 +65,7 @@ class LoginController extends Controller
 
         $key = $this->throttleKey($request->cookie('id'));
         $limitedTime = $this->ensureIsNotRateLimited($key,$request->getClientIp());
-        RateLimiter::hit($key, 300);
+        RateLimiter::hit($key, 180);
        
         if ($limitedTime == -1) {
             $user=null;
@@ -168,7 +168,7 @@ class LoginController extends Controller
                 Auth::guard('student')->login($user);
                 break;
             case 'p':
-                Auth::guard('parent')->login($user);
+                Auth::guard('studparent')->login($user);
                 break;
             case 't':
                 Auth::guard('teacher')->login($user);

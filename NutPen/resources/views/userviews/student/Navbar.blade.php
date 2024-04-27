@@ -53,6 +53,7 @@
         <a class="dropdown-item" href="/diak/tantargyak">Tantárgyaim</a>
         <a class="dropdown-item" href="/diak/ertekelesek">Értékeléseim</a>
         <a class="dropdown-item" href="/diak/hazifeladatok">Házi feladataim</a>
+        <a class="dropdown-item" href="/diak/kesesek">Késéseim</a>
        
     </div>
 </li>

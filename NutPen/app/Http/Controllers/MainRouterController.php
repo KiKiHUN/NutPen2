@@ -9,6 +9,7 @@ use App\Models\Message;
 use App\Models\RoleType;
 use App\Models\SexType;
 use App\Models\Student;
+use App\Models\StudentParent;
 use App\Models\StudParent;
 use App\Models\Teacher;
 use App\Models\Warning;
@@ -32,7 +33,7 @@ class MainRouterController extends Controller
                $oneWeekAgo = now()->subWeek();
                $warnings=Warning::where('StudentID','=',Auth::user()->UserID)->where('DateTime','>=',$oneWeekAgo)->get();
                $wariningswithUsers = [];
-
+              
                // Loop through each student in the class
                foreach ($warnings as $warning) {
                     
@@ -49,18 +50,53 @@ class MainRouterController extends Controller
                return View('userviews.student.dashboard',['user'=>$user,'messages'=>$msg,'newwarnings'=>$wariningswithUsers,'newratings'=>$ratings]);
                break;
             case 'p':
-                 $user = StudParent::where(['UserID' => Auth::user()->UserID])->first();
-                 if ( $this->DefaultCheck($user)) {
-                    return redirect('/jelszoVisszaallitas');
-                 }
-                 return View('szulo.szulo_dashboard',['user'=>$user,'messages'=>$msg]);
+               $user = StudParent::where(['UserID' => Auth::user()->UserID])->first();
+               if ( $this->DefaultCheck($user)) {
+               return redirect('/jelszoVisszaallitas');
+               }
+
+               $ownchilds=StudentParent::where('ParentID','=',Auth::user()->UserID)->get();
+
+
+               $oneWeekAgo = now()->subWeek();
+               $warnings=[];
+               $ratings=[];
+               foreach ( $ownchilds as $child ) {
+                    $warnings[]=Warning::where('StudentID','=',$child->UserID)->where('DateTime','>=',$oneWeekAgo)->get();
+                    $ratings[]=Grade::with(['GetLesson.GetSubject','GetGradeType','GetStudent'])->where('StudentID','=',$child->UserID)->where('DateTime','>=',$oneWeekAgo)->get();
+               }
+               $wariningswithUsers = [];
+
+               if ( count($warnings)>0) {
+                    // Loop through each student in the class
+                    foreach ($warnings as $warning) {
+                         foreach ($warning as $onewarning) {
+                              $whogave=Warning::GetWhoGave($onewarning->ID);
+                              $student=Student::where("UserID","=",$onewarning->StudentID);
+                              $wariningswithUsers[$onewarning->ID] = [
+                                   'ID' => $onewarning->ID,
+                                   'name' => $onewarning->Name,
+                                   'whogavename' => $whogave->LName." ". $whogave->FName,
+                                   'whogaveID' => $onewarning->WhoGaveID,
+                                   'childName' => $student->LName." ". $student->FName
+                              ];
+                         }
+                    }
+               }
+              
+               
+               return View('userviews.parent.dashboard',['user'=>$user,'messages'=>$msg,'newwarnings'=>$wariningswithUsers,'newratings'=>$ratings]);
+
+
+
+                
                  break;
             case 't':
                  $user = Teacher::where(['UserID' => Auth::user()->UserID])->first();
                  if ( $this->DefaultCheck($user)) {
                     return redirect('/jelszoVisszaallitas');
                  }
-                 return View('tanar.tanar_dashboard',['user'=>$user,'messages'=>$msg]);
+                 return View('userviews.teacher.dashboard',['user'=>$user,'messages'=>$msg]);
                  break;
             case 'a':
                  $user = Admin::where(['UserID' => Auth::user()->UserID])->first();
@@ -74,7 +110,7 @@ class MainRouterController extends Controller
                 if ( $this->DefaultCheck($user)) {
                     return redirect('/jelszoVisszaallitas');
                  }
-                return View('userviews.admin.admin_dashboard',['user'=>$user,'messages'=>$msg]);
+                return View('userviews.headuser.dashboard',['user'=>$user,'messages'=>$msg]);
                 break;
          }
     }

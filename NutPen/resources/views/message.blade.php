@@ -44,7 +44,7 @@
                 </div>
                 <div class="modal-body modal-inside">
                      <div class="form-group">
-                        <label for="newMSGTargetID">Címzet azonosító:</label>
+                        <label for="newMSGTargetID">Címzett azonosító:</label>
                         <input type="text" class="form-control" id="newMSGTargetID" placeholder="Cél azonosító...">
                     </div>
                     <hr>

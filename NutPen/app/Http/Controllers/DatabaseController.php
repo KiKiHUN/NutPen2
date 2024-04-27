@@ -99,6 +99,22 @@ class DatabaseController extends Controller
         $r->Name="Admin";
         $r->Description="Minden kezelő";
         $r->save();
+        $r=new RoleType();
+        $r->Name="Tanár";
+        $r->Description="Tanító";
+        $r->save();
+        $r=new RoleType();
+        $r->Name="Diák";
+        $r->Description="Tanuló";
+        $r->save();
+        $r=new RoleType();
+        $r->Name="Szülő";
+        $r->Description="Tanuló gondviselője";
+        $r->save();
+        $r=new RoleType();
+        $r->Name="Fő felhasználó";
+        $r->Description="igazgató/irodai dolgozó";
+        $r->save();
 
         $s=new SexType();
         $s->Name="Férfi";

@@ -6,25 +6,14 @@
     </a>
 </li>
 
-<li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-        aria-haspopup="true" aria-expanded="false">
-        <i class="fa-solid fa-clock"></i>
-        <span>
-            Figyelmeztetések <i class="fas fa-angle-down"></i>
-        </span>
-    </a>
-    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="/diak/figyelmeztetesek">Figyelmeztetéseim</a>
-    </div>
-</li>
+
 
 <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="/diak/osztaly" id="navbarDropdown" role="button" 
+    <a class="nav-link dropdown-toggle" href="/szulo/diakok" id="navbarDropdown" role="button" 
         aria-haspopup="true" aria-expanded="false">
         <i class="fa-solid fa-clock"></i>
         <span>
-            Saját osztályaim 
+            Diákjaim
         </span>
     </a>
 </li>
@@ -40,22 +29,6 @@
    
 </li>
 
-<li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-        aria-haspopup="true" aria-expanded="false">
-        <i class="fa-solid fa-clock"></i>
-        <span>
-            Tanóra/Tantárgy <i class="fas fa-angle-down"></i>
-        </span>
-    </a>
-    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="/diak/tanorak">Tanóráim</a>
-        <a class="dropdown-item" href="/diak/tantargyak">Tantárgyaim</a>
-        <a class="dropdown-item" href="/diak/ertekelesek">Értékeléseim</a>
-        <a class="dropdown-item" href="/diak/hazifeladatok">Házi feladataim</a>
-       
-    </div>
-</li>
 
 
 

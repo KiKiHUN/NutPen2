@@ -87,7 +87,7 @@
                                 </div>
 
                                 <div class="inputcolumn">
-                                    <label for="IPchk">UUID bannnolva: </label>
+                                    <label for="IPchk">IP bannnolva: </label>
                                     <td><input type="checkbox" name="IPchk" id="IPchk" class="textfield"></td>
                                 </div>
 

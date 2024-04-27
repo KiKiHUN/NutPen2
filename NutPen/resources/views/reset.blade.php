@@ -39,7 +39,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" href="/fiok">Fiók</a>
-            <a class="dropdown-item" href="/logout">Kilépés</a>
+            <a class="dropdown-item" href="/kijelentkezes">Kilépés</a>
         </div>
     </li>
 @endsection

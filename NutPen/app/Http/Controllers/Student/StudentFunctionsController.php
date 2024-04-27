@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Grade;
 use App\Models\HomeWork;
 use App\Models\HomeWorkStudent;
+use App\Models\LatesMissing;
 use App\Models\Lesson;
 use App\Models\SchoolClass;
+use App\Models\Student;
 use App\Models\StudentsClass;
 use App\Models\Warning;
 use Carbon\Carbon;
@@ -297,6 +299,10 @@ class StudentFunctionsController extends Controller
             return redirect()->back()->with('failedmessage', "Fájl nem található");
         }
         
+    }
+    function Missings()
+    {
+        return view('userviews/student/missings',['status'=>0,'missings'=>LatesMissing::with(['GetStudent','GetLesson.GetSubject','GetLesson.GetTeacher','GetVerificationType'])->where("StudentID","=",Auth::user()->UserID)->latest()->get(),"student"=>Student::where("UserID","=",Auth::user()->UserID)->first()]);
     }
 }
 

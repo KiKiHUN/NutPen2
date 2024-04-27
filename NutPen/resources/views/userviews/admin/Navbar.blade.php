@@ -49,6 +49,8 @@
         <a class="dropdown-item" href="/admin/ujtantargy">Új tantárgy</a>
         <a class="dropdown-item" href="/admin/ertekelestipusok">Értékelés típusok</a>
         <a class="dropdown-item" href="/admin/ertekelesek">Értékelések</a>
+        <a class="dropdown-item" href="/admin/igazolastipusok">Igazolás típusok</a>
+        <a class="dropdown-item" href="/admin/hianyzasok">Késések/Hiányzások</a>
         <a class="dropdown-item" href="/admin/hazifeladatok">Házi feladatok</a>
     </div>
 </li>
@@ -79,9 +81,6 @@
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
         <a class="dropdown-item" href="/admin/kapcsolat/szulodiak">Diák-szülő</a>
-        <a class="dropdown-item" href="/admin/kapcsolat/szulo/uj">Diák-Osztály</a>
-        <a class="dropdown-item" href="/admin/kapcsolat/szulo/uj">Diák-HáziFeladat</a>
-        <a class="dropdown-item" href="/admin/kapcsolat/szulo/uj">Osztály-tanóra</a>
     </div>
 </li>
 

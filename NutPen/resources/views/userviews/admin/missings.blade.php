@@ -25,32 +25,32 @@
         <div class="col-12 tm-block-col">
             <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
                 @if ($status == 0)     <!--//értékeléstípusok-->
-                    <h2 class="tm-block-title">Értékelés típusok</h2>
-                    <button class="NewItemButton" onclick="location.href = '/admin/ujertekelestipus';" >Új értékelés típus</button>
+                    <h2 class="tm-block-title">Igazolás típusok</h2>
+                    <button class="NewItemButton" onclick="location.href = '/admin/ujigazolastipus';" >Új értékelés típus</button>
                     <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                         <thead>
                             <tr>
                                 <th class="th-sm">Név</th>
-                                <th class="th-sm">Érték</th>
-                                <th class="th-sm">Értékelés módosítása</th>
+                                <th class="th-sm">Leírás</th>
+                                <th class="th-sm">Igazolás típus módosítása</th>
                             </tr>
                         </thead>
                         <tbody id="myTable">
                             
-                            @foreach ($ratings as $item)
+                            @foreach ($veriftypes as $item)
                                 <tr>
                                     <td>{{ $item->Name }}</td>
-                                    <td>{{ $item->Value}}</td>
-                                    <td><div class="btnplacer"><button  class="EditButton" onclick="location.href = '/admin/ertekelestipusmodositas/{{ $item->ID }}';" >Módosítás</button> </div></td>
+                                    <td>{{ $item->Description}}</td>
+                                    <td><div class="btnplacer"><button  class="EditButton" onclick="location.href = '/admin/igazolastipusmodositas/{{ $item->ID }}';" >Módosítás</button> </div></td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
                 @else
                     @if ($status == 2)      <!--//új értékeléstípus-->
-                        <h2 class="tm-block-title">Új Értékelés típus</h2>
+                        <h2 class="tm-block-title">Új Igazolás típus</h2>
                         
-                            <form id="ujFelh" class="formCenterContent" action="/admin/ujertekelestipusmentes" method="post">
+                            <form id="ujFelh" class="formCenterContent" action="/admin/ujigazolastipusmentes" method="post">
                                 @csrf
                                 <div class="NewUser">
                                     <div class="inputcolumn">
@@ -58,8 +58,8 @@
                                         <input type="text" class="textfield" id="name" name="name" value="" required>
                                     </div>
                                     <div class="inputcolumn">
-                                        <label for="value">Érték: </label>
-                                        <input type="text" class="textfield" id="value" name="value" value="" required >
+                                        <label for="description">Leírás: </label>
+                                        <input type="text" class="textfield" id="description" name="description" value="" required >
                                     </div>
                                     <div class="inputcolumn">
                                         <input type="submit" value="Mentés" class=" btn-success margined-send-btn">
@@ -70,19 +70,19 @@
                     @else
                         @if ($status ==3)       <!--//értékeléstípus módosítás-->
 
-                            <h2 class="tm-block-title">Értékelés típus módosítás</h2>
-                            <form id="ujFelh" class="formCenterContent" action="/admin/ertekelestipusmodositas" method="post">
+                            <h2 class="tm-block-title">Igazolás típus módosítás</h2>
+                            <form id="ujFelh" class="formCenterContent" action="/admin/igazolastipusmodositas" method="post">
                                 @csrf
-                                <input type="hidden" name="ratingID" id="ratingID" value="{{ $rating->ID }}">
+                                <input type="hidden" name="verificationID" id="verificationID" value="{{ $verif->ID }}">
                                 <div class="NewUser">
                                     <div class="NewUser">
                                         <div class="inputcolumn">
                                             <label for="name">Név: </label>
-                                            <input type="text" class="textfield" id="name" name="name" value="{{ $rating->Name }}" required>
+                                            <input type="text" class="textfield" id="name" name="name" value="{{ $verif->Name }}" required>
                                         </div>
                                         <div class="inputcolumn">
-                                            <label for="value">Érték: </label>
-                                            <input type="text" class="textfield" id="value" name="value" value="{{ $rating->Value }}" required >
+                                            <label for="description">Leírás: </label>
+                                            <input type="text" class="textfield" id="description" name="description" value="{{ $verif->Description }}" required >
                                         </div>
                                         <div class="inputcolumn">
                                             <input type="submit" value="Mentés" class=" btn-success margined-send-btn">
@@ -94,30 +94,38 @@
                             </div>
                         @else
                             @if ($status ==4)       <!--//Értékelések listázása a tanórában szereplő diákoknak osztályra szűrve-->
-                                <h2 class="tm-block-title"><b>{{ $classname }}</b> osztály diákjainak értékelései <b>{{ $subjectName }}</b> tárgyból</h2>
-                                <button class="NewItemButton" onclick="location.href = '/admin/tanorak/ujertekeles/{{ $lessonID }}/osztaly/{{ $classID }}';" >Új értékelés</button>
+                                <h2 class="tm-block-title"><b>{{ $classname }}</b> osztály diákjainak késései/hiányzásai <b>{{ $subjectName }}</b> tárgyból</h2>
+                                <button class="NewItemButton" onclick="location.href = '/admin/tanorak/ujhianyzas/{{ $lessonID }}/osztaly/{{ $classID }}';" >Új hiányzás</button>
                                 <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                                     <thead>
                                         <tr>
                                             <th class="th-sm">Azonosító</th>
                                             <th class="th-sm">Név</th>
-                                            <th class="th-sm">Értékelések</th>
+                                            <th class="th-sm">Késések</th>
                                         </tr>
                                     </thead>
                                     <tbody id="myTable">
-                                        @foreach ($gradesByStudent as $item)
+                                        @foreach ($missingsByStudent as $item)
                                         
                                             <tr>
                                                 <td>{{ $item["UserID"] }}</td>
                                                 <td>{{ $item["name"] }}</td>
                                                 <td>
-                                                    @if (count($item["grades"])==0)
-                                                        Nincs még értékelés
+                                                   
+                                                    @if (count($item["missings"])==0)
+                                                        Nincs még hiányzás
                                                     @else
-                                                        @foreach ($item["grades"] as $grade)
-                                                                <span class="grade-button" onclick="showGradeDetails('{{  $grade->GetGradeType->Name }}', '{{  $grade->DateTime }}')">{{ $grade->GetGradeType->Value }}</span>
-                                                        @endforeach
+                                                        @foreach ($item["missings"] as $missing)
+                                                            @if ($missing->Verified==1)
+                                                                <span class="grade-button" onclick="showGradeDetails('{{ $missing->GetVerificationType->Name }}', '{{ $missing->DateTime }}')">{{ $missing->MissedMinute }}</span>
+                                                            
+                                                            @else
+                                                                {{ $missing->MissedMinute }}
+                                                            @endif
+                                                    
+                                                         @endforeach
                                                     @endif
+                                                   
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -125,8 +133,8 @@
                                 </table>
                             @else
                                 @if ($status ==5)       <!--//osztály tanórához felvétel-->
-                                    <h2 class="tm-block-title">{{ $classname }} osztályhoz új értékelések</h2>
-                                    <form id="ujFelh" class="formCenterContent" action="/admin/tanorak/ertekelesekmentes" method="post">
+                                    <h2 class="tm-block-title">{{ $classname }} osztályhoz új hiányzás felvétele</h2>
+                                    <form id="ujFelh" class="formCenterContent" action="/admin/tanorak/hianyzasmentes" method="post">
                                         @csrf
                                         <input type="hidden" name="lessonID" id="lessonID" value="{{ $lessonID }}">
                                         <input type="hidden" name="classID" id="classID" value="{{ $classID }}">
@@ -136,7 +144,8 @@
                                                     <tr>
                                                         <th class="th-sm">Azonosító</th>
                                                         <th class="th-sm">Név</th>
-                                                        <th class="th-sm">Értékelések</th>
+                                                        <th class="th-sm">Késett perc</th>
+                                                        <th class="th-sm">Igazolás</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="myTable">
@@ -144,11 +153,18 @@
                                                         <tr>
                                                             <td>{{ $item->UserID }}</td>
                                                             <td>{{ $item->LName." ".$item->FName }}</td>
+                                                            <td>  
+                                                                <div class="inputcolumn">
+                                                                    <label for="minutes_{{ $item['UserID'] }}">Késett perc: </label>
+                                                                    <input type="number" id="minutes_{{ $item['UserID'] }}" name="minutes_{{ $item['UserID'] }}" value=0>
+                                                                </div>
+                                                            </td>
                                                             <td>
-                                                                <select id="gradeID_{{ $item['UserID'] }}" class="textfield" name="gradeID_{{ $item['UserID'] }}">
-                                                                    <option value="-1">-</option>
-                                                                    @foreach ($grades as $grade)
-                                                                        <option value="{{ $grade->ID }}">{{ $grade->Name."  ".$grade->Value }}</option>
+                                                              
+                                                                <select id="missingID_{{ $item['UserID'] }}" class="textfield" name="missingID_{{ $item['UserID'] }}">
+                                                                    <option value="-1">Nincs igazolva</option>
+                                                                    @foreach ($verifTypes as $verif)
+                                                                        <option value="{{ $verif->ID }}">{{ $verif->Name."  ".$verif->Description }}</option>
                                                                     @endforeach
                                                                 </select>
                                                             </td>
@@ -173,41 +189,58 @@
                                                     <th class="th-sm">Diák Neve</th>
                                                     <th class="th-sm">Tanár neve</th>
                                                     <th class="th-sm">Tantárgy</th>
-                                                    <th class="th-sm">Értékelés</th>
+                                                    <th class="th-sm">Késett perc</th>
+                                                    <th class="th-sm">Igazolva</th>
                                                     <th class="th-sm">Értékelés módosítása</th>
                                                     <th class="th-sm">Értékelés törlése</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="myTable">
-                                                @foreach ($ratings as $item)
+                                                @foreach ($missings as $item)
+                                              
                                                     <tr>
                                                         <td>{{ $item->GetStudent->UserID }}</td>
                                                         <td>{{ $item->GetStudent->FName." ".$item->GetStudent->LName }}</td>
                                                         <td>{{ $item->GetLesson->GetTeacher->FName." ".$item->GetLesson->GetTeacher->LName }}</td>
                                                         <td>{{ $item->GetLesson->GetSubject->Name }}</td>
-                                                        <td>{{ $item->GetGradeType->Name." // ".$item->GetGradeType->Value}}</td>
-                                                        <td><div class="btnplacer"><button class="EditButton" onclick="location.href = '/admin/ertekelesmodositas/{{ $item->ID }}';" >Módosítás</button></div></td>
-                                                        <td><div class="btnplacer"><button class="RemoveButton" onclick="location.href = '/admin/ertekelestorles/{{ $item->ID }}';" >Törlés</button></div></td>
+                                                        <td>{{  $item->MissedMinute }} perc </td>
+                                                        <td>
+                                                          
+                                                            @if ($item->GetVerificationType)
+                                                                {{ $item->GetVerificationType->Name}}
+                                                            @else
+                                                                nincs még igazolva!
+                                                            @endif
+                                                        </td>
+                                                        
+                                                        <td><div class="btnplacer"><button class="EditButton" onclick="location.href = '/admin/hianyzasmodositas/{{ $item->ID }}';" >Módosítás</button></div></td>
+                                                        <td><div class="btnplacer"><button class="RemoveButton" onclick="location.href = '/admin/hianyzastorles/{{ $item->ID }}';" >Törlés</button></div></td>
                                                     </tr>
                                                 @endforeach
                                             </tbody>
                                         </table>
                                     @else
                                         @if($status==7)      <!--//Diák jegyének módosítása-->
-                                            <h2 class="tm-block-title">{{ $rating->GetStudent->LName." ".$rating->GetStudent->FName }} jegyének módosítása</h2>
-                                            <form id="ujFelh" class="formCenterContent" action="/admin/ertekelesmodositas" method="post">
+                                            <h2 class="tm-block-title">{{ $missing->GetStudent->LName." ".$missing->GetStudent->FName }} hiányzásának módosítása</h2>
+                                            <form id="ujFelh" class="formCenterContent" action="/admin/hianyzasmodositas" method="post">
                                                 @csrf
-                                                <input type="hidden" name="ratingID" id="ratingID" value="{{ $rating->ID }}">
+                                                <input type="hidden" name="missID" id="missID" value="{{ $missing->ID }}">
                                                 <div class="NewUser">
                                                     <div class="NewUser">
                                                         <div class="inputcolumn">
-                                                            <label for="value">Érték: </label>
-                                                            <select id="gradeTypeID" class="textfield" name="gradeTypeID">
-                                                                @foreach ($grades as $grade)
-                                                                    <option value="{{ $grade->ID }}" {{ $rating->GradeTypeID == $grade->ID ? 'selected' : '' }}>{{ $grade->Name."  ".$grade->Value }}</option>
+                                                            <label for="minutes">Késett perc: </label>
+                                                            <input type="number" id="minutes" name="minutes" value="{{ $missing->MissedMinute }}">
+                                                        </div>
+                                                        <div class="inputcolumn">
+                                                            <label for="verifID">Hiányzás igazolása: </label>
+                                                            <select id="verifID" class="textfield" name="verifID">
+                                                                <option value="{{ null }}" {{ $missing->VerificationTypeID == null ? 'selected' : '' }}>Nincs igazolva</option>
+                                                                @foreach ($VerifTypes as $verif)
+                                                                    <option value="{{ $verif->ID }}" {{ $missing->VerificationTypeID == $verif->ID ? 'selected' : '' }}>{{ $verif->Name.":  ".$verif->Description }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
+                                                        
                                                         <div class="inputcolumn">
                                                             <input type="submit" value="Mentés" class=" btn-success margined-send-btn">
                                                         </div>
@@ -233,7 +266,7 @@
 @section('script')
     <script>
         function showGradeDetails(gradeName, gradeDateTime) {
-            alert(gradeName + " értékelést kapott ekkor:\n" + gradeDateTime);
+            alert(gradeName + " igazolást kapott ekkor:\n" + gradeDateTime);
         }
     </script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet" />

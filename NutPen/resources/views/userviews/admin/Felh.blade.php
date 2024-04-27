@@ -36,6 +36,7 @@
                     <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                         <thead>
                             <tr>
+                                <th class="th-sm">Azonosító</th>
                                 <th class="th-sm">Vnév</th>
                                 <th class="th-sm">Knév</th>
                                 <th class="th-sm">Módosítás</th>
@@ -44,6 +45,7 @@
                         <tbody id="myTable">
                             @foreach ($users as $item)
                                 <tr>
+                                    <td>{{ $item->UserID }}</td>
                                     <td>{{ $item->fname }}</td>
                                     <td>{{ $item->lname }}</td>
                                     <td> <div class="btnplacer"><button class="EditButton" onclick="location.href = '/admin/felhasznalomodositas/{{ $item->UserID }}';" >Szerkesztés</button></div></td>

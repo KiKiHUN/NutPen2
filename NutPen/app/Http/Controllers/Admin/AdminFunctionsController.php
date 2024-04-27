@@ -12,15 +12,18 @@ use App\Models\GradeType;
 use App\Models\HeadUser;
 use App\Models\HomeWork;
 use App\Models\HomeWorkStudent;
+use App\Models\LatesMissing;
 use App\Models\Lesson;
 use App\Models\RoleType;
 use App\Models\SchoolClass;
 use App\Models\SexType;
 use App\Models\Student;
+use App\Models\StudentParent;
 use App\Models\StudentsClass;
 use App\Models\StudParent;
 use App\Models\Subject;
 use App\Models\Teacher;
+use App\Models\VerificationType;
 use App\Models\Warning;
 use DateTime;
 use Illuminate\Http\Request;
@@ -393,6 +396,50 @@ class AdminFunctionsController extends Controller
         }
     //users
 
+    //parentstudent
+        function StudParConns()
+        {
+            return view('userviews/admin/studparconn',['status'=>0,'conns'=>StudentParent::with(["GetStudent","GetParent"])->get()]);
+        }
+
+        function RemoveStudPar($studentID,$parentID) 
+        {
+            if (!StudentParent::RemoveStudPar($studentID,$parentID)) {
+                return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+            }
+            return redirect('/admin/kapcsolat/szulodiak')->with('successmessage', "sikeres mentés");
+        }
+
+        function NewStudPar()
+        {
+            return view('userviews/admin/studparconn',['status'=>2,"parents"=>StudParent::all(),'students'=>Student::all()]);
+        }
+
+        function SaveStudPar(Request $request) 
+        {
+            $studentID="";
+            $parentID="";
+            if ($request->studentID==null) {
+                return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+            }
+
+            if ($request->parentID==null) {
+                return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+            }
+
+            $studentID=$request->studentID;
+            $parentID=$request->parentID;
+            if (StudentParent::GetStudParIfExist($studentID,$parentID)!=null) {
+                return redirect()->back()->with('failedmessage', "Mentés sikeretlen, kapcsolat már létezik.");
+            }
+            if (!StudentParent::AddNewStudPar($studentID,$parentID)) {
+                return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+            }
+            return redirect('/admin/kapcsolat/szulodiak')->with('successmessage', "sikeres mentés");
+
+        }
+    //parentstudent
+
     //roles
         function Roles()
         {
@@ -490,7 +537,7 @@ class AdminFunctionsController extends Controller
                     $IPbanned=0;
                 }
             }
-            if (!BannedIP::AddNewBann($UUID,$IP,$UUIDbanned,$IPbanned)) {
+            if (!BannedIP::AddNewBann($UUID,$UUIDbanned,$IP,$IPbanned)) {
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
             }
             return redirect('/admin/kitiltottak')->with('successmessage', "sikeres mentés");
@@ -946,6 +993,23 @@ class AdminFunctionsController extends Controller
             }
             return redirect('/admin/ertekelestipusok')->with('successmessage', "sikeres mentés");
         }
+        function SaveRatingType(Request $request) 
+        {
+            $name="";
+            $value="";
+            if ($request->name!=null) {
+            
+                $name=$request->name;
+            }
+            if ($request->value!=null) {
+                $value=$request->value;
+            }
+            if (!GradeType::AddNewGrade($name,$value)) {
+                return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+            }
+            return redirect('/admin/ertekelestipusok')->with('successmessage', "sikeres mentés");
+
+        }
 
       
     //ratingtypes
@@ -1017,23 +1081,7 @@ class AdminFunctionsController extends Controller
             return redirect('/admin/ertekelesek/tanora/'.$request->lessonID.'/osztaly/'.$request->classID)->with('successmessage', "sikeres mentés");
         }
     
-        function SaveRatingType(Request $request) 
-        {
-            $name="";
-            $value="";
-            if ($request->name!=null) {
-            
-                $name=$request->name;
-            }
-            if ($request->value!=null) {
-                $value=$request->value;
-            }
-            if (!GradeType::AddNewGrade($name,$value)) {
-                return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
-            }
-            return redirect('/admin/ertekelestipusok')->with('successmessage', "sikeres mentés");
-
-        }
+        
 
         function RemoveRatingType($ratingID) 
         {
@@ -1078,7 +1126,193 @@ class AdminFunctionsController extends Controller
             return redirect('/admin/ertekelesek')->with('successmessage', "sikeres mentés");
         }
 
+        
+
     //ratings
+
+    //verifications types
+        function NewVerifType()
+        {
+            return view('userviews/admin/missings',['status'=>2]);
+        }
+        function VerifTypes()
+        {
+            return view('userviews/admin/missings',['status'=>0,'veriftypes'=>VerificationType::all()]);
+        }
+
+        function EditVerifTypegPage($verifID)  
+        {
+            $veriftype=VerificationType::GetVerifIfExist($verifID);
+            if (!$veriftype) {
+                return redirect('/admin/igazolastipusok')->with('failedmessage', "ID nem található");
+            }
+            return view('userviews/admin/missings',['status'=>3,'verif'=>$veriftype]);
+        }
+        function SaveVerifType(Request $request) 
+        {
+            $name="";
+            $description="";
+            if ($request->name!=null) {
+            
+                $name=$request->name;
+            }
+            if ($request->description!=null) {
+                $description=$request->description;
+            }
+            if (!VerificationType::AddNewVerif($name,$description)) {
+                return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+            }
+            return redirect('/admin/igazolastipusok')->with('successmessage', "sikeres mentés");
+
+        }
+        function EditVerifType(Request $request) 
+        {
+            $name="";
+            $description="";
+            if ($request->name!=null) {
+            
+                $name=$request->name;
+            }
+            if ($request->description!=null) {
+                $description=$request->description;
+            }
+            if (!VerificationType::EditVerif($request->verificationID,$name,$description)) {
+                return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+            }
+            return redirect('/admin/igazolastipusok')->with('successmessage', "sikeres mentés");
+        }
+    //verification types
+
+    //lates-missings
+        function RecentMissings()
+        {
+            return view('userviews/admin/missings',['status'=>6,'missings'=>LatesMissing::with(['GetStudent','GetLesson.GetSubject','GetLesson.GetTeacher','GetVerificationType'])->latest()->take(20)->get()]);
+        }
+        function RemoveStudentMissing($missID) 
+        {
+            if (!LatesMissing::RemoveMissing($missID)) {
+                return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+            }
+            return redirect('/admin/hianyzasok')->with('successmessage', "sikeres mentés");
+        }
+
+        function EditStudentMissingPage($missID)  
+        {
+            $miss=LatesMissing::GetMissingIfExist($missID);
+            if (!$miss) {
+                return redirect('/admin/hianyzasok')->with('failedmessage', "ID nem található");
+            }
+            return view('userviews/admin/missings',['status'=>7,'missing'=>$miss,'VerifTypes'=>VerificationType::all()]);
+        }
+
+        function EditStudentMissing(Request $request) 
+        {
+            $verificatiopTypeID=null;
+            $minutes=0;
+            
+            if ($request->verifID!=null) {
+                $verificatiopTypeID=$request->verifID;
+            }
+            if ($request->minutes!=null) {
+                $minutes=$request->minutes;
+            }
+            $c=LatesMissing::GetMissingIfExist($request->missID);
+            if ($c->Verified==1&& $verificatiopTypeID==null) {
+                return redirect()->back()->with('failedmessage', "Mentés sikeretlen\n igazolást nem lehet visszavonni!");
+            }
+            if (!LatesMissing::EditMissing($request->missID,$minutes,$verificatiopTypeID)) {
+                return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+            }
+            return redirect('/admin/hianyzasok')->with('successmessage', "sikeres mentés");
+        }
+
+        function MissingsLessons($lessonID,$classID)
+        {
+            $class=SchoolClass::with('GetStudents')->where('ID', '=', $classID)->first();
+            // Initialize an empty array to store grades
+            $gradesByStudent = [];
+            $lesson=Lesson::with('GetSubject')->where('ID', $lessonID)->first();
+            // Loop through each student in the class
+            foreach ($class->GetStudents as $student) {
+                // Get grades for the student for the given lesson
+                $missings = LatesMissing::with('GetVerificationType')->where('StudentID', $student->UserID)
+                            ->where('LessonID', $lessonID)
+                            ->get();
+            
+                // Add grades to the array grouped by StudentID
+                $missingsByStudent[$student->UserID] = [
+                    'UserID' => $student->UserID,
+                    'name' => $student->LName." ".$student->FName,
+                    'missings' => $missings
+                ];
+            }
+            return view('userviews/admin/missings',['status'=>4,'missingsByStudent'=>$missingsByStudent,"classname"=>$class->Name,'subjectName'=>$lesson->GetSubject->Name,'lessonID'=>$lessonID,'classID'=>$classID]);
+        }
+
+        function  AddNewissingToLessonClass($lessonID,$classID)
+        {
+            $class=SchoolClass::with('GetStudents')->where('ID', '=', $classID)->first();
+
+
+            return view('userviews/admin/missings',['status'=>5,'students'=>$class->GetStudents,"classname"=>$class->Name,'classID'=>$classID,'lessonID'=>$lessonID,'verifTypes'=>VerificationType::all()]);
+        }
+
+        
+        function SaveNewissingToLessonClass(Request $request) 
+        {
+            $data = $request->except(['_token','lessonID','dtBasicExample_length','classID']);
+        
+            
+            // Initialize an empty array to store filtered student grades
+            $filteredMissingVerifications = [];
+            $filteredMissingMinutes = [];
+
+            // Loop through the request parameters
+            foreach ($data as $key => $value) {
+                // Check if the parameter key starts with 'gradeID_'
+                if (strpos($key, 'missingID_') === 0) {
+                    // Extract StudentID from the parameter key
+                    $studentID = substr($key, 10); // Assuming the length of 'gradeID_' is 8 characters
+                    
+                    // Check if the grade is not equal to -1
+                    if ($value != -1) {
+                        // Add StudentID and gradeTypeID to the filtered array
+                        $filteredMissingVerifications[$studentID] = $value;
+                    }
+                }
+                else if(strpos($key, 'minutes_') === 0)
+                {
+                    $studentID = substr($key, 8); // Assuming the length of 'gradeID_' is 8 characters
+                    
+                    // Check if the grade is not equal to -1
+                    if ($value > 0) {
+                        // Add StudentID and gradeTypeID to the filtered array
+                        $filteredMissingMinutes[$studentID] = $value;
+                    }
+                }
+            }
+        
+            DB::beginTransaction();
+            foreach ($filteredMissingMinutes as $key => $value) {
+                $misid=null;
+                if ($filteredMissingVerifications) {
+                    try {
+                        $misid=$filteredMissingVerifications[$key];
+                    } catch (\Throwable $th) {
+                        $misid=null;
+                    }
+                }
+                if ( !LatesMissing::AddNewMissingToLesson($key,$request->lessonID,$value, $misid)) {
+                    DB::rollBack();
+                    return redirect()->back()->with('failedmessage', "Mentés sikeretlen, módosítások visszavonva");
+                }
+            
+            }
+            DB::commit();
+            return redirect('/admin/hianyzasok/tanora/'.$request->lessonID.'/osztaly/'.$request->classID)->with('successmessage', "sikeres mentés");
+        }
+
+    //lates-missings
 
     //warnings
         function Warnings()
