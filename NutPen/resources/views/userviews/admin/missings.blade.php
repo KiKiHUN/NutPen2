@@ -117,7 +117,7 @@
                                                     @else
                                                         @foreach ($item["missings"] as $missing)
                                                             @if ($missing->Verified==1)
-                                                                <span class="grade-button" onclick="showGradeDetails('{{ $missing->GetVerificationType->Name }}', '{{ $missing->DateTime }}')">{{ $missing->MissedMinute }}</span>
+                                                                <span class="grade-button" onclick="showMissingDetails('{{ $missing->GetVerificationType->Name }}', '{{ $missing->DateTime }}')">{{ $missing->MissedMinute }}</span>
                                                             
                                                             @else
                                                                 {{ $missing->MissedMinute }}
@@ -264,13 +264,10 @@
 @endsection
 
 @section('script')
-    <script>
-        function showGradeDetails(gradeName, gradeDateTime) {
-            alert(gradeName + " igazolást kapott ekkor:\n" + gradeDateTime);
-        }
-    </script>
+    
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js"></script>
     <script src="{{ asset('/js/gorgeto.js') }}" type="text/javascript" defer></script>
+    <script src="{{ asset('/js/sharedfunctions.js') }}" type="text/javascript" defer></script>
     <script src="{{ asset('/js/adminJS.js') }}" type="text/javascript" defer></script>
 @endsection

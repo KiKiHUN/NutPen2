@@ -18,14 +18,14 @@
     <div class="row tm-content-row">
         <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
             <div class="tm-bg-primary-dark tm-block">
-                <h2 class="tm-block-title">Performance</h2>
+                <h2 class="tm-block-title">Értesítések</h2>
                 <canvas id="barChart"></canvas>
             </div>
         </div>
         
         @include('message')
 
-        <div class="col-12 tm-block-col">
+       <!-- <div class="col-12 tm-block-col">
             <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
                 <h2 class="tm-block-title">Orders List</h2>
                 <table class="table">
@@ -177,7 +177,7 @@
                 </table>
             </div>
         </div>
-    </div>
+    </div>-->
     </div>
 @endsection
 

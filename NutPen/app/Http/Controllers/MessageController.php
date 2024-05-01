@@ -15,6 +15,9 @@ class MessageController extends Controller
     {
         $type=bannertype::where('typename','=','LoginBanner')->first();
         $msg=BannerMsg::where('messageTypeID', '=', $type->ID)->latest()->first();
+        if ( $msg->Enabled==0) {
+            return response( null,200);
+        }
         $file=null;
         if ($msg->ImagePath) 
         {

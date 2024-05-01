@@ -11,7 +11,7 @@ class SchoolClass extends Model
     protected $fillable = [
       'ID',
       'Name',
-      'ClassMaterID'
+      'ClassMasterID'
     ];
     protected $primaryKey = 'ID';
     public $incrementing = true;

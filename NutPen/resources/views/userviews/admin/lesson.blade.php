@@ -45,17 +45,25 @@
                                     <td>{{ $item->GetSubject->Name}}</td>
                                     <td>{{ $item->Minutes}} perc</td>
                                     <td>
-                                    <?php 
-                                            $notNullCount = 0;
-                                            foreach (unserialize($item->WeeklyTimes) as $day => $time) {
-                                                // Check if the time is not null
-                                                if ($time !== null) {
-                                                    // If it's not null, increment the counter
-                                                    $notNullCount++;
-                                                }
+                                        <?php 
+                                        $notNullCount = 0;
+                                        $dayTimes=[];
+                                        foreach (unserialize($item->WeeklyTimes) as $day => $time) {
+                                            // Check if the time is not null
+                                            if ($time !== null) {
+                                                $dayTimes[] = [
+                                                    'Day' => $day,
+                                                    'Time' => $time,
+                                                    'Lenght'=>$item->Minutes
+                                                ];
+                                                
+                                                $notNullCount++;
                                             }
-                                            echo ($notNullCount) ;
-                                        ?>
+                                        }
+                                        $dayTimesJson = json_encode($dayTimes);
+                                        echo("<span class='grade-button' onclick='showDetails($dayTimesJson)'> $notNullCount </span>");
+                                        
+                                    ?>
                                     </td>
                                     <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/admin/naptar/tanorak/{{ $item->ID }}';" >Naptár</button></div></td>
                                     <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/admin/osztalyok/tanora/{{ $item->ID }}';" >Osztályok listázása</button></div></td>
@@ -316,6 +324,7 @@
 @section('script')
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js"></script>
+    <script src="{{ asset('/js/sharedfunctions.js') }}" type="text/javascript" defer></script>
     <script src="{{ asset('/js/gorgeto.js') }}" type="text/javascript" defer></script>
     <script src="{{ asset('/js/adminJS.js') }}" type="text/javascript" defer></script>
 @endsection

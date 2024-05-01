@@ -34,7 +34,7 @@
         aria-haspopup="true" aria-expanded="false">
         <i class="fa-solid fa-clock"></i>
         <span>
-            Naptáram
+            {UD}  Naptáram {UD}
         </span>
     </a>
    

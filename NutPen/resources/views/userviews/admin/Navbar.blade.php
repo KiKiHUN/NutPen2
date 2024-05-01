@@ -1,10 +1,10 @@
-<li class="nav-item">
+<!--<li class="nav-item">
     <a class="nav-link " href="/vezerlopult">
         <i class="fa-solid fa-house-chimney"></i>
         Főoldal
         <span class="sr-only">(current)</span>
     </a>
-</li>
+</li>-->
 
 <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
@@ -15,6 +15,7 @@
         </span>
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="/admin/evvege">Év lezárása</a>
         <a class="dropdown-item" href="/admin/kitiltottak">ID vagy IP bannolások</a>
         <a class="dropdown-item" href="/admin/figyelmeztetesek">Figyelmeztetések</a>
     </div>
@@ -47,6 +48,17 @@
         <a class="dropdown-item" href="/admin/ujtanora">Új tanóra</a>
         <a class="dropdown-item" href="/admin/tantargyak">Tantárgyak</a>
         <a class="dropdown-item" href="/admin/ujtantargy">Új tantárgy</a>
+    </div>
+</li>
+<li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
+        <i class="fa-solid fa-clock"></i>
+        <span>
+            Értékelések/Házifeladat/HF <i class="fas fa-angle-down"></i>
+        </span>
+    </a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
         <a class="dropdown-item" href="/admin/ertekelestipusok">Értékelés típusok</a>
         <a class="dropdown-item" href="/admin/ertekelesek">Értékelések</a>
         <a class="dropdown-item" href="/admin/igazolastipusok">Igazolás típusok</a>
@@ -54,7 +66,6 @@
         <a class="dropdown-item" href="/admin/hazifeladatok">Házi feladatok</a>
     </div>
 </li>
-
 
 <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button" data-toggle="dropdown"

@@ -15,19 +15,23 @@
         </span>
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="/diak/figyelmeztetesek">Figyelmeztetéseim</a>
+        <a class="dropdown-item" href="/tanar/figyelmeztetesek">Figyelmeztetéseim</a>
     </div>
 </li>
 
-<li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="/diak/osztaly" id="navbarDropdown" role="button" 
-        aria-haspopup="true" aria-expanded="false">
-        <i class="fa-solid fa-clock"></i>
-        <span>
-            Saját osztályaim 
-        </span>
-    </a>
-</li>
+
+@if (isset($ownclasses)&&$ownclasses==true)
+    <li class="nav-item dropdown ">
+        <a class="nav-link dropdown-toggle" href="/tanar/osztaly" id="navbarDropdown" role="button" 
+            aria-haspopup="true" aria-expanded="false">
+            <i class="fa-solid fa-clock"></i>
+            <span>
+                Saját osztályaim 
+            </span>
+        </a>
+    </li>
+
+@endif
 
 <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="/naptar" id="navbarDropdown" role="button" 
@@ -49,10 +53,10 @@
         </span>
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="/diak/tanorak">Tanóráim</a>
-        <a class="dropdown-item" href="/diak/tantargyak">Tantárgyaim</a>
-        <a class="dropdown-item" href="/diak/ertekelesek">Értékeléseim</a>
-        <a class="dropdown-item" href="/diak/hazifeladatok">Házi feladataim</a>
+        <a class="dropdown-item" href="/tanar/tanorak">Tanóráim</a>
+        <a class="dropdown-item" href="/tanar/tantargyak">Tantárgyaim</a>
+        <a class="dropdown-item" href="/tanar/ertekelesek">Értékeléseim</a>
+        <a class="dropdown-item" href="/tanar/hazifeladatok">Házi feladataim</a>
        
     </div>
 </li>

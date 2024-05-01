@@ -73,24 +73,30 @@
                         </div>
                     @else
                         @if ($status ==3)       <!--//osztály módosítás-->
+                      
                             <h2 class="tm-block-title">Osztály módosítás</h2>
                             
                                 <form id="ujFelh" class="formCenterContent" action="/admin/osztalymodositas" method="post">
                                     @csrf
-                                    <input type="hidden" name="classID" id="classID" value="{{ $class->ID }}">
+                                   
+                                    <input type="hidden" name="classID" id="classID" value="{{ $classinfo->ID }}">
                                     <div class="NewUser">
                                         <div class="inputcolumn">
                                             <label for="name">Név: </label>
-                                            <input type="text" class="textfield" id="name" name="name" value="{{ $class->Name }}" required>
+                                            <input type="text" class="textfield" id="name" name="name" value="{{ $classinfo->Name }}" required>
                                         </div>
-                                    
+                                       
                                         <div class="inputcolumn">
+                                           
                                             <label for="teacher">Osztályfőnök: </label>
+                                         
                                             <select id="teacher" class="textfield" name="teacher">
+                                               
                                                 @foreach ($teachers as $teacher)
-                                                    <option value="{{ $teacher->UserID }}" {{ $class->ClassMasterID == $teacher->ID ? 'selected' : '' }}>{{ $teacher->FName." ".$teacher->LName.", ID: ".$teacher->UserID }}</option>
+                                                    <option value="{{ $teacher->UserID }}" {{ $classinfo->ClassMasterID == $teacher->UserID ? 'selected' : '' }}>{{ $teacher->FName." ".$teacher->LName.", ID: ".$teacher->UserID }}</option>
                                                 @endforeach
                                             </select>
+                                           
                                         </div>
 
                                         <div class="inputcolumn">
@@ -116,8 +122,8 @@
                                         @foreach ($users as $item)
                                             <tr>
                                                 <td>{{ $item->UserID }}</td>
-                                                <td>{{ $item->fname }}</td>
                                                 <td>{{ $item->lname }}</td>
+                                                <td>{{ $item->fname }}</td>
                                                 <td> <div class="btnplacer"><button class="RemoveButton" onclick="location.href = '/admin/osztaly/{{ $classID }}/diaktorles/{{ $item->UserID }}';" >Kapcsolat bontása</button> </div></td>
                                             </tr>
                                         @endforeach

@@ -119,9 +119,9 @@ class LoginController extends Controller
         } else
         {
             return redirect('/login')->
-                with('message', 'Én találjam ki a jelszavad? '.
+                with('message', 'Túl sok próbálkozás! '.
                     $limitedTime.
-                    ' másodpercig gondolkozz el rajta.')->
+                    ' másodpercig letiltva a bejelentkezés.')->
                 with('voltproba', true);
         }
     }

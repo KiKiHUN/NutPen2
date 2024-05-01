@@ -35,6 +35,7 @@ use App\Models\WhoCanSeeEvent;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class DatabaseController extends Controller
 {
@@ -94,7 +95,7 @@ class DatabaseController extends Controller
         PublicPermissions::truncate();
 
         DB::statement("SET foreign_key_checks=1");
-
+       
         $r=new RoleType();
         $r->Name="Admin";
         $r->Description="Minden kezelő";
@@ -128,6 +129,10 @@ class DatabaseController extends Controller
         $s->Description="Nőnek született nőnek nevezi magát";
         $s->save();
 
+        $l=new bannertype();
+        $l->typename="LoginBanner";
+        $l->save();
+
         $p=new PublicPermissionsType();
         $p->RoleName="EnableOverallLogin";
         $p->save();
@@ -138,6 +143,131 @@ class DatabaseController extends Controller
         $pp->save();
 
         
+    }
+
+    public static function EndYearBackup()
+    {
+        $type=PublicPermissionsType::where('RoleName','=','EnableOverallLogin')->first();
+        if ($type) {
+            $pp=PublicPermissions::where('PermissionType', '=', $type->ID)->latest()->first();
+            $pp->status=1;
+            $pp->save();
+        }
+     
+
+        $currentSessionId = session()->getId();
+        $directory = storage_path('framework/sessions');
+
+        // Get all files in the directory
+        $files = glob($directory . '/*');
+
+        // Loop through each file and delete it if it's not the current session ID
+        foreach($files as $file) {
+            if(is_file($file) && basename($file) !== $currentSessionId) {
+                unlink($file);
+            }
+        }
+
+        $folderStructurePath = storage_path().'\app\SChoolYearBackup';
+
+        if (! File::exists($folderStructurePath)) {
+            if (!File::makeDirectory($folderStructurePath)) {
+                return redirect()->back()->with('failedmessage', "Sikertelen mentés, szerver IO hiba");
+            }
+        }
+        // Generate a filename for the SQL dump
+        $filename = date('Ym').'_backup_' . date('Ymd_His') . '.sql';
+
+        // Path to store the backup file
+        $outfilepath = $folderStructurePath ."\\". $filename;
+
+        // Path to store the backup file
+        $folderPath = storage_path().'\mysqlFiles';
+
+        // Database configuration
+        $dbHost = env('DB_HOST');
+        $dbPort = env('DB_PORT');
+        $dbName = env('DB_DATABASE');
+        $dbUser = env('DB_USERNAME');
+        $dbPass = env('DB_PASSWORD');
+
+        // Path to mysqldump.exe
+        $mysqldumpPath = $folderPath . "\\" . 'mysqldump.exe';
+
+        // Generate mysqldump command
+        $command = sprintf(
+            '"%s" --host=%s --port=%s --user=%s --password=%s --skip-ssl %s > %s',
+            $mysqldumpPath,
+            escapeshellarg($dbHost),
+            escapeshellarg($dbPort),
+            escapeshellarg($dbUser),
+            escapeshellarg($dbPass),
+            escapeshellarg($dbName),
+            escapeshellarg($outfilepath)
+        );
+
+        
+
+        // Execute mysqldump command
+        exec($command, $output, $returnVar);
+
+        // Check if the command was executed successfully
+        if ($returnVar === 0) {
+            if ( self::EndYearNuke()) {
+                if ($type) {
+                    $pp=PublicPermissions::where('PermissionType', '=', $type->ID)->latest()->first();
+                    $pp->status=0;
+                    $pp->save();
+                }
+                return true;
+            }else 
+            {
+                return  false;
+            }
+        } else {
+           
+            return  false;
+        }
+    }
+
+    static function EndYearNuke() 
+    {
+
+       $returnvar=false;
+        DB::statement("SET foreign_key_checks=0");
+        try {
+            CalendarEvent::truncate();
+            Grade::truncate(); 
+            HomeWork::truncate();
+            HomeWorkStudent::truncate();
+            LatesMissing::truncate();
+            Lesson::truncate();
+            $returnvar=true;
+        } catch (\Throwable $th) {
+            return false;
+            DB::rollBack();
+        }
+        DB::statement("SET foreign_key_checks=1");
+        $students=Student::all();
+       
+        DB::beginTransaction();
+        foreach ( $students as $student ) {
+            $student->RemainedParentVerification=3;
+          
+            try {
+                $student->save();
+                $returnvar=true;
+            } catch (\Throwable $th) {
+                $returnvar=false;
+                DB::rollBack();
+                break;
+            }
+          
+        } 
+        DB::commit();
+        return $returnvar;
+     
+       
     }
 
 

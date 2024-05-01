@@ -6,6 +6,8 @@ use App\CustomClasses\Downloader;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Filesystem\Filesystem;
 
 class HomeWorkStudent extends Model
 {
@@ -55,7 +57,39 @@ class HomeWorkStudent extends Model
       if (!$c) {
         return false;
       }
-      
+     
+      if (isset($c->FileName)) {
+        $folderPath = '\public\homeworks\id_'.$homeworkID;
+        $folderStructurePath = storage_path().'\app'. $folderPath;
+
+        $file= $folderStructurePath."\\".$c->FileName;
+        if (File::exists( $file)) 
+        {
+          if (!File::delete( $file)) 
+          {
+            return false;
+          }else
+          {
+
+            $FileSystem = new Filesystem();
+            if ($FileSystem->exists($folderStructurePath)) 
+            {
+
+              $files = $FileSystem->files($folderStructurePath);
+              if (empty($files)) 
+              {
+                $FileSystem->deleteDirectory($folderStructurePath);
+              }
+
+            }
+
+          }
+        }
+       
+      }
+    
+
+
       try {
         if ( DB::delete('DELETE FROM home_work_students WHERE HomeWorkID = ? AND StudentID = ? ', [ $homeworkID,$studentID])) {
           return true;
@@ -80,6 +114,20 @@ class HomeWorkStudent extends Model
           return null;
         }
     }
-
+    
+    static function EditAnswer($homeworkID,$studentID,$Answer) 
+    {
+      try {
+        DB::table('home_work_students')
+            ->where('HomeWorkID', $homeworkID)
+            ->where('StudentID', $studentID)
+            ->update(['Answer' => $Answer]);
+        
+        return true;
+      } catch (\Exception $e) {
+        error_log($e);
+        return false;
+      }
+  } 
     
 }

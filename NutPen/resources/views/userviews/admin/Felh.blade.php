@@ -26,9 +26,9 @@
                 @if ($status==1)
                     <button type="submit" class="filterbtn" value="a">Admin</button>
                     <button type="submit" class="filterbtn" value="t">Tanár</button>
-                    <button type="submit" class="filterbtn" value="d">Diák</button>
-                    <button type="submit" class="filterbtn" value="s">Szülő</button>
-                    <button type="submit" class="filterbtn" value="f">Fő emberek</button>
+                    <button type="submit" class="filterbtn" value="s">Diák</button>
+                    <button type="submit" class="filterbtn" value="p">Szülő</button>
+                    <button type="submit" class="filterbtn" value="h">Fő emberek</button>
                 @endif
                
                 @if ($status == 0)
@@ -185,6 +185,8 @@
                                 </div>
                                 
                                 <div id="additional-fields">
+                                    
+                                </div>
 
                                 <div class="inputcolumn">
                                     <input type="submit" value="Mentés" class=" btn-success margined-send-btn">

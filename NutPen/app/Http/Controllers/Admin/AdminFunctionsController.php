@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\CustomClasses\PwHasher;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\DatabaseController;
 use App\Models\Admin;
 use App\Models\BannedIP;
 use App\Models\ClassesLessons;
@@ -29,7 +30,10 @@ use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Symfony\Component\Console\Output\StreamOutput;
 
 class AdminFunctionsController extends Controller
 {
@@ -132,24 +136,25 @@ class AdminFunctionsController extends Controller
             {
                 $user->FName = $request->fname;
                 $user->LName = $request->lname;
-                $user->RoleTypeID = $request->role;
                 $user->Email= $request->email;
                 $user->Phone=$request->phone;
                 $user->SexTypeID=$request->sextype;
 
-
-                if (!empty($request->pw)&&!$request->pw==" ") {
+               
+                if ((!empty($request->pw))&&$request->pw!=" ") {
+                  
                     $hashedpw=PwHasher::hasheles($request->pw);
                     $user->password= $hashedpw;
+                    $user->DefaultPassword= 1;
                     
                 }
                 try { 
                     $user->save();
-                    return redirect('/admin/felhasznalok/'.$azonositoValaszto)->with('successmessage', "Sikeres mentés.");
                 } catch (\Throwable $th) {
                     dd($th);
                     return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
                 }
+                return redirect('/admin/felhasznalok/'.$azonositoValaszto)->with('successmessage', "Sikeres mentés.");
             }else {
                 return redirect()->back()->with('failedmessage', "Azonosító nem található");
             }
@@ -304,7 +309,7 @@ class AdminFunctionsController extends Controller
                         $users[]=$u;
                     }
                     break;
-                case 'd':
+                case 's':
                     foreach (Student::all() as $user) {
                         $u=new OneUser();
                         $u->UserID=$user->UserID;
@@ -324,7 +329,7 @@ class AdminFunctionsController extends Controller
                         $users[]=$u;
                     }
                     break;
-                case 's':
+                case 'p':
                     foreach (StudParent::all() as $user) {
                         $u=new OneUser();
                         $u->UserID=$user->UserID;
@@ -334,7 +339,7 @@ class AdminFunctionsController extends Controller
                         $users[]=$u;
                     }
                     break;
-                case 'f':
+                case 'h':
                     foreach (HeadUser::all() as $user) {
                         $u=new OneUser();
                         $u->UserID=$user->UserID;
@@ -544,6 +549,27 @@ class AdminFunctionsController extends Controller
         }
     //banning
 
+    //backupAndNuke
+
+        function BackupYearAndNukeConfirm() 
+        {
+            return view('userviews/admin/areyousure',['gotopage'=>"/admin/doevvege"]);
+        }
+        function BackupYearAndNuke() 
+        {
+
+        if(DatabaseController::EndYearBackup())
+        {
+            return redirect('/vezerlopult')->with('successmessage', "sikeres mentés");
+        }else {
+            return redirect('/vezerlopult')->with('failedmessage', "sikertelen mentés");
+        }
+
+        
+        
+        }
+    //backupAndNuke
+
     //classes
         function SchoolClasses()
         {
@@ -612,7 +638,7 @@ class AdminFunctionsController extends Controller
             if (!$class) {
                 return redirect('/admin/osztalyok')->with('failedmessage', "ID nem található");
             }
-            return view('userviews/admin/school_Classes',['status'=>3,'teachers'=>Teacher::query()->orderBy('FName', 'desc')->get(),'class'=>$class]);
+            return view('userviews/admin/school_Classes',['status'=>3,'classinfo'=>$class,'teachers'=>Teacher::query()->orderBy('FName', 'desc')->get()]);
         }
 
         function EditClass(Request $request) 
@@ -1547,7 +1573,7 @@ class AdminFunctionsController extends Controller
 
         function RemoveHomeWork($homewokID) 
         {
-            if (!Warning::RemoveWarning($homewokID)) {
+            if (!HomeWork::RemoveHomeWork($homewokID)) {
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
             }
             return redirect('/admin/hazifeladatok')->with('successmessage', "sikeres mentés");

@@ -7,6 +7,7 @@ use App\Models\Grade;
 use App\Models\HeadUser;
 use App\Models\Message;
 use App\Models\RoleType;
+use App\Models\SchoolClass;
 use App\Models\SexType;
 use App\Models\Student;
 use App\Models\StudentParent;
@@ -21,6 +22,7 @@ class MainRouterController extends Controller
 {
     public function Dash()
     {
+   
          $firstCharacter = mb_substr(Auth::user()->UserID, 0, 1);
          $msg=Message::getTopXMessagesByID(Auth::user()->UserID,10);
          switch ($firstCharacter) {
@@ -96,7 +98,8 @@ class MainRouterController extends Controller
                  if ( $this->DefaultCheck($user)) {
                     return redirect('/jelszoVisszaallitas');
                  }
-                 return View('userviews.teacher.dashboard',['user'=>$user,'messages'=>$msg]);
+                 $classes=SchoolClass::where("ClassMasterID","=",Auth::user()->UserID)->get();
+                 return View('userviews.teacher.dashboard',['user'=>$user,'messages'=>$msg,'ownclasses'=>$classes]);
                  break;
             case 'a':
                  $user = Admin::where(['UserID' => Auth::user()->UserID])->first();

@@ -65,7 +65,7 @@
                                             
                                         ?>
                                     </td>
-                                    <td><button onclick="location.href = '/diak/naptar/tanorak/{{ $lesson->ID }}';" >Naptár</button></td>
+                                    <td><button onclick="location.href = '/diak/naptar/tanorak/{{ $lesson->ID }}';" > {UD} Naptár {UD}</button></td>
                                 </tr>
                                 @endforeach
                             @endforeach
@@ -81,80 +81,10 @@
 @endsection
 
 @section('script')
-    <script>
-        
-        function showDetails(DayTimes) 
-        {
-            console.log(DayTimes);
-            var out="";
-            for(var i = 0; i < DayTimes.length; i++) {
-                var endTime=addMinutesToTime(DayTimes[i].Time,DayTimes[i].Lenght);
-                out=out+DayNameTranslate(DayTimes[i].Day)+": "+DayTimes[i].Time+"->"+endTime+"\n";
-            }
-            alert(out);
-           
-        }
-        
-        function addMinutesToTime(timeString, minutesToAdd) 
-        {
-            var timeParts = timeString.split(':');
-            var hours = parseInt(timeParts[0], 10);
-            var minutes = parseInt(timeParts[1], 10);
-        
-            
-            var date = new Date();
-            date.setHours(hours);
-            date.setMinutes(minutes);
-        
-           
-            date.setMinutes(date.getMinutes() + minutesToAdd);
-        
-           
-            var resultHours = date.getHours();
-            var resultMinutes = date.getMinutes();
-        
-            
-            resultMinutes = (resultMinutes < 10 ? '0' : '') + resultMinutes;
-        
-            var resultTimeString = resultHours + ':' + resultMinutes;
-        
-            return resultTimeString;
-        }
-       
-        function DayNameTranslate(Day) 
-        {
-            var hunDay = "";
-            switch(Day) {
-                case "Monday":
-                    hunDay = "Hétfő";
-                    break;
-                case "Tuesday":
-                    hunDay = "Kedd";
-                    break;
-                case "Wednesday":
-                    hunDay = "Szerda";
-                    break;
-                case "Thursday":
-                    hunDay = "Csütörtök";
-                    break;
-                case "Friday":
-                    hunDay = "Péntek";
-                    break;
-                case "Saturday":
-                    hunDay = "Szombat";
-                    break;
-                case "Sunday":
-                    hunDay = "Vasárnap";
-                    break;
-            }
-            return hunDay;
-        }
-        
-
-       
-    </script>
+    
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js"></script>
     <script src="{{ asset('/js/gorgeto.js') }}" type="text/javascript" defer></script>
+    <script src="{{ asset('/js/sharedfunctions.js') }}" type="text/javascript" defer></script>
     <script src="{{ asset('/js/adminJS.js') }}" type="text/javascript" defer></script>
 @endsection

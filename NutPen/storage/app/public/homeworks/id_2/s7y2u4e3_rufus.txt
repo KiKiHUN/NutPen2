@@ -1,6 +1,0 @@
-Locale = hu-HU
-CommCheck64 = 6988937
-UpdateCheckInterval = -1
-ShowAdvancedDriveProperties = 0
-ShowAdvancedFormatOptions = 0
-LastUpdateCheck = 13357747550
