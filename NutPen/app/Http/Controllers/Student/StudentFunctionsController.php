@@ -241,7 +241,7 @@ class StudentFunctionsController extends Controller
             
             $guessExtension = $file->guessExtension();
           
-            $finalname=Auth::user()->UserID."_".$fileDetails["filename"].".";
+            $finalname=Auth::user()->UserID."_".$fileDetails["filename"].date('Ymd_His').".";
             
             if ( $guessExtension!=null) {
                 $finalname=$finalname.$guessExtension;

@@ -61,88 +61,101 @@ class DatabaseController extends Controller
     }
     public static function DefaultValues() 
     {
-        DB::statement("SET foreign_key_checks=0");
+        try {
+            DB::statement("SET foreign_key_checks=0");
 
-        Admin::truncate();
-        BannedIP::truncate();
-        BannerMsg::truncate();
-        bannertype::truncate();
-        CalendarEvent::truncate();
-        ClassesLessons::truncate();
-        Grade::truncate();
-        GradeType::truncate();
-        HeadUser::truncate();
-        HomeWork::truncate();
-        HomeWorkStudent::truncate();
-        LatesMissing::truncate();
-        Lesson::truncate();
-        Message::truncate();
-        PushSub::truncate();
-        SchoolClass::truncate();
-        SchoolInfo::truncate();
-        Student::truncate();
-        StudentParent::truncate();
-        StudentsClass::truncate();
-        StudParent::truncate();
-        Subject::truncate();
-        Teacher::truncate();
-        VerificationType::truncate();
-        Warning::truncate();
-        WhoCanSeeEvent::truncate();
-        RoleType::truncate();
-        SexType::truncate();
-        PublicPermissionsType::truncate();
-        PublicPermissions::truncate();
+            Admin::truncate();
+            BannedIP::truncate();
+            BannerMsg::truncate();
+            bannertype::truncate();
+            CalendarEvent::truncate();
+            ClassesLessons::truncate();
+            Grade::truncate();
+            GradeType::truncate();
+            HeadUser::truncate();
+            HomeWork::truncate();
+            HomeWorkStudent::truncate();
+            LatesMissing::truncate();
+            Lesson::truncate();
+            Message::truncate();
+            PushSub::truncate();
+            SchoolClass::truncate();
+            SchoolInfo::truncate();
+            Student::truncate();
+            StudentParent::truncate();
+            StudentsClass::truncate();
+            StudParent::truncate();
+            Subject::truncate();
+            Teacher::truncate();
+            VerificationType::truncate();
+            Warning::truncate();
+            WhoCanSeeEvent::truncate();
+            RoleType::truncate();
+            SexType::truncate();
+            PublicPermissionsType::truncate();
+            PublicPermissions::truncate();
+    
+            DB::statement("SET foreign_key_checks=1");
 
-        DB::statement("SET foreign_key_checks=1");
+        } catch (\Throwable $th) {
+            return false;
+        }
+        DB::beginTransaction();
+        try {
+            $r=new RoleType();
+            $r->Name="Admin";
+            $r->Description="Minden kezelő";
+            $r->save();
+            $r=new RoleType();
+            $r->Name="Tanár";
+            $r->Description="Tanító";
+            $r->save();
+            $r=new RoleType();
+            $r->Name="Diák";
+            $r->Description="Tanuló";
+            $r->save();
+            $r=new RoleType();
+            $r->Name="Szülő";
+            $r->Description="Tanuló gondviselője";
+            $r->save();
+            $r=new RoleType();
+            $r->Name="Fő felhasználó";
+            $r->Description="igazgató/irodai dolgozó";
+            $r->save();
+    
+            $s=new SexType();
+            $s->Name="Férfi";
+            $s->Title="Mr.";
+            $s->Description="Férfinak születtet, férfinak nevezi magát";
+            $s->save();
+    
+            $s=new SexType();
+            $s->Name="Nő";
+            $s->Title="Mrs.";
+            $s->Description="Nőnek született nőnek nevezi magát";
+            $s->save();
+    
+            $l=new bannertype();
+            $l->typename="LoginBanner";
+            $l->save();
+    
+            $p=new PublicPermissionsType();
+            $p->RoleName="EnableOverallLogin";
+            $p->save();
+    
+            $pp=new PublicPermissions();
+            $pp->PermissionType=1;
+            $pp->status=0;
+            $pp->save();
+           
+            Config::set('CFG_IsFirstRun', true);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return false;
+        }
+        DB::commit();
+        return true;
        
-        $r=new RoleType();
-        $r->Name="Admin";
-        $r->Description="Minden kezelő";
-        $r->save();
-        $r=new RoleType();
-        $r->Name="Tanár";
-        $r->Description="Tanító";
-        $r->save();
-        $r=new RoleType();
-        $r->Name="Diák";
-        $r->Description="Tanuló";
-        $r->save();
-        $r=new RoleType();
-        $r->Name="Szülő";
-        $r->Description="Tanuló gondviselője";
-        $r->save();
-        $r=new RoleType();
-        $r->Name="Fő felhasználó";
-        $r->Description="igazgató/irodai dolgozó";
-        $r->save();
-
-        $s=new SexType();
-        $s->Name="Férfi";
-        $s->Title="Mr.";
-        $s->Description="Férfinak születtet, férfinak nevezi magát";
-        $s->save();
-
-        $s=new SexType();
-        $s->Name="Nő";
-        $s->Title="Mrs.";
-        $s->Description="Nőnek született nőnek nevezi magát";
-        $s->save();
-
-        $l=new bannertype();
-        $l->typename="LoginBanner";
-        $l->save();
-
-        $p=new PublicPermissionsType();
-        $p->RoleName="EnableOverallLogin";
-        $p->save();
-
-        $pp=new PublicPermissions();
-        $pp->PermissionType=1;
-        $pp->status=0;
-        $pp->save();
-
-        
     }
 
     public static function EndYearBackup()

@@ -15,9 +15,11 @@
         </span>
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="/admin/evvege">Év lezárása</a>
+        <a class="dropdown-item" href="/admin/confirm/doevvege">Év lezárása</a>
         <a class="dropdown-item" href="/admin/kitiltottak">ID vagy IP bannolások</a>
         <a class="dropdown-item" href="/admin/figyelmeztetesek">Figyelmeztetések</a>
+        <a class="dropdown-item" href="/admin/banner">Banner módosítása</a>
+        <a class="dropdown-item" href="/admin/confirm/nuke">Napló gyári visszaállítása</a>
     </div>
 </li>
 

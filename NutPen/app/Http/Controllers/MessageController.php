@@ -14,7 +14,7 @@ class MessageController extends Controller
     public function GetLoginBannerMessage()
     {
         $type=bannertype::where('typename','=','LoginBanner')->first();
-        $msg=BannerMsg::where('messageTypeID', '=', $type->ID)->latest()->first();
+        $msg=BannerMsg::where('messageTypeID', '=', $type->ID)->where("Enabled","=",1)->latest()->first();
         if ( $msg->Enabled==0) {
             return response( null,200);
         }

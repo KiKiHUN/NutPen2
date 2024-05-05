@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\DatabaseController;
 use App\Models\Admin;
 use App\Models\BannedIP;
+use App\Models\BannerMsg;
+use App\Models\bannertype;
 use App\Models\ClassesLessons;
 use App\Models\Grade;
 use App\Models\GradeType;
@@ -551,24 +553,184 @@ class AdminFunctionsController extends Controller
 
     //backupAndNuke
 
-        function BackupYearAndNukeConfirm() 
+        function Confirm($link) 
         {
-            return view('userviews/admin/areyousure',['gotopage'=>"/admin/doevvege"]);
+            return view('userviews/admin/areyousure',['gotopage'=>"/admin/".$link]);
         }
         function BackupYearAndNuke() 
         {
-
-        if(DatabaseController::EndYearBackup())
-        {
-            return redirect('/vezerlopult')->with('successmessage', "sikeres mentés");
-        }else {
-            return redirect('/vezerlopult')->with('failedmessage', "sikertelen mentés");
+            if(DatabaseController::EndYearBackup())
+            {
+                return redirect('/vezerlopult')->with('successmessage', "sikeres mentés");
+            }else {
+                return redirect('/vezerlopult')->with('failedmessage', "sikertelen mentés");
+            }
         }
-
-        
-        
+        function Nuke() 
+        {
+            if(DatabaseController::DefaultValues())
+            {
+                return redirect('/')->with('successmessage', "sikeres mentés");
+            }else {
+                return redirect('/vezerlopult')->with('failedmessage', "sikertelen mentés");
+            }
         }
     //backupAndNuke
+
+    //banner
+        function Banner()
+        {
+            $type=bannertype::where('typename','=','LoginBanner')->first();
+            $msg=BannerMsg::where('messageTypeID', '=', $type->ID)->get();
+            return view('userviews/admin/banner',['status'=>0,'banners'=>$msg]);
+        }
+
+        function EditBannerPage($bannerID)  {
+            $banner=BannerMsg::GetMSGIfExist($bannerID);
+            if (!$banner) {
+                return redirect('/admin/banner')->with('failedmessage', "ID nem található");
+            }
+            if ($banner->ImagePath) 
+            {
+                $file=asset("storage/images/LoginBanner/{$banner->ImagePath}");
+
+            }
+            return view('userviews/admin/banner',['status'=>3,'banner'=>$banner,'file'=>$file]);
+        }
+
+        function EditBanner(Request $request) 
+        {
+            $name="";
+            $desc="";
+            $finalname=null;
+            if ($request->header!=null) {
+                $name=$request->header;
+            }
+            
+            if ($request->desc!=null) {
+                $desc=$request->desc;
+            }
+           
+            if (isset($request->file_upload)) {
+               
+                $request->validate([
+                    'file_upload' => 'required|file|mimes:jpg,png|max:2048',
+                ]);
+                $folderPath = '\public\images\LoginBanner';
+                $folderStructurePath = storage_path().'\app'. $folderPath;
+    
+                if (! File::exists($folderStructurePath)) {
+                    if (!File::makeDirectory($folderStructurePath)) {
+                        return redirect()->back()->with('failedmessage', "Sikertelen mentés, szerver IO hiba");
+                    }
+                }
+                
+                // Store the file in storage\app\public folder
+                $file = $request->file('file_upload');
+                $fileDetails=pathinfo($file->getClientOriginalName());
+                
+                $guessExtension = $file->guessExtension();
+              
+                $finalname=Auth::user()->UserID."_".$fileDetails["filename"]."_".date('Ymd_His').".";
+                
+                if ( $guessExtension!=null) {
+                    $finalname=$finalname.$guessExtension;
+                }else
+                {
+                    $finalname=$finalname.$fileDetails["extension"];
+                }
+               try 
+               {
+                $filePath = $file->storeAs($folderPath,  $finalname );
+               } catch (\Throwable $th) 
+               {
+                return redirect()->back()->with('failedmessage', "Sikertelen mentés, szerver IO hiba");
+               }
+            }
+            if (!BannerMsg::EditMSG($request->bannerID,$name,$desc,$finalname)) {
+                return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+            }
+            return redirect('/admin/banner')->with('successmessage', "sikeres mentés");
+        }
+
+        function BannerChange(Request $request) 
+        {
+            $id=null;
+            if ($request->banningId!=null) {
+                $id=$request->banningId;
+            }
+            
+            if (!BannerMsg::ChangeMSG($id)) {
+                return response()->json(['status'=>1,'message' => 'Sikertelen módosítás'], 200);
+                
+            }
+            return response()->json(['status'=>0,'message' => 'Sikeres módosítás'], 200);
+        }
+
+        function NewBannerPage()
+        {
+            return view('userviews/admin/banner',['status'=>2]);
+        }
+
+        function SaveBanner(Request $request) 
+        {
+          
+            $name="";
+            $desc="";
+            $finalname=null;
+            if ($request->header!=null) {
+                $name=$request->header;
+            }
+            
+            if ($request->desc!=null) {
+                $desc=$request->desc;
+            }
+            
+            if (isset($request->file_upload)) {
+               
+                $request->validate([
+                    'file_upload' => 'required|file|mimes:jpg,png|max:2048',
+                ]);
+               
+                $folderPath = '\public\images\LoginBanner';
+                $folderStructurePath = storage_path().'\app'. $folderPath;
+    
+                if (! File::exists($folderStructurePath)) {
+                    if (!File::makeDirectory($folderStructurePath)) {
+                        return redirect()->back()->with('failedmessage', "Sikertelen mentés, szerver IO hiba");
+                    }
+                }
+                
+                // Store the file in storage\app\public folder
+                $file = $request->file('file_upload');
+                $fileDetails=pathinfo($file->getClientOriginalName());
+                
+                $guessExtension = $file->guessExtension();
+                
+              
+                $finalname=Auth::user()->UserID."_".$fileDetails["filename"].".";
+                
+                if ( $guessExtension!=null) {
+                    $finalname=$finalname.$guessExtension;
+                }else
+                {
+                    $finalname=$finalname.$fileDetails["extension"];
+                }
+               try 
+               {
+                $filePath = $file->storeAs($folderPath,  $finalname );
+               } catch (\Throwable $th) 
+               {
+                return redirect()->back()->with('failedmessage', "Sikertelen mentés, szerver IO hiba");
+               }
+            }
+            if (!BannerMsg::AddNewMSG($name,$desc,$finalname,0)) {
+                return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+            }
+            return redirect('/admin/banner')->with('successmessage', "sikeres mentés");
+
+        }
+    //banner
 
     //classes
         function SchoolClasses()

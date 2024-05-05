@@ -77,8 +77,18 @@ Route::middleware(['blockIP'])->group(function () {
         Route::post('/admin/kitiltasmodositas',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditBannings']);
 
         //mentes
-        Route::get('/admin/evvege',[App\Http\Controllers\Admin\AdminFunctionsController::class,'BackupYearAndNukeConfirm']);
+        Route::get('/admin/confirm/{link}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'Confirm']);
         Route::get('/admin/doevvege',[App\Http\Controllers\Admin\AdminFunctionsController::class,'BackupYearAndNuke']);
+        Route::get('/admin/nuke',[App\Http\Controllers\Admin\AdminFunctionsController::class,'Nuke']);
+
+        //banner
+        Route::get('/admin/banner',[App\Http\Controllers\Admin\AdminFunctionsController::class,'Banner']);
+        Route::post('/admin/bannervalasztas',[App\Http\Controllers\Admin\AdminFunctionsController::class,'BannerChange']);
+        Route::get('/admin/ujbanner',[App\Http\Controllers\Admin\AdminFunctionsController::class,'NewBannerPage']);
+        Route::post('/admin/ujbannermentes',[App\Http\Controllers\Admin\AdminFunctionsController::class,'SaveBanner']);
+        Route::get('/admin/bannermodositas/{bannerID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditBannerPage']);
+        Route::post('/admin/bannermodositas',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditBanner']);
+        Route::get('/admin/bannertorles/{bannerID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'RemoveBanner']);
       
 
         //osztályok

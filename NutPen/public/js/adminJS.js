@@ -202,3 +202,40 @@ $('.CHK_IPbanning').click(function() {
    
 });
 
+$('#SaveBannerBTN').click(function() {
+    var selectedBanner = $('input[type="radio"].CHK_bannerEN:checked');
+    var banningId=null;
+    if(selectedBanner.length > 0) {
+        banningId = selectedBanner.attr('banningid');
+    } 
+    if (banningId==null) {
+        alert("Nincs ID kiválasztva");
+        return;
+    }
+    console.log(banningId);
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $.ajax({
+        url: '/admin/bannervalasztas', 
+        method: 'POST',
+        data: {
+            banningId 
+        },
+        success: function(response) {
+        console.log('válasz:', response);
+        if (response.status!=0) {
+            alert("hiba: "+response.message);
+        }else
+        {
+            alert(response.message);
+        }
+        },
+        error: function(xhr, status, error) {
+        // Handle error response from the server
+        alert("hiba: \n"+xhr.responseText)
+        }
+    });
+});
