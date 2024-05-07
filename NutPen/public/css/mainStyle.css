@@ -732,6 +732,7 @@ input[type="checkbox"]:focus {
   color: #9f1321;
 }
 .tm-footer {
+  left:0;
     position:fixed;
     bottom:0;
     width: 98%;

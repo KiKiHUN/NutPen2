@@ -102,38 +102,44 @@ class DatabaseController extends Controller
         }
         DB::beginTransaction();
         try {
-            $r=new RoleType();
-            $r->Name="Admin";
-            $r->Description="Minden kezelő";
-            $r->save();
-            $r=new RoleType();
-            $r->Name="Tanár";
-            $r->Description="Tanító";
-            $r->save();
-            $r=new RoleType();
-            $r->Name="Diák";
-            $r->Description="Tanuló";
-            $r->save();
-            $r=new RoleType();
-            $r->Name="Szülő";
-            $r->Description="Tanuló gondviselője";
-            $r->save();
-            $r=new RoleType();
-            $r->Name="Fő felhasználó";
-            $r->Description="igazgató/irodai dolgozó";
-            $r->save();
+            $r1=new RoleType();
+            $r1->Name="Admin";
+            $r1->Description="Minden kezelő";
+            $r1->save();
+            $r2=new RoleType();
+            $r2->Name="Tanár";
+            $r2->Description="Tanító";
+            $r2->save();
+            $r3=new RoleType();
+            $r3->Name="Diák";
+            $r3->Description="Tanuló";
+            $r3->save();
+            $r4=new RoleType();
+            $r4->Name="Szülő";
+            $r4->Description="Tanuló gondviselője";
+            $r4->save();
+            $r5=new RoleType();
+            $r5->Name="Fő felhasználó";
+            $r5->Description="igazgató/irodai dolgozó";
+            $r5->save();
+
+            $v=new VerificationType();
+            $v->Name="Szülői igazolás";
+            $v->Description="Szülő által igazolt hiányzás";
+            $v->save();
+
+
+            $s1=new SexType();
+            $s1->Name="Férfi";
+            $s1->Title="Mr.";
+            $s1->Description="Férfinak születtet, férfinak nevezi magát";
+            $s1->save();
     
-            $s=new SexType();
-            $s->Name="Férfi";
-            $s->Title="Mr.";
-            $s->Description="Férfinak születtet, férfinak nevezi magát";
-            $s->save();
-    
-            $s=new SexType();
-            $s->Name="Nő";
-            $s->Title="Mrs.";
-            $s->Description="Nőnek született nőnek nevezi magát";
-            $s->save();
+            $s2=new SexType();
+            $s2->Name="Nő";
+            $s2->Title="Mrs.";
+            $s2->Description="Nőnek született nőnek nevezi magát";
+            $s2->save();
     
             $l=new bannertype();
             $l->typename="LoginBanner";
