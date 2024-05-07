@@ -13,6 +13,7 @@ use App\Models\SchoolClass;
 use App\Models\Student;
 use App\Models\VerificationType;
 use App\Models\Warning;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -406,6 +407,184 @@ class TeacherFunctionController extends Controller
         return redirect('/tanar/tanorak')->with('successmessage', "sikeres mentés");
     }
 
+    function CalendarLesson($lessonID) 
+    {
+        $lesson=Lesson::with(["GetTeacher","GetSubject"])->where('ID', '=', $lessonID)->first();
+        
+        $events = [];
+
+        $unserializedData = unserialize($lesson->WeeklyTimes);
+    
+        // Start date
+        $currentDate = new DateTime($lesson->StartDate);
+        
+        // End date
+        $endDate = new DateTime($lesson->EndDate);
+        $endDate->modify('+1 day');
+    
+        while ($currentDate <= $endDate) {
+
+            $dayOfWeek = $currentDate->format('l');
+
+            if ($unserializedData[$dayOfWeek]) {
+                $startTime = $unserializedData[$dayOfWeek];
+            
+
+                list($hours, $minutes) = explode(':', $startTime);
+                $currentDate->setTime($hours, $minutes);
+            
+
+                $endDateTime = clone $currentDate;
+                $endDateTime->modify('+' . $lesson->Minutes . ' minutes');
+
+
+                $c=new CalendarData();
+                $c->start= $currentDate->format('U');
+                $c->end= $endDateTime->format('U');
+                $c->title=$lesson->GetSubject->Name;
+                $c->content='Tanár: '.$lesson->GetTeacher->FName." ".$lesson->GetTeacher->LName;
+                $c->category= 'Tanóra';
+
+
+                $events[] = $c;
+            }
+        
+            $currentDate->modify('+1 day');
+        } 
+    
+        return view('calendar',['status'=>0,'eventsData'=> $events]);
+    }
+
+
+
+
+
+
+
+    function SchoolClasses()
+    {
+        $classesWithTeachers=SchoolClass::with("GetTeacher")->where("ClassMasterID",Auth::user()->UserID)->get();
+        return view('userviews/teacher/school_Classes',['status'=>0,"ownclasses"=>self::HasClass(),'classes'=>$classesWithTeachers]);
+    }
+
+    function ClassStudents($classID) 
+    {
+        $class=SchoolClass::with('GetStudents')->where('ID', '=', $classID)->first();
+        $users = [];
+        foreach ($class->GetStudents as $student) {
+            $u=new OneUser2();
+            $u->UserID=$student->UserID;
+            $u->fname=$student->FName;
+            $u->lname=$student->LName;
+            $users[]=$u;
+        }
+
+        return view('userviews/teacher/school_Classes',['status'=>4,"ownclasses"=>self::HasClass(),'users'=>$users,'classID'=>$classID,'className'=> $class->Name]);
+    }
+
+    function StudWarnings($studID)
+    {
+        $wariningswithUsers = [];
+
+        // Loop through each student in the class
+        foreach (Warning::with(['GetStudent'])->where("StudentID",$studID)->get() as $warning) {
+            
+            $whogave=Warning::GetWhoGave($warning->ID);
+            $wariningswithUsers[$warning->ID] = [
+                'ID' => $warning->ID,
+                'name' => $warning->Name,
+                'description' => $warning->Description,
+                'datetime' => $warning->DateTime,
+                'whogavename' => $whogave->LName." ". $whogave->FName,
+                'whogaveID' => $warning->WhoGaveID,
+                'studentID'=>$warning->StudentID,
+                'studentname'=>$warning->GetStudent->LName." ". $warning->GetStudent->FName
+            ];
+        }
+        return view('userviews/teacher/school_Classes',['status'=>9,"ownclasses"=>self::HasClass(),'warnings'=>$wariningswithUsers]);
+    }
+    function ClassLessons($classID)
+    {
+        $class=SchoolClass::with('GetLessons.GetSubject')->where('ID', '=', $classID)->first();
+        return view('userviews/teacher/school_Classes',['status'=>5,"ownclasses"=>self::HasClass(),'class'=>$class,"className"=>$class->Name,"ownclasses"=>self::HasClass()]);
+    }
+    function StudentMissingsLessons($lessonID,$classID)
+    {
+        $class=SchoolClass::with('GetStudents')->where('ID', '=', $classID)->first();
+        // Initialize an empty array to store grades
+        $gradesByStudent = [];
+        $lesson=Lesson::with('GetSubject')->where('ID', $lessonID)->first();
+        // Loop through each student in the class
+        foreach ($class->GetStudents as $student) {
+            // Get grades for the student for the given lesson
+            $missings = LatesMissing::with('GetVerificationType')->where('StudentID', $student->UserID)
+                        ->where('LessonID', $lessonID)
+                        ->get();
+        
+            // Add grades to the array grouped by StudentID
+            $missingsByStudent[$student->UserID] = [
+                'UserID' => $student->UserID,
+                'name' => $student->LName." ".$student->FName,
+                'missings' => $missings
+            ];
+        }
+        return view('userviews/teacher/school_Classes',['status'=>7,"ownclasses"=>self::HasClass(),'missingsByStudent'=>$missingsByStudent,"classname"=>$class->Name,'subjectName'=>$lesson->GetSubject->Name,'lessonID'=>$lessonID,'classID'=>$classID]);
+    }
+
+    function EditClassStudentMissingPage($missID)  
+    {
+        $miss=LatesMissing::GetMissingIfExist($missID);
+        if (!$miss) {
+            return redirect('/tanar/tanorak')->with('failedmessage', "ID nem található");
+        }
+        return view('userviews/teacher/school_Classes',['status'=>8,"ownclasses"=>self::HasClass(),'missing'=>$miss,'VerifTypes'=>VerificationType::all()]);
+    }
+    function EditClassStudentMissing(Request $request) 
+    {
+        $verificatiopTypeID=null;
+        $minutes=0;
+        
+        if ($request->verifID!=null) {
+            $verificatiopTypeID=$request->verifID;
+        }
+        if ($request->minutes!=null) {
+            $minutes=$request->minutes;
+        }
+        $c=LatesMissing::GetMissingIfExist($request->missID);
+        if ($c->Verified==1&& $verificatiopTypeID==null) {
+            return redirect()->back()->with('failedmessage', "Mentés sikeretlen\n igazolást nem lehet visszavonni!");
+        }
+        if (!LatesMissing::EditMissing($request->missID,$minutes,$verificatiopTypeID)) {
+            return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+        }
+        return redirect('tanar/osztalyok')->with('successmessage', "sikeres mentés");
+    }
+
+    function RatingsStudentLessons($lessonID,$classID)
+    {
+        $class=SchoolClass::with('GetStudents')->where('ID', '=', $classID)->first();
+        // Initialize an empty array to store grades
+        $gradesByStudent = [];
+        $lesson=Lesson::with('GetSubject')->where('ID', $lessonID)->first();
+        // Loop through each student in the class
+        foreach ($class->GetStudents as $student) {
+            // Get grades for the student for the given lesson
+            $grades = Grade::with('GetGradeType')->where('StudentID', $student->UserID)
+                        ->where('LessonID', $lessonID)
+                        ->get();
+           
+            // Add grades to the array grouped by StudentID
+            $gradesByStudent[$student->UserID] = [
+                'UserID' => $student->UserID,
+                'name' => $student->LName." ".$student->FName,
+                'grades' => $grades
+            ];
+        }
+        return view('userviews/teacher/school_Classes',['status'=>6,"ownclasses"=>self::HasClass(),'gradesByStudent'=>$gradesByStudent,"classname"=>$class->Name,'subjectName'=>$lesson->GetSubject->Name,'lessonID'=>$lessonID,'classID'=>$classID]);
+    }
+
+
+
 
     function HasClass() 
     {
@@ -419,4 +598,20 @@ class TeacherFunctionController extends Controller
         return false;
         
     }
+}
+class OneUser2 
+{
+    public $UserID=0;
+    public $fname;
+    public $lname;
+    public $role;
+}
+
+class CalendarData
+{
+    public $start="";
+    public $end="";
+    public $title=null;
+    public $content=null;
+    public $category=null;
 }

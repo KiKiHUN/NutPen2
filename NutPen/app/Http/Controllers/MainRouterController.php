@@ -23,7 +23,9 @@ class MainRouterController extends Controller
     public function Dash()
     {
    
+     
          $firstCharacter = mb_substr(Auth::user()->UserID, 0, 1);
+        
          $msg=Message::getTopXMessagesByID(Auth::user()->UserID,10);
          switch ($firstCharacter) {
             case 's':

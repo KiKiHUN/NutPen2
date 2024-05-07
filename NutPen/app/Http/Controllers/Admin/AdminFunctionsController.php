@@ -249,11 +249,11 @@ class AdminFunctionsController extends Controller
                         $i += 1;
                     }
                     break;
-                case 'Fő ember':
+                case 'Fő felhasználó':
                     $f=new HeadUser();
                     $i = 0;
                     while (!$good) {
-                        $ID = $faker->bothify('h##?#??');
+                        $ID = $faker->bothify('h#?#?#?#');
                         $user = HeadUser::where([
                             'UserID' => $ID
                         ])->first();
@@ -266,6 +266,9 @@ class AdminFunctionsController extends Controller
                         }
                         $i += 1;
                     }
+                    break;
+                default:
+                    return redirect()->back()->with('failedmessage', 'Ilyen rangra még nincs felkészítve a rendszer');
                     break;
             }
         
@@ -555,7 +558,7 @@ class AdminFunctionsController extends Controller
 
         function Confirm($link) 
         {
-            return view('userviews/admin/areyousure',['gotopage'=>"/admin/".$link]);
+            return view('/areyousure',['gotopage'=>"/admin/".$link]);
         }
         function BackupYearAndNuke() 
         {
@@ -1594,6 +1597,12 @@ class AdminFunctionsController extends Controller
         function HomeWorks()
         {
             return view('userviews/admin/homework',['status'=>0,'homeworks'=>HomeWork::with(['GetLesson.GetTeacher','GetLesson.GetSubject','GetLesson.GetClasses'])->get()]);
+        }
+        function StudentsHomeWorksByLesson($lessonID)
+        {
+        $h=HomeWork::with(['GetLesson.GetClasses'])->where("LessonID","=",$lessonID)->get();
+        return view('userviews/admin/homework',['status'=>0,'homeworks'=>$h,'lessonid'=>$lessonID]);
+       
         }
         function StudentsHomeWorks($homewokID)
         {

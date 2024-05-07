@@ -24,7 +24,7 @@
         <div class="col-12 tm-block-col">
             <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
                 @if ($status == 0)
-                    <h2 class="tm-block-title">Házi feladataim</h2>
+                    <h2 class="tm-block-title">Házifeladataim</h2>
                     <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                         <thead>
                             <tr>

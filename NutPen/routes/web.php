@@ -179,7 +179,7 @@ Route::middleware(['blockIP'])->group(function () {
         Route::get('/admin/hazifeladattorles/{homewokID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'RemoveHomeWork']);
         Route::get('/admin/bekuldotthazifeladat/letoltes/{homewokID}/{studentID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'DownloadHomeWork']);
         Route::get('/admin/bekuldotthazifeladat/torles/{homewokID}/{studentID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'RemoveStudentHomeWork']);
-
+        Route::get('/admin/hazifeladatok/tanora/{lessonID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'StudentsHomeWorksByLesson']);
        
     });
    
@@ -233,7 +233,20 @@ Route::middleware(['blockIP'])->group(function () {
         Route::get('/tanar/bekuldotthazifeladat/letoltes/{homewokID}/{studentID}',[App\Http\Controllers\Teacher\TeacherFunctionController::class,'DownloadHomeWork']);
         Route::get('/tanar/bekuldotthazifeladat/torles/{homewokID}/{studentID}',[App\Http\Controllers\Teacher\TeacherFunctionController::class,'RemoveStudentHomeWork']);
         Route::post('/tanar/hfkomment',[App\Http\Controllers\Teacher\TeacherFunctionController::class,'EditHomeWorkComment']);
-       
+        Route::get('/tanar/naptar/tanorak/{tanoraid}',[App\Http\Controllers\Teacher\TeacherFunctionController::class,'CalendarLesson']);
+
+
+
+        Route::get('/tanar/osztalyok',[App\Http\Controllers\Teacher\TeacherFunctionController::class,'SchoolClasses']);
+        Route::get('/tanar/osztaly/diakok/{classID}',[App\Http\Controllers\Teacher\TeacherFunctionController::class,'ClassStudents']);
+        Route::get('/tanar/diak/figyelmeztetesek/{studID}',[App\Http\Controllers\Teacher\TeacherFunctionController::class,'StudWarnings']);
+        Route::get('/tanar/osztaly/tanorak/{classID}',[App\Http\Controllers\Teacher\TeacherFunctionController::class,'ClassLessons']);
+        Route::get('/tanar/Osztalyhianyzasok/tanora/{lessonID}/osztaly/{classID}',[App\Http\Controllers\Teacher\TeacherFunctionController::class,'StudentMissingsLessons']);
+        Route::get('/tanar/osztalyhianyzasmodositas/{missID}',[App\Http\Controllers\Teacher\TeacherFunctionController::class,'EditClassStudentMissingPage']);
+        Route::post('/tanar/osztalyhianyzasmodositas',[App\Http\Controllers\Teacher\TeacherFunctionController::class,'EditStudentMissing']);
+        Route::get('/tanar/ertekelesek/Osztalytanorak/{lessonID}/osztaly/{classID}',[App\Http\Controllers\Teacher\TeacherFunctionController::class,'RatingsStudentLessons']);
+
+        
 
     });
     Route::group(['middleware' => 'auth:studparent'], function () {
@@ -250,17 +263,133 @@ Route::middleware(['blockIP'])->group(function () {
         Route::get('/szulo/hazifeladat/letoltes/{homewokID}',[App\Http\Controllers\StudParent\StudParentController::class,'DownloadHomeWork']);
     });
     Route::group(['middleware' => 'auth:headUser'], function () {
-        Route::get('/fo/ertekelesek',[App\Http\Controllers\HeadUser\HeadUSerController::class,'Ratings']);
-        Route::get('/fo/tanora/hazifeladatok/{lessonID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'HomeWorks']);
-        Route::get('/fo/figyelmeztetesek',[App\Http\Controllers\HeadUser\HeadUSerController::class,'Warnings']);
-        Route::get('/fo/tanorak',[App\Http\Controllers\HeadUser\HeadUSerController::class,'Lessons']);
+        //felhasznalo
+        Route::get('/fo/felhasznalok',[App\Http\Controllers\HeadUser\HeadUSerController::class,'UsersPage']);
+        Route::get('/fo/felhasznalok/{filter}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'UsersPageFilter']);
+        Route::get('/fo/ujfelhasznalo',[App\Http\Controllers\HeadUser\HeadUSerController::class,'NewUserPage']);
+        Route::get('/fo/felhasznalomodositas/{UserID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'EditUserPage']);
+        Route::post('/fo/felhasznalomodositas/mentes',[App\Http\Controllers\HeadUser\HeadUSerController::class,'EditUser']);
+        Route::post('/fo/ujfelhasznalomentes',[App\Http\Controllers\HeadUser\HeadUSerController::class,'AddNewUser']);
+
+        //rang
+        Route::get('/fo/rangok',[App\Http\Controllers\HeadUser\HeadUSerController::class,'Roles']);
+
+         //diak-szulo
+         Route::get('/fo/kapcsolat/szulodiak',[App\Http\Controllers\HeadUser\HeadUSerController::class,'StudParConns']);
+         Route::get('/fo/kapcsolat/ujszulodiak',[App\Http\Controllers\HeadUser\HeadUSerController::class,'NewStudPar']);
+         Route::get('/fo/kapcsolat/szulodiaktorles/{studentID}/{parentID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'RemoveStudPar']);
+         Route::post('/fo/kapcsolat/ujszulodiakmentes',[App\Http\Controllers\HeadUser\HeadUSerController::class,'SaveStudPar']);
+        
+
+        //bannolás
+        Route::get('/fo/kitiltottak',[App\Http\Controllers\HeadUser\HeadUSerController::class,'BannedUSers']);
+        Route::get('/fo/ujkitiltas',[App\Http\Controllers\HeadUser\HeadUSerController::class,'NewBanning']);
+        Route::post('/fo/ujkitiltasmentes',[App\Http\Controllers\HeadUser\HeadUSerController::class,'SaveNewBanning']);
+        Route::post('/fo/kitiltasmodositas',[App\Http\Controllers\HeadUser\HeadUSerController::class,'EditBannings']);
+
+        //mentes
+        Route::get('/fo/confirm/{link}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'Confirm']);
+        Route::get('/fo/doevvege',[App\Http\Controllers\HeadUser\HeadUSerController::class,'BackupYearAndNuke']);
+        Route::get('/fo/nuke',[App\Http\Controllers\HeadUser\HeadUSerController::class,'Nuke']);
+
+        //banner
+        Route::get('/fo/banner',[App\Http\Controllers\HeadUser\HeadUSerController::class,'Banner']);
+        Route::post('/fo/bannervalasztas',[App\Http\Controllers\HeadUser\HeadUSerController::class,'BannerChange']);
+        Route::get('/fo/ujbanner',[App\Http\Controllers\HeadUser\HeadUSerController::class,'NewBannerPage']);
+        Route::post('/fo/ujbannermentes',[App\Http\Controllers\HeadUser\HeadUSerController::class,'SaveBanner']);
+        Route::get('/fo/bannermodositas/{bannerID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'EditBannerPage']);
+        Route::post('/fo/bannermodositas',[App\Http\Controllers\HeadUser\HeadUSerController::class,'EditBanner']);
+        Route::get('/fo/bannertorles/{bannerID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'RemoveBanner']);
+      
+
+        //osztályok
+        Route::get('/fo/osztalyok',[App\Http\Controllers\HeadUser\HeadUSerController::class,'SchoolClasses']);
+        Route::get('/fo/osztaly/diakok/{classID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'ClassStudents']);
+        Route::get('/fo/ujosztaly',[App\Http\Controllers\HeadUser\HeadUSerController::class,'NewClass']);
+        Route::get('/fo/osztalymodositas/{classID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'EditClassPage']);
+        Route::post('/fo/ujosztalymentes',[App\Http\Controllers\HeadUser\HeadUSerController::class,'SaveClass']);
+        Route::post('/fo/osztalymodositas',[App\Http\Controllers\HeadUser\HeadUSerController::class,'EditClass']);
+        Route::get('/fo/osztalyok/diakhozzad/{classID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'AddStudentToClass']);
+        Route::post('/fo/osztalyok/diakhozzad/mentes',[App\Http\Controllers\HeadUser\HeadUSerController::class,'SaveStudentToClass']);
+        Route::get('/fo/osztaly/{classID}/diaktorles/{studentID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'RemoveStudentFromClass']);
+
+        //tantárgyak
         Route::get('/fo/tantargyak',[App\Http\Controllers\HeadUser\HeadUSerController::class,'Subjects']);
-        Route::get('/fo/osztaly',[App\Http\Controllers\HeadUser\HeadUSerController::class,'SchoolClasseWithStudents']);
-        Route::get('/fo/osztaly/osztalytarsak/{classID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'ClassStudents']);
-        Route::get('/fo/naptar/tanorak/{tanoraid}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'CalendarLesson']);
         Route::get('/fo/tantargy/orak/{tantargyid}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'SubjectLessons']);
-        Route::post('/fo/hazifeladat/feltoltes',[App\Http\Controllers\HeadUser\HeadUSerController::class,'UploadHomeWork'] );
-        Route::get('/fo/hazifeladat/letoltes/{homewokID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'DownloadHomeWork']);
+
+        Route::get('/fo/ujtantargy',[App\Http\Controllers\HeadUser\HeadUSerController::class,'NewSubject']);
+        Route::get('/fo/tantargymodositas/{tantargyid}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'EditSubjectPage']);
+        Route::post('/fo/ujtantargymentes',[App\Http\Controllers\HeadUser\HeadUSerController::class,'SaveSubject']);
+        Route::post('/fo/tantargymodositas',[App\Http\Controllers\HeadUser\HeadUSerController::class,'EditSubject']);
+
+        //tanorak
+        Route::get('/fo/tanorak',[App\Http\Controllers\HeadUser\HeadUSerController::class,'Lessons']);
+        Route::get('/fo/osztalyok/tanora/{tanoraid}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'LessonsClasses']);
+        Route::get('/fo/ujtanora',[App\Http\Controllers\HeadUser\HeadUSerController::class,'NewLesson']);
+        Route::get('/fo/tanoramodositas/{tanoraid}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'EditLessonPage']);
+        Route::post('/fo/ujtanoramentes',[App\Http\Controllers\HeadUser\HeadUSerController::class,'SaveLesson']);
+        Route::post('/fo/tanoramodositas',[App\Http\Controllers\HeadUser\HeadUSerController::class,'EditLesson']);
+        Route::get('/fo/naptar/tanorak/{tanoraid}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'CalendarLesson']);
+        Route::get('/fo/tanorak/osztalyhozzad/{lessonID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'AddClassToLesson']);
+        Route::post('/fo/tanorak/osztalyhozzad/mentes',[App\Http\Controllers\HeadUser\HeadUSerController::class,'SaveClassToLesson']);
+        Route::get('/fo/tanora/{lessonID}/osztalytorles/{classID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'RemoveClassFromLesson']);
+
+        
+         //ertekelesek
+        Route::get('/fo/ertekelestipusok',[App\Http\Controllers\HeadUser\HeadUSerController::class,'RatingTypes']);
+        Route::get('/fo/ujertekelestipus',[App\Http\Controllers\HeadUser\HeadUSerController::class,'NewRatingType']);
+        Route::get('/fo/ertekelestipusmodositas/{gradeID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'EditRatinTypegPage']);
+        Route::get('/fo/ertekelestipustorles/{gradeID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'RemoveRatingType']);
+        Route::post('/fo/ujertekelestipusmentes',[App\Http\Controllers\HeadUser\HeadUSerController::class,'SaveRatingType']);
+        Route::post('/fo/ertekelestipusmodositas',[App\Http\Controllers\HeadUser\HeadUSerController::class,'EditRatingType']);
+        
+        Route::get('/fo/ertekelesek/tanora/{lessonID}/osztaly/{classID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'RatingsLessons']);
+        Route::get('/fo/tanorak/ujertekeles/{lessonID}/osztaly/{classID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'AddNewRatingToLessonClass']);
+        Route::post('/fo/tanorak/ertekelesekmentes',[App\Http\Controllers\HeadUser\HeadUSerController::class,'SaveNewRatingToLessonClass']);
+
+        Route::get('/fo/ertekelesek',[App\Http\Controllers\HeadUser\HeadUSerController::class,'RecentRatings']);
+        Route::get('/fo/ertekelesmodositas/{gradeID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'EditStudentRatingPage']);
+        Route::get('/fo/ertekelestorles/{gradeID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'RemoveStudentGrade']);
+        Route::post('/fo/ertekelesmodositas',[App\Http\Controllers\HeadUser\HeadUSerController::class,'EditStudentRating']);
+
+        //hiányzások
+        Route::get('/fo/igazolastipusok',[App\Http\Controllers\HeadUser\HeadUSerController::class,'VerifTypes']);
+        Route::get('/fo/ujigazolastipus',[App\Http\Controllers\HeadUser\HeadUSerController::class,'NewVerifType']);
+        Route::post('/fo/ujigazolastipusmentes',[App\Http\Controllers\HeadUser\HeadUSerController::class,'SaveVerifType']);
+        Route::get('/fo/igazolastipusmodositas/{verifID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'EditVerifTypegPage']);
+        Route::post('/fo/igazolastipusmodositas',[App\Http\Controllers\HeadUser\HeadUSerController::class,'EditVerifType']);
+
+        Route::get('/fo/hianyzasok',[App\Http\Controllers\HeadUser\HeadUSerController::class,'RecentMissings']);
+        Route::get('/fo/hianyzasmodositas/{missID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'EditStudentMissingPage']);
+        Route::get('/fo/hianyzastorles/{missID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'RemoveStudentMissing']);
+        Route::post('/fo/hianyzasmodositas',[App\Http\Controllers\HeadUser\HeadUSerController::class,'EditStudentMissing']);
+
+        Route::get('/fo/hianyzasok/tanora/{lessonID}/osztaly/{classID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'MissingsLessons']);
+        Route::get('/fo/tanorak/ujhianyzas/{lessonID}/osztaly/{classID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'AddNewissingToLessonClass']);
+        Route::post('/fo/tanorak/hianyzasmentes',[App\Http\Controllers\HeadUser\HeadUSerController::class,'SaveNewissingToLessonClass']);
+
+
+
+        
+        //figyelmeztetések
+        Route::get('/fo/figyelmeztetesek',[App\Http\Controllers\HeadUser\HeadUSerController::class,'Warnings']);
+        Route::get('/fo/ujfigyelmeztetes',[App\Http\Controllers\HeadUser\HeadUSerController::class,'NewWarning']);
+        Route::get('/fo/figyelmeztetesmodositas/{warningID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'EditWarningPage']);
+        Route::post('/fo/ujfigyelmeztetesmentes',[App\Http\Controllers\HeadUser\HeadUSerController::class,'SaveWarning']);
+        Route::post('/fo/figyelmeztetesmodositas',[App\Http\Controllers\HeadUser\HeadUSerController::class,'EditWarning']);
+        Route::get('/fo/figyelmeztetestorles/{warningID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'RemoveWarning']);
+
+        //házifeladatok
+        Route::get('/fo/hazifeladatok',[App\Http\Controllers\HeadUser\HeadUSerController::class,'HomeWorks']);
+        Route::get('/fo/hazifeladatok/diakok/{homewokID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'StudentsHomeWorks']);
+        Route::get('/fo/hazifeladat/osztalyok/{homewokID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'HomeWorkClasses']);
+        Route::get('/fo/ujhazifeladat',[App\Http\Controllers\HeadUser\HeadUSerController::class,'NewHomeWork']);
+        Route::get('/fo/hazifeladatmodositas/{homewokID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'EditHomeWorkPage']);
+        Route::post('/fo/ujhazifeladatmentes',[App\Http\Controllers\HeadUser\HeadUSerController::class,'SaveHomeWork']);
+        Route::post('/fo/hazifeladatmodositas',[App\Http\Controllers\HeadUser\HeadUSerController::class,'EditHomeWork']);
+        Route::get('/fo/hazifeladattorles/{homewokID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'RemoveHomeWork']);
+        Route::get('/fo/bekuldotthazifeladat/letoltes/{homewokID}/{studentID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'DownloadHomeWork']);
+        Route::get('/fo/bekuldotthazifeladat/torles/{homewokID}/{studentID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'RemoveStudentHomeWork']);
     });
 });
 

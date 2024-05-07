@@ -24,7 +24,7 @@
         <div class="col-12 tm-block-col">
             <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
                 @if ($status == 0)
-                    <h2 class="tm-block-title">Házi feladatok</h2>
+                    <h2 class="tm-block-title">Házifeladatok</h2>
                     <button class="NewItemButton" onclick="location.href = '/tanar/ujhazifeladat/{{ $lessonid }}';" >Hozzáadás</button>
                     <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                         <thead>
@@ -63,7 +63,7 @@
 
                 @else
                     @if ($status == 2)
-                        <h2 class="tm-block-title">Új Házi feladat</h2>
+                        <h2 class="tm-block-title">Új Házifeladat</h2>
                         
                             <form id="ujRang" class="formCenterContent" action="/tanar/ujhazifeladatmentes" method="post">
                                 @csrf
@@ -98,7 +98,7 @@
                         </div>
                     @else
                         @if ($status ==3)
-                            <h2 class="tm-block-title">Házi feladat módosítása</h2>
+                            <h2 class="tm-block-title">Házifeladat módosítása</h2>
                             
                                 <form id="ujRang" class="formCenterContent" action="/tanar/hazifeladatmodositas" method="post">
                                     @csrf

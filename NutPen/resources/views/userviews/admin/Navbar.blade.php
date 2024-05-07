@@ -65,7 +65,7 @@
         <a class="dropdown-item" href="/admin/ertekelesek">Értékelések</a>
         <a class="dropdown-item" href="/admin/igazolastipusok">Igazolás típusok</a>
         <a class="dropdown-item" href="/admin/hianyzasok">Késések/Hiányzások</a>
-        <a class="dropdown-item" href="/admin/hazifeladatok">Házi feladatok</a>
+        <a class="dropdown-item" href="/admin/hazifeladatok">Házifeladatok</a>
     </div>
 </li>
 

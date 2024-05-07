@@ -15,12 +15,16 @@ class HeadUser extends Authenticatable
         'FName',
         'LName',
         'Email',
+        'SexTypeID',
+        'PostalCode',
+        'FullAddress',
+        'BDay',
         'Phone',
         'RoleTypeID',
         'LastLogin',
         'DefaultPassword'
       ];
-      protected $primaryKey = 'userID';
+      protected $primaryKey = 'UserID';
       public $incrementing = false;
       protected $keyType="string";
       public function GetRole()

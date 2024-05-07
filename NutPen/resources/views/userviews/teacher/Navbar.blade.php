@@ -22,7 +22,7 @@
 
 @if (isset($ownclasses)&&$ownclasses==true)
     <li class="nav-item dropdown ">
-        <a class="nav-link dropdown-toggle" href="/tanar/osztaly" id="navbarDropdown" role="button" 
+        <a class="nav-link dropdown-toggle" href="/tanar/osztalyok" id="navbarDropdown" role="button" 
             aria-haspopup="true" aria-expanded="false">
             <i class="fa-solid fa-clock"></i>
             <span>
@@ -33,7 +33,7 @@
 
 @endif
 
-<li class="nav-item dropdown ">
+<!--<li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="/naptar" id="navbarDropdown" role="button" 
         aria-haspopup="true" aria-expanded="false">
         <i class="fa-solid fa-clock"></i>
@@ -42,21 +42,18 @@
         </span>
     </a>
    
-</li>
+</li>-->
 
 <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false">
         <i class="fa-solid fa-clock"></i>
         <span>
-            Tanóra/Tantárgy <i class="fas fa-angle-down"></i>
+            Tanóra <i class="fas fa-angle-down"></i>
         </span>
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
         <a class="dropdown-item" href="/tanar/tanorak">Tanóráim</a>
-        <a class="dropdown-item" href="/tanar/tantargyak">Tantárgyaim</a>
-        <a class="dropdown-item" href="/tanar/ertekelesek">Értékeléseim</a>
-        <a class="dropdown-item" href="/tanar/hazifeladatok">Házi feladataim</a>
        
     </div>
 </li>

@@ -157,6 +157,7 @@ class LoginController extends Controller
 
     function registerGuard($firstChar,$user)
     {
+       
         switch ($firstChar) {
             case 'h':
                 Auth::guard('headUser')->login($user);

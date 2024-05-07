@@ -3,7 +3,7 @@
 @section('navbar')
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
-    @include('userviews.admin.Navbar')
+    @include('userviews.headuser.Navbar')
     
 @endsection
 
@@ -25,7 +25,7 @@
             <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
                 @if ($status == 0)
                     <h2 class="tm-block-title">Házifeladatok</h2>
-                    <button class="NewItemButton" onclick="location.href = '/admin/ujhazifeladat';" >Hozzáadás</button>
+                    <button class="NewItemButton" onclick="location.href = '/fo/ujhazifeladat';" >Hozzáadás</button>
                     <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                         <thead>
                             <tr>
@@ -50,7 +50,7 @@
                                     <td>{{ $item->GetLesson->GetTeacher->FName." ".$item->GetLesson->GetTeacher->LName  }}</td>
                                     <td>{{ $item->GetLesson->GetSubject->Name }}</td>
                                   
-                                    <td>  <div class="btnplacer"> <button class="OtherFunctionButton" onclick="location.href = '/admin/hazifeladat/osztalyok/{{ $item->ID }}';" >Osztályok</button> </div> </td>
+                                    <td>  <div class="btnplacer"> <button class="OtherFunctionButton" onclick="location.href = '/fo/hazifeladat/osztalyok/{{ $item->ID }}';" >Osztályok</button> </div> </td>
                                     <td>
                                         @if ($item->Active)
                                             Igen
@@ -58,9 +58,9 @@
                                             Nem
                                         @endif
                                     </td>
-                                    <td> <div class="btnplacer"><button  class="DownloadButton" onclick="location.href = '/admin/hazifeladatok/diakok/{{ $item->ID }}';" >Beadott feladatok</button>  </div></td>
-                                    <td><div class="btnplacer"><button class="EditButton" onclick="location.href = '/admin/hazifeladatmodositas/{{ $item->ID }}';" >Szerkesztés</button></div></td>
-                                    <td><div class="btnplacer"><button class="RemoveButton" onclick="location.href = '/admin/hazifeladattorles/{{ $item->ID }}';" >Törlés</button></div></td>
+                                    <td> <div class="btnplacer"><button  class="DownloadButton" onclick="location.href = '/fo/hazifeladatok/diakok/{{ $item->ID }}';" >Beadott feladatok</button>  </div></td>
+                                    <td><div class="btnplacer"><button class="EditButton" onclick="location.href = '/fo/hazifeladatmodositas/{{ $item->ID }}';" >Szerkesztés</button></div></td>
+                                    <td><div class="btnplacer"><button class="RemoveButton" onclick="location.href = '/fo/hazifeladattorles/{{ $item->ID }}';" >Törlés</button></div></td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -70,7 +70,7 @@
                     @if ($status == 2)
                         <h2 class="tm-block-title">Új Házifeladat</h2>
                         
-                            <form id="ujRang" class="formCenterContent" action="/admin/ujhazifeladatmentes" method="post">
+                            <form id="ujRang" class="formCenterContent" action="/fo/ujhazifeladatmentes" method="post">
                                 @csrf
                                 <div class="NewUser">
                                     <div class="inputcolumn">
@@ -120,7 +120,7 @@
                         @if ($status ==3)
                             <h2 class="tm-block-title">Házifeladat módosítása</h2>
                             
-                                <form id="ujRang" class="formCenterContent" action="/admin/hazifeladatmodositas" method="post">
+                                <form id="ujRang" class="formCenterContent" action="/fo/hazifeladatmodositas" method="post">
                                     @csrf
                                     <input type="hidden" name="homeworkID" id="homeworkID" value="{{ $homework->ID }}">
                                     <div class="NewUser">
@@ -193,12 +193,12 @@
                                                 <td>{{ $item->Answer }}</td>
                                                 
                                                 @if (isset($item->FileName))
-                                                    <td><div class="btnplacer"><button class="DownloadButton" title="{{ $item->FileName }}" onclick="location.href = '/admin/bekuldotthazifeladat/letoltes/{{ $item->HomeWorkID }}/{{ $item->StudentID }}';" >Letöltés</button></div></td>
+                                                    <td><div class="btnplacer"><button class="DownloadButton" title="{{ $item->FileName }}" onclick="location.href = '/fo/bekuldotthazifeladat/letoltes/{{ $item->HomeWorkID }}/{{ $item->StudentID }}';" >Letöltés</button></div></td>
                                                 @else
                                                     <td>Nincs beküldött házifeladat</td>
                                                 @endif
                                                
-                                                <td><div class="btnplacer"><button class="RemoveButton" onclick="location.href = '/admin/bekuldotthazifeladat/torles/{{ $item->HomeWorkID }}/{{ $item->StudentID }}';" >Törlés</button></div></td>
+                                                <td><div class="btnplacer"><button class="RemoveButton" onclick="location.href = '/fo/bekuldotthazifeladat/torles/{{ $item->HomeWorkID }}/{{ $item->StudentID }}';" >Törlés</button></div></td>
                                             </tr>
                                         @endforeach
                                     </tbody>

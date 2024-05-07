@@ -3,7 +3,7 @@
 @section('navbar')
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
-    @include('userviews.admin.Navbar')
+    @include('userviews.headuser.Navbar')
     
 @endsection
 
@@ -35,7 +35,6 @@
                                 <th class="th-sm">Napok száma</th>
                                 <th class="th-sm">Naptár megnyitása</th>
                                 <th class="th-sm">Osztályok listázása</th>
-                                <th class="th-sm">Házifeladatok</th>
                                 <th class="th-sm">Óra módosítása</th>
                             </tr>
                         </thead>
@@ -66,10 +65,9 @@
                                         
                                     ?>
                                     </td>
-                                    <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/admin/naptar/tanorak/{{ $item->ID }}';" >Naptár</button></div></td>
-                                    <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/admin/osztalyok/tanora/{{ $item->ID }}';" >Osztályok listázása</button></div></td>
-                                    <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/admin/hazifeladatok/tanora/{{ $item->ID }}';" >Házifeladatok listázása</button></div></td>
-                                    <td><div class="btnplacer"><button class="EditButton" onclick="location.href = '/admin/tanoramodositas/{{ $item->ID }}';" >Szerkesztés</button></div></td>
+                                    <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/fo/naptar/tanorak/{{ $item->ID }}';" >Naptár</button></div></td>
+                                    <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/fo/osztalyok/tanora/{{ $item->ID }}';" >Osztályok listázása</button></div></td>
+                                    <td><div class="btnplacer"><button class="EditButton" onclick="location.href = '/fo/tanoramodositas/{{ $item->ID }}';" >Szerkesztés</button></div></td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -78,7 +76,7 @@
                     @if ($status == 2)       <!--//új tanóra-->
                         <h2 class="tm-block-title">Új Tanóra</h2>
                         
-                            <form id="ujFelh" class="formCenterContent" action="/admin/ujtanoramentes" method="post">
+                            <form id="ujFelh" class="formCenterContent" action="/fo/ujtanoramentes" method="post">
                                 @csrf
                                 <div class="NewUser">
                                     <div class="inputcolumn">
@@ -172,7 +170,7 @@
                         @if ($status ==3)        <!--//tanóra módosítás-->
 
                             <h2 class="tm-block-title">Tanóra módosítás</h2>
-                            <form id="ujFelh" class="formCenterContent" action="/admin/tanoramodositas" method="post">
+                            <form id="ujFelh" class="formCenterContent" action="/fo/tanoramodositas" method="post">
                                 @csrf
                                 <input type="hidden" name="lessonID" id="lessonID" value="{{ $lesson->ID }}">
                                 <div class="NewUser">
@@ -263,7 +261,7 @@
                         @else
                             @if ($status ==4)       <!-- //Tanórához kapcsolt osztályok és diákok és értékelés-->
                                 <h2 class="tm-block-title">{{ $subjectName }} tantárgy osztályai Tanár:({{ $teacherName }})</h2>
-                                <button class="NewItemButton" onclick="location.href = '/admin/tanorak/osztalyhozzad/{{ $lessonID }}';" >Új osztály hozzáadása a tanórához</button>
+                                <button class="NewItemButton" onclick="location.href = '/fo/tanorak/osztalyhozzad/{{ $lessonID }}';" >Új osztály hozzáadása a tanórához</button>
                                 <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                                     <thead>
                                         <tr>
@@ -280,10 +278,10 @@
                                             <tr>
                                                 <td>{{ $item->Name }}</td>
                                                 <td>{{ $item->GetTeacher->FName." ".$item->GetTeacher->LName }}</td>
-                                                <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/admin/ertekelesek/tanora/{{  $lessonID }}/osztaly/{{ $item->ID }}';" >Értékelések</button></div></td>
-                                                <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/admin/hianyzasok/tanora/{{  $lessonID }}/osztaly/{{ $item->ID }}';" >Hiányzások</button></div></td>
-                                                <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/admin/osztaly/diakok/{{ $item->ID }}';" >Diákok listázása</button></div></td>
-                                                <td><div class="btnplacer"><button class="RemoveButton" onclick="location.href = '/admin/tanora/{{ $lessonID }}/osztalytorles/{{ $item->ID }}';" >Kapcsolat bontása</button></div></td>
+                                                <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/fo/ertekelesek/tanora/{{  $lessonID }}/osztaly/{{ $item->ID }}';" >Értékelések</button></div></td>
+                                                <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/fo/hianyzasok/tanora/{{  $lessonID }}/osztaly/{{ $item->ID }}';" >Hiányzások</button></div></td>
+                                                <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/fo/osztaly/diakok/{{ $item->ID }}';" >Diákok listázása</button></div></td>
+                                                <td><div class="btnplacer"><button class="RemoveButton" onclick="location.href = '/fo/tanora/{{ $lessonID }}/osztalytorles/{{ $item->ID }}';" >Kapcsolat bontása</button></div></td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -292,7 +290,7 @@
                                 @if ($status ==5)        <!--//osztály tanórához felvétel-->
                                     <h2 class="tm-block-title">Osztályok felvétele a tanórára</h2>
                                                     
-                                    <form id="ujFelh" class="formCenterContent" action="/admin/tanorak/osztalyhozzad/mentes" method="post">
+                                    <form id="ujFelh" class="formCenterContent" action="/fo/tanorak/osztalyhozzad/mentes" method="post">
                                         @csrf
                                         <input type="hidden" name="lessonID" id="lessonID" value="{{ $lessonID }}">
                                         <div class="NewUser">

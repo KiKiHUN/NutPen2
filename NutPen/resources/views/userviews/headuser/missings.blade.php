@@ -3,7 +3,7 @@
 @section('navbar')
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
-    @include('userviews.admin.Navbar')
+    @include('userviews.headuser.Navbar')
     
 @endsection
 
@@ -26,13 +26,11 @@
             <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
                 @if ($status == 0)     <!--//értékeléstípusok-->
                     <h2 class="tm-block-title">Igazolás típusok</h2>
-                    <button class="NewItemButton" onclick="location.href = '/admin/ujigazolastipus';" >Új igazolás típus</button>
                     <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                         <thead>
                             <tr>
                                 <th class="th-sm">Név</th>
                                 <th class="th-sm">Leírás</th>
-                                <th class="th-sm">Igazolás típus módosítása</th>
                             </tr>
                         </thead>
                         <tbody id="myTable">
@@ -41,7 +39,6 @@
                                 <tr>
                                     <td>{{ $item->Name }}</td>
                                     <td>{{ $item->Description}}</td>
-                                    <td><div class="btnplacer"><button  class="EditButton" onclick="location.href = '/admin/igazolastipusmodositas/{{ $item->ID }}';" >Módosítás</button> </div></td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -50,7 +47,7 @@
                     @if ($status == 2)      <!--//új értékeléstípus-->
                         <h2 class="tm-block-title">Új Igazolás típus</h2>
                         
-                            <form id="ujFelh" class="formCenterContent" action="/admin/ujigazolastipusmentes" method="post">
+                            <form id="ujFelh" class="formCenterContent" action="/fo/ujigazolastipusmentes" method="post">
                                 @csrf
                                 <div class="NewUser">
                                     <div class="inputcolumn">
@@ -71,7 +68,7 @@
                         @if ($status ==3)       <!--//értékeléstípus módosítás-->
 
                             <h2 class="tm-block-title">Igazolás típus módosítás</h2>
-                            <form id="ujFelh" class="formCenterContent" action="/admin/igazolastipusmodositas" method="post">
+                            <form id="ujFelh" class="formCenterContent" action="/fo/igazolastipusmodositas" method="post">
                                 @csrf
                                 <input type="hidden" name="verificationID" id="verificationID" value="{{ $verif->ID }}">
                                 <div class="NewUser">
@@ -95,7 +92,7 @@
                         @else
                             @if ($status ==4)       <!--//Értékelések listázása a tanórában szereplő diákoknak osztályra szűrve-->
                                 <h2 class="tm-block-title"><b>{{ $classname }}</b> osztály diákjainak késései/hiányzásai <b>{{ $subjectName }}</b> tárgyból</h2>
-                                <button class="NewItemButton" onclick="location.href = '/admin/tanorak/ujhianyzas/{{ $lessonID }}/osztaly/{{ $classID }}';" >Új hiányzás</button>
+                                <button class="NewItemButton" onclick="location.href = '/fo/tanorak/ujhianyzas/{{ $lessonID }}/osztaly/{{ $classID }}';" >Új hiányzás</button>
                                 <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                                     <thead>
                                         <tr>
@@ -134,7 +131,7 @@
                             @else
                                 @if ($status ==5)    
                                     <h2 class="tm-block-title">{{ $classname }} osztályhoz új hiányzás felvétele</h2>
-                                    <form id="ujFelh" class="formCenterContent" action="/admin/tanorak/hianyzasmentes" method="post">
+                                    <form id="ujFelh" class="formCenterContent" action="/fo/tanorak/hianyzasmentes" method="post">
                                         @csrf
                                         <input type="hidden" name="lessonID" id="lessonID" value="{{ $lessonID }}">
                                         <input type="hidden" name="classID" id="classID" value="{{ $classID }}">
@@ -213,8 +210,8 @@
                                                             @endif
                                                         </td>
                                                         
-                                                        <td><div class="btnplacer"><button class="EditButton" onclick="location.href = '/admin/hianyzasmodositas/{{ $item->ID }}';" >Módosítás</button></div></td>
-                                                        <td><div class="btnplacer"><button class="RemoveButton" onclick="location.href = '/admin/hianyzastorles/{{ $item->ID }}';" >Törlés</button></div></td>
+                                                        <td><div class="btnplacer"><button class="EditButton" onclick="location.href = '/fo/hianyzasmodositas/{{ $item->ID }}';" >Módosítás</button></div></td>
+                                                        <td><div class="btnplacer"><button class="RemoveButton" onclick="location.href = '/fo/hianyzastorles/{{ $item->ID }}';" >Törlés</button></div></td>
                                                     </tr>
                                                 @endforeach
                                             </tbody>
@@ -222,7 +219,7 @@
                                     @else
                                         @if($status==7)     
                                             <h2 class="tm-block-title">{{ $missing->GetStudent->LName." ".$missing->GetStudent->FName }} hiányzásának módosítása</h2>
-                                            <form id="ujFelh" class="formCenterContent" action="/admin/hianyzasmodositas" method="post">
+                                            <form id="ujFelh" class="formCenterContent" action="/fo/hianyzasmodositas" method="post">
                                                 @csrf
                                                 <input type="hidden" name="missID" id="missID" value="{{ $missing->ID }}">
                                                 <div class="NewUser">

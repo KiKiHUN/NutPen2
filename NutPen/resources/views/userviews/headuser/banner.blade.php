@@ -3,7 +3,7 @@
 @section('navbar')
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
-    @include('userviews.admin.Navbar')
+    @include('userviews.headuser.Navbar')
     
 @endsection
 
@@ -25,7 +25,7 @@
             <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
                 @if ($status == 0)
                     <h2 class="tm-block-title">Összes Bejelentkezés banner</h2>
-                    <button class="NewItemButton"  onclick="location.href = '/admin/ujbanner';" >Új Banner</button>
+                    <button class="NewItemButton"  onclick="location.href = '/fo/ujbanner';" >Új Banner</button>
                     
                     <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                         <thead>
@@ -61,19 +61,19 @@
                                             value=0
                                         @endif
                                     ></td>
-                                    <td><div class="btnplacer"><button  class="EditButton" onclick="location.href = '/admin/bannermodositas/{{ $item->ID }}';" >Módosítás</button> </div></td>
-                                    <td> <div class="btnplacer"><button class="RemoveButton" onclick="location.href = '/admin/bannertorles/{{ $item->ID }}';" >Törlés</button> </div></td>
+                                    <td><div class="btnplacer"><button  class="EditButton" onclick="location.href = '/fo/bannermodositas/{{ $item->ID }}';" >Módosítás</button> </div></td>
+                                    <td> <div class="btnplacer"><button class="RemoveButton" onclick="location.href = '/fo/bannertorles/{{ $item->ID }}';" >Törlés</button> </div></td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
-                    <button id="SaveBannerBTN" class=" btn-success margined-send-btn">Mentés</button>
+                    <button id="SaveBannerHeadUserBTN" class=" btn-success margined-send-btn">Mentés</button>
                 @endif
 
                 @if ($status == 2)
                     <h2 class="tm-block-title">Új banner üzenet</h2>
                     
-                        <form id="ujFelh" class="formCenterContent" action="/admin/ujbannermentes" method="post" enctype="multipart/form-data">
+                        <form id="ujFelh" class="formCenterContent" action="/fo/ujbannermentes" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="NewUser">
                                 <div class="inputcolumn">
@@ -100,7 +100,7 @@
                 @if ($status ==3)
                     <h2 class="tm-block-title">Banner üzenet módosítása</h2>
                     
-                        <form id="ujRang" class="formCenterContent" action="/admin/bannermodositas" method="post" enctype="multipart/form-data">
+                        <form id="ujRang" class="formCenterContent" action="/fo/bannermodositas" method="post" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="bannerID" id="bannerID" value="{{ $banner->ID }}">
                             <div class="NewUser">

@@ -35,7 +35,7 @@
                                 <th class="th-sm">Napok száma</th>
                                 <th class="th-sm">Naptár megnyitása</th>
                                 <th class="th-sm">Osztályok listázása</th>
-                                <th class="th-sm">Házi feladatok</th>
+                                <th class="th-sm">Házifeladatok</th>
                             </tr>
                         </thead>
                         <tbody id="myTable">
@@ -66,7 +66,7 @@
                                     </td>
                                     <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/tanar/naptar/tanorak/{{ $item->ID }}';" >Naptár</button></div></td>
                                     <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/tanar/osztalyok/tanora/{{ $item->ID }}';" >Osztályok listázása</button></div></td>
-                                    <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/tanar/hazifeladatok/tanora/{{ $item->ID }}';" >Házi feladatok listázása</button></div></td>
+                                    <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/tanar/hazifeladatok/tanora/{{ $item->ID }}';" >Házifeladatok listázása</button></div></td>
                                 </tr>
                             @endforeach
                         </tbody>
