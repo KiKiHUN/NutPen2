@@ -82,7 +82,7 @@
                                 @csrf
                                 <div class="NewUser">
                                     <div class="inputcolumn">
-                                        <label for="teacher">Osztályfőnök: </label>
+                                        <label for="teacher">Tanár: </label>
                                         <select id="teacher" class="textfield" name="teacher">
                                             @foreach ($teachers as $teacher)
                                                 <option value="{{ $teacher->UserID }}">{{ $teacher->FName." ".$teacher->LName.", ID: ".$teacher->UserID }}</option>
@@ -177,7 +177,7 @@
                                 <input type="hidden" name="lessonID" id="lessonID" value="{{ $lesson->ID }}">
                                 <div class="NewUser">
                                     <div class="inputcolumn">
-                                        <label for="teacher">Osztályfőnök: </label>
+                                        <label for="teacher">Tanár: </label>
                                         <select id="teacher" class="textfield" name="teacher">
                                             @foreach ($teachers as $teacher)
                                                 <option value="{{ $teacher->UserID }}" {{ $lesson->TeacherID == $teacher->UserID ? 'selected' : '' }}>{{ $teacher->FName." ".$teacher->LName.", ID: ".$teacher->UserID }}</option>
