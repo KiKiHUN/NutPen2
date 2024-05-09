@@ -66,8 +66,9 @@ class MainRouterController extends Controller
                $warnings=[];
                $ratings=[];
                foreach ( $ownchilds as $child ) {
-                    $warnings[]=Warning::where('StudentID','=',$child->UserID)->where('DateTime','>=',$oneWeekAgo)->get();
-                    $ratings[]=Grade::with(['GetLesson.GetSubject','GetGradeType','GetStudent'])->where('StudentID','=',$child->UserID)->where('DateTime','>=',$oneWeekAgo)->get();
+                    $warnings[]=Warning::where('StudentID','=',$child->StudentID)->where('DateTime','>=',$oneWeekAgo)->get();
+                    $ratings[]=Grade::with(['GetLesson.GetSubject','GetGradeType','GetStudent'])->where('StudentID','=',$child->StudentID)->where('DateTime','>=',$oneWeekAgo)->get();
+                   
                }
                $wariningswithUsers = [];
 
@@ -76,13 +77,13 @@ class MainRouterController extends Controller
                     foreach ($warnings as $warning) {
                          foreach ($warning as $onewarning) {
                               $whogave=Warning::GetWhoGave($onewarning->ID);
-                              $student=Student::where("UserID","=",$onewarning->StudentID);
+                              $student=Student::where("UserID","=",$onewarning->StudentID)->first();
                               $wariningswithUsers[$onewarning->ID] = [
                                    'ID' => $onewarning->ID,
                                    'name' => $onewarning->Name,
-                                   'whogavename' => $whogave->LName." ". $whogave->FName,
+                                   'whogavename' => $whogave->FName." ". $whogave->LName,
                                    'whogaveID' => $onewarning->WhoGaveID,
-                                   'childName' => $student->LName." ". $student->FName
+                                   'childName' => $student->FName." ". $student->LName
                               ];
                          }
                     }

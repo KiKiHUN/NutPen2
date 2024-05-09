@@ -10,7 +10,7 @@
 @section('content')
     <div class="row">
         <div class="col">
-            <p class="text-white mt-5 mb-5">Hello, <b>{{ $user->FName }}</b></p>
+            <p class="text-white mt-5 mb-5">Hello, <b>{{ $user->LName }}</b></p>
             <input type="hidden" id="UserID" value="{{ $user->UserID }}">
         </div>
     </div>
