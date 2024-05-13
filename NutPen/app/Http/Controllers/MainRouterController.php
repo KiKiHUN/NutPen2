@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\Grade;
 use App\Models\HeadUser;
+use App\Models\HomeWork;
+use App\Models\HomeWorkStudent;
 use App\Models\Message;
 use App\Models\RoleType;
 use App\Models\SchoolClass;
 use App\Models\SexType;
 use App\Models\Student;
 use App\Models\StudentParent;
+use App\Models\StudentsClass;
 use App\Models\StudParent;
 use App\Models\Teacher;
 use App\Models\Warning;
@@ -102,8 +105,22 @@ class MainRouterController extends Controller
                     return redirect('/jelszoVisszaallitas');
                  }
                  $classes=SchoolClass::where("ClassMasterID","=",Auth::user()->UserID)->get();
-                 return View('userviews.teacher.dashboard',['user'=>$user,'messages'=>$msg,'ownclasses'=>$classes]);
-                 break;
+
+
+                 
+
+                 $newhomeworks=HomeWork::whereHas('GetLesson', function ($query) {
+                    return $query->where('TeacherID', '=', Auth::user()->UserID);
+                })->withCount(['GetSubmittedHomeWorks' => function ($query) {
+                    $query->where('SubmitDateTime', '>=', now()->subWeek());
+                }])
+                ->get();
+
+               
+                  
+            
+               return View('userviews.teacher.dashboard',['user'=>$user,"newhomeworks"=>$newhomeworks,'messages'=>$msg,'ownclasses'=>$classes]);
+               break;
             case 'a':
                  $user = Admin::where(['UserID' => Auth::user()->UserID])->first();
                  if ( $this->DefaultCheck($user)) {

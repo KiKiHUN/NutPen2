@@ -43,7 +43,7 @@ class StudParentController extends Controller
                     'name' => $warning->Name,
                     'description' => $warning->Description,
                     'datetime'=>$warning->DateTime,
-                    'whogavename' => $whogave->LName." ". $whogave->FName,
+                    'whogavename' => $whogave->FName." ". $whogave->LName,
                     'whogaveID' => $warning->WhoGaveID
             ];
         }
@@ -52,6 +52,7 @@ class StudParentController extends Controller
     function Lessons($studID)
     {
         $classConnections=StudentsClass::with(['GetClass.GetLessons.GetSubject','GetClass.GetLessons.GetTeacher'])->where('StudentID','=', $studID)->get();
+        
        
         return view('userviews/parent/lesson',['status'=>0,'lessonclassconecttions'=>$classConnections,"student"=>Student::where("UserID","=",$studID)->first()]);
     }
@@ -128,7 +129,7 @@ class StudParentController extends Controller
         foreach ($grades as $grade => $lessonGrades) {
             $latestGradeDateTime = $lessonGrades->last()->DateTime;
             $subjectName = $lessonGrades->last()->GetLesson->GetSubject->Name;
-            $teacherName = $lessonGrades->last()->GetLesson->GetTeacher->LName." ".$lessonGrades->last()->GetLesson->GetTeacher->FName;
+            $teacherName = $lessonGrades->last()->GetLesson->GetTeacher->FName." ".$lessonGrades->last()->GetLesson->GetTeacher->LName;
             $gradesArray = [];
             foreach ($lessonGrades as $grade) {
                 $gradeTypeValue = $grade->GetGradeType->Value;
@@ -154,24 +155,16 @@ class StudParentController extends Controller
     function HomeWorks($studID)
     {
        
-        $currentDate = Carbon::now();
-        $currentYear = $currentDate->year;
-        $currentYearStart = $currentDate->copy()->month(9)->day(1);
-        if ($currentDate->lt($currentYearStart)) {
-            $currentYearStart->subYear();
-        }
-        
-        // End at July 1st of the current year
-        $nextYearJuly = Carbon::create($currentYear, 7, 1, 0, 0, 0);
+      
       
 
         $homeworksConnections = StudentsClass::with(
             [
                 'GetClass.GetLessons.GetHomeworks'=> 
-                        function ($q) use ($currentYearStart,$nextYearJuly) 
-                        {
-                                $q ->whereBetween('StartDateTime', [$currentYearStart, $nextYearJuly]);
-                        }, 
+                function ($q)
+                {
+                        $q ->where('Active','=',1);
+                }, 
                 'GetClass.GetLessons.GetHomeworks.GetSubmittedHomeWorks',
                 'GetClass.GetLessons.GetSubject',
                 'GetClass.GetLessons.GetTeacher'

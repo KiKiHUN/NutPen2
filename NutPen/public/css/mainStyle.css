@@ -1059,3 +1059,70 @@ input[type="time"] {
   border-radius: 0.5em;
 }
 
+
+.day-divider {
+  border-bottom: 1px solid #f5a623;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  font-size: x-large;
+  
+}
+.boldmodaltext{
+  font-weight: bold;
+  
+}
+
+.timepadding{
+  padding-left: 10%;
+}
+
+.grade-info
+{
+  margin-bottom: 10px;
+}
+
+.modalonerow
+{
+  font-size: large;
+}
+.btn-closemodal
+{
+  background-color: #f5a623;
+  
+}
+
+.modaledit
+{
+  margin-left: 16px;
+}
+.modaledittext
+{
+  border-radius:0.5rem;
+  border-style: solid;
+}
+.btn-savemodal
+{
+  background-color: #00a72a;
+  align-self: end;
+  margin-bottom: 0.8em;
+  margin-left: 10px;
+  
+}
+.btn-modalgomb
+{
+  font-size: larger;
+  border-radius:0.5rem;
+  border-style: solid;
+  width: fit-content;
+  padding: 5px 10px;
+}
+.btn-editmodal
+{
+  background-color: #3c9e04;
+  border-color: #03c77c;
+}
+
+.modal-content
+{
+  background-color: #416d85;
+}

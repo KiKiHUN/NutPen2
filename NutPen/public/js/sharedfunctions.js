@@ -6,11 +6,17 @@ function showDetails(DayTimes)
     var out="";
     for(var i = 0; i < DayTimes.length; i++) {
         var endTime=addMinutesToTime(DayTimes[i].Time,DayTimes[i].Lenght);
-        out=out+DayNameTranslate(DayTimes[i].Day)+": "+DayTimes[i].Time+"->"+endTime+"\n";
+        //out=out+DayNameTranslate(DayTimes[i].Day)+": "+DayTimes[i].Time+"->"+endTime+"\n";
+        out += '<div class="day-divider">' + DayNameTranslate(DayTimes[i].Day) + ' : <span class="boldmodaltext timepadding">' + DayTimes[i].Time + ' - ' + endTime + '</span></div>';
     }
-    alert(out);
+    $('#classinfomodal .modal-body').html(out);
+    $('#classinfomodal').modal('show').find('.modal-dialog').slideDown();
+    //alert(out);
     
 }
+$(".close").click(function() {
+    $("#myModal").css("display", "none");
+});
 
 function addMinutesToTime(timeString, minutesToAdd) 
 {
@@ -70,56 +76,104 @@ function DayNameTranslate(Day)
 
        
 function showMissingDetails(gradeName, gradeDateTime) {
-    alert(gradeName + " igazolást kapott ekkor:\n" + gradeDateTime);
+    var out = '<div class="grade-info"><span class="boldmodaltext">' + gradeName + '</span> igazolást kapott ekkor:</div>';
+    out += '<div >' + gradeDateTime + '</div>';
+    $('#gradedetailsmodal .modal-body').html(out);
+    $('#gradedetailsmodal').modal('show').find('.modal-dialog').slideDown();
 }
 function showGradeDetails(gradeName, gradeDateTime) {
-    alert(gradeName + " értékelést kapott ekkor:\n" + gradeDateTime);
+    //alert(gradeName + " értékelést kapott ekkor:\n" + gradeDateTime);
+
+    var out = '<div class="grade-info"><span class="boldmodaltext">' + gradeName + '</span> értékelést kapott ekkor:</div>';
+    out += '<div >' + gradeDateTime + '</div>';
+    $('#gradedetailsmodal .modal-body').html(out);
+    $('#gradedetailsmodal').modal('show').find('.modal-dialog').slideDown();
 }
 
 //<script src="{{ asset('/js/sharedfunctions.js') }}" type="text/javascript" defer></script>
 function showGradeDetailsAndAskToEdit(gradeName, gradeDateTime,link) {
-    if ( confirm(gradeName + " értékelést kapott ekkor:\n" + gradeDateTime +"\n \nSzeretnéd módosítani? \nOK->folytatás vagy Mégsem->megszakít.") == true) {
-        window.location.replace(link);
-    } 
+    var out = '<div class="grade-info"><span class="boldmodaltext">' + gradeName + '</span> értékelést kapott ekkor:</div>';
+    out += '<div >' + gradeDateTime + '</div>';
+    $('#gradedetailsWithEditmodal .modal-body').html(out);
+    $('#gradedetailsWithEditmodal').modal('show').find('.modal-dialog').slideDown();
+    $('#editButton').click(function() {
+        window.location.href=link;
+      });
+  
+    //if ( confirm(gradeName + " értékelést kapott ekkor:\n" + gradeDateTime +"\n \nSzeretnéd módosítani? \nOK->folytatás vagy Mégsem->megszakít.") == true) {
+    //    window.location.replace(link);
+    //} 
 }
 
 function showMissingDetailsAndAskToEdit(link) {
-    if ( confirm("Még nincs igazolva." +"\n \nSzeretnéd módosítani? \nOK->folytatás vagy Mégsem->megszakít.") == true) {
-        window.location.replace(link);
-    } 
+    
+    var out = '<div class="grade-info"><span class="boldmodaltext">Még nincs igazolva!</span></div>';
+    out += '<div > Szeretné módosítani?</div>';
+    $('#gradedetailsWithEditmodal .modal-body').html(out);
+    $('#gradedetailsWithEditmodal').modal('show').find('.modal-dialog').slideDown();
+    $('#editButton').click(function() {
+        window.location.href=link;
+    });
 }
 
-function AskForCommentText(studentid,homeworkid) {
-    if ( confirm("Szeretnéd módosítani? \nOK->folytatás vagy Mégsem->megszakít.") == true) {
-        var comment=prompt("Itt lehet kommentet hozzáfűzni az adott házifeladathoz:");
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            url: '/tanar/hfkomment/', 
-            method: 'POST',
-            data:
-            {
-                comment,
-                studentid,
-                homeworkid
-            },
-            success: function(response) {
-            console.log('válasz:', response);
-            if (response.status!=0) {
-                alert("hiba: "+response.message);
-            }else
-            {
-                alert(response.message);
-                location.reload();
-            }
-            },
-            error: function(xhr, status, error) {
-            // Handle error response from the server
-            alert("hiba: \n"+xhr.responseText)
-            }
-        });
-    } 
+$(document).ready(function() {
+    $('#editButton').click(function() {
+      $(this).hide(); // Hide the edit button
+    });
+
+    $('#gradedetailsWithEditmodal').on('hidden.bs.modal', function() {
+      $('#editButton').show(); // Show the edit button when the modal is closed
+    });
+  });
+
+function AskForCommentText(studentid,homeworkid,text) {
+
+    var out = '<div class="grade-info"><span class="boldmodaltext">Seretné a hozzászólást módosítani?</span></div>';
+    $('#gradedetailsWithEditmodal .modal-body').html(out);
+    $('#gradedetailsWithEditmodal').modal('show').find('.modal-dialog').slideDown();
+    $('#editButton').click(function() {
+        if ($('#commentinput').length === 0) {
+            var editForm = '<div class="row"><div class="form-group modaledit"><label for="commentinput">Hozzászólás módosítása:</label><input type="text" class="form-control modaledittext" id="commentinput" value="'+text+'"></div>';
+            var saveButton = '<button type="button" class="btn btn-secondary btn-savemodal btn-modalgomb" id="saveButton">Mentés</button></div>';
+            $('#gradedetailsWithEditmodal .modal-body').append(editForm + saveButton);
+    
+            $('#saveButton').click(function() {
+                var comment = $('#commentinput').val();
+                console.log('Edited Grade:', comment);
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: '/tanar/hfkomment/', 
+                    method: 'POST',
+                    data:
+                    {
+                        comment,
+                        studentid,
+                        homeworkid
+                    },
+                    success: function(response) {
+                    console.log('válasz:', response);
+                    if (response.status!=0) {
+                        alert("hiba: "+response.message);
+                    }else
+                    {
+                        location.reload();
+                    }
+                    },
+                    error: function(xhr, status, error) {
+                    // Handle error response from the server
+                    alert("hiba: \n"+xhr.responseText)
+                    }
+                });
+
+
+              $('#gradedetailsWithEditmodal').modal('hide');
+            });
+        }
+    });
 }
+

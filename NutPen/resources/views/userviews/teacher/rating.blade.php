@@ -27,6 +27,7 @@
                 @if ($status ==4)       <!--//Értékelések listázása a tanórában szereplő diákoknak osztályra szűrve-->
                     <h2 class="tm-block-title"><b>{{ $classname }}</b> osztály diákjainak értékelései <b>{{ $subjectName }}</b> tárgyból</h2>
                     <button class="NewItemButton" onclick="location.href = '/tanar/tanorak/ujertekeles/{{ $lessonID }}/osztaly/{{ $classID }}';" >Új értékelés</button>
+                    @include('gradeinfoWithEdit')
                     <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                         <thead>
                             <tr>

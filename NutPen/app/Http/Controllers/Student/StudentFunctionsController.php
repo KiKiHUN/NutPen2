@@ -25,12 +25,12 @@ class StudentFunctionsController extends Controller
     {
        
         $classConnections=StudentsClass::with('GetClass')->where('StudentID','=', Auth::user()->UserID)->get();
-        return view('userviews/Student/school_Classes',['status'=>0,'classes'=>$classConnections]);
+        return view('userviews/student/school_Classes',['status'=>0,'classes'=>$classConnections]);
     }
     function ClassStudents($classID) 
     {
         $class=SchoolClass::with('GetStudents')->where('ID', '=', $classID)->first();
-        return view('userviews/Student/school_Classes',['status'=>4,'class'=>$class]);
+        return view('userviews/student/school_Classes',['status'=>4,'class'=>$class]);
     }
     function Warnings()
     {
@@ -50,19 +50,19 @@ class StudentFunctionsController extends Controller
                     'whogaveID' => $warning->WhoGaveID
             ];
         }
-        return view('userviews/Student/warning',['status'=>0,'warnings'=>$wariningswithUsers]);
+        return view('userviews/student/warning',['status'=>0,'warnings'=>$wariningswithUsers]);
     }
     function Lessons()
     {
         $classConnections=StudentsClass::with(['GetClass.GetLessons.GetSubject','GetClass.GetLessons.GetTeacher'])->where('StudentID','=', Auth::user()->UserID)->get();
        
-        return view('userviews/Student/lesson',['status'=>0,'lessonclassconecttions'=>$classConnections]);
+        return view('userviews/student/lesson',['status'=>0,'lessonclassconecttions'=>$classConnections]);
     }
     function Subjects()
     {
         $classConnections=StudentsClass::with(['GetClass.GetLessons.GetSubject'])->where('StudentID','=', Auth::user()->UserID)->get();
        
-        return view('userviews/Student/subject',['status'=>0,'lessonclassconecttions'=>$classConnections]);
+        return view('userviews/student/subject',['status'=>0,'lessonclassconecttions'=>$classConnections]);
     }
     function SubjectLessons($sujectID) 
     { 
@@ -171,23 +171,15 @@ class StudentFunctionsController extends Controller
     function HomeWorks()
     {
        
-        $currentDate = Carbon::now();
-        $currentYear = $currentDate->year;
-        $currentYearStart = $currentDate->copy()->month(9)->day(1);
-        if ($currentDate->lt($currentYearStart)) {
-            $currentYearStart->subYear();
-        }
-        
-        // End at July 1st of the current year
-        $nextYearJuly = Carbon::create($currentYear, 7, 1, 0, 0, 0);
+       
       
 
         $homeworksConnections = StudentsClass::with(
             [
                 'GetClass.GetLessons.GetHomeworks'=> 
-                        function ($q) use ($currentYearStart,$nextYearJuly) 
+                        function ($q)
                         {
-                                $q ->whereBetween('StartDateTime', [$currentYearStart, $nextYearJuly]);
+                                $q ->where('Active','=',1);
                         }, 
                 'GetClass.GetLessons.GetHomeworks.GetSubmittedHomeWorks',
                 'GetClass.GetLessons.GetSubject',

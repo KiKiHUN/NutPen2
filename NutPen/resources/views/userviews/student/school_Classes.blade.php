@@ -38,7 +38,7 @@
                                 <tr>
                                     <td>{{ $item->GetClass->Name }}</td>
                                     <td>{{ $item->GetClass->GetTeacher->FName." ".$item->GetClass->GetTeacher->LName }}</td>
-                                    <td><button onclick="location.href = '/diak/osztaly/osztalytarsak/{{ $item->ClassID }}';" >Osztálytársak</button></td>
+                                    <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/diak/osztaly/osztalytarsak/{{ $item->ClassID }}';" >Osztálytársak</button></div></td>
                                 </tr>
                             @endforeach
                         </tbody>

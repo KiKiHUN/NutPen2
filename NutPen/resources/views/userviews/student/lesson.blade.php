@@ -26,6 +26,8 @@
             <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
                 @if ($status == 0)    <!--//tanórák-->
                     <h2 class="tm-block-title">Tanórák</h2>
+                    @include('classinfo')
+
                     <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                         <thead>
                             <tr>
@@ -60,12 +62,13 @@
                                                     $notNullCount++;
                                                 }
                                             }
+                                            
                                             $dayTimesJson = json_encode($dayTimes);
                                             echo("<span class='grade-button' onclick='showDetails($dayTimesJson)'> $notNullCount </span>");
                                             
                                         ?>
                                     </td>
-                                    <td><button onclick="location.href = '/diak/naptar/tanorak/{{ $lesson->ID }}';" > {UD} Naptár {UD}</button></td>
+                                    <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/diak/naptar/tanorak/{{ $lesson->ID }}';" >Naptár</button></td>
                                 </tr>
                                 @endforeach
                             @endforeach

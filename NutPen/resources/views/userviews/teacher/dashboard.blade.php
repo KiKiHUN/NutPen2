@@ -20,7 +20,16 @@
         <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
             <div class="tm-bg-primary-dark tm-block">
                 <h2 class="tm-block-title">Értesítések</h2>
-               
+                <div class="MainGrades">
+                    @if ($newhomeworks)
+                        @foreach ( $newhomeworks as $newhomework)
+                            @if ($newhomework->get_submitted_home_works_count>0)
+                                <h5>{{  $newhomework->Name }} házifeladatot {{ $newhomework->get_submitted_home_works_count }} diák adta be a héten!</h5>
+                            @endif
+                           
+                        @endforeach
+                    @endif
+                </div>
             </div>
         </div>
         

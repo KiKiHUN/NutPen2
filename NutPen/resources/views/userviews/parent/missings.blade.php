@@ -25,12 +25,13 @@
         <div class="col-12 tm-block-col">
             <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
                 @if ($status ==0)   <!--//top X értékelés--> 
-                    <h2 class="tm-block-title">{{ $student->LName." ".$student->FName }} késései</h2>
+                    <h2 class="tm-block-title">{{ $student->FName." ".$student->LName }} késései</h2>
                     <h2 class="tm-block-title">{{ $student->RemainedParentVerification }}db. szülői igazolása maradt</h2>
-                    
+                    @include('gradeinfo')
                     <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                         <thead>
                             <tr>
+                                <th class="th-sm">Dátum</th>
                                 <th class="th-sm">Tanár neve</th>
                                 <th class="th-sm">Tantárgy</th>
                                 <th class="th-sm">Késett perc</th>
@@ -42,6 +43,7 @@
                             @foreach ($missings as $item)
                             
                                 <tr>
+                                    <td>{{  $item->DateTime }}</td>
                                     <td>{{ $item->GetLesson->GetTeacher->FName." ".$item->GetLesson->GetTeacher->LName }}</td>
                                     <td>{{ $item->GetLesson->GetSubject->Name }}</td>
                                     <td>{{  $item->MissedMinute }} perc </td>

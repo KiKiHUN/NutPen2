@@ -27,6 +27,8 @@
                 @if ($status ==4)       <!--//Értékelések listázása a tanórában szereplő diákoknak osztályra szűrve-->
                     <h2 class="tm-block-title"><b>{{ $classname }}</b> osztály diákjainak késései/hiányzásai <b>{{ $subjectName }}</b> tárgyból</h2>
                     <button class="NewItemButton" onclick="location.href = '/tanar/tanorak/ujhianyzas/{{ $lessonID }}/osztaly/{{ $classID }}';" >Új hiányzás</button>
+                    @include('gradeinfo')
+                    @include('gradeinfoWithEdit')
                     <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                         <thead>
                             <tr>
@@ -48,7 +50,7 @@
                                         @else
                                             @foreach ($item["missings"] as $missing)
                                                 @if ($missing->Verified==1)
-                                                    <span class="grade-button" onclick="showGradeDetails('{{ $missing->GetVerificationType->Name }}', '{{ $missing->DateTime }}','{{ '/tanar/hianyzasmodositas/'.$missing->ID }}')">{{ $missing->MissedMinute }} perc, </span>
+                                                    <span class="grade-button" onclick="showMissingDetails('{{ $missing->GetVerificationType->Name }}', '{{ $missing->DateTime }}','{{ '/tanar/hianyzasmodositas/'.$missing->ID }}')">{{ $missing->MissedMinute }} perc, </span>
                                                 
                                                 @else
                                                 <span class="noMissing-button" onclick="showMissingDetailsAndAskToEdit('{{ '/tanar/hianyzasmodositas/'.$missing->ID }}')">{{ $missing->MissedMinute }} perc, </span>

@@ -93,6 +93,7 @@
                             @if ($status ==4)       <!--//Értékelések listázása a tanórában szereplő diákoknak osztályra szűrve-->
                                 <h2 class="tm-block-title"><b>{{ $classname }}</b> osztály diákjainak késései/hiányzásai <b>{{ $subjectName }}</b> tárgyból</h2>
                                 <button class="NewItemButton" onclick="location.href = '/fo/tanorak/ujhianyzas/{{ $lessonID }}/osztaly/{{ $classID }}';" >Új hiányzás</button>
+                                @include('gradeinfo')
                                 <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                                     <thead>
                                         <tr>
@@ -182,6 +183,7 @@
                                         <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                                             <thead>
                                                 <tr>
+                                                    <th class="th-sm">Dátum</th>
                                                     <th class="th-sm">Diák Azonosító</th>
                                                     <th class="th-sm">Diák Neve</th>
                                                     <th class="th-sm">Tanár neve</th>
@@ -196,6 +198,7 @@
                                                 @foreach ($missings as $item)
                                               
                                                     <tr>
+                                                        <td>{{  $item->DateTime }}</td>
                                                         <td>{{ $item->GetStudent->UserID }}</td>
                                                         <td>{{ $item->GetStudent->FName." ".$item->GetStudent->LName }}</td>
                                                         <td>{{ $item->GetLesson->GetTeacher->FName." ".$item->GetLesson->GetTeacher->LName }}</td>

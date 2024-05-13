@@ -30,11 +30,12 @@ class HomeWork extends Model
     {
         return $this->belongsTo(Lesson::class,"LessonID");
     }
+   
+    
     public function GetSubmittedHomeWorks() 
     {
       return $this->hasMany(HomeWorkStudent::class,"HomeWorkID");
     }
-
     static function RemoveHomework($homeworkID) 
     {
       $c=self::GetHomeworkIfExist($homeworkID);

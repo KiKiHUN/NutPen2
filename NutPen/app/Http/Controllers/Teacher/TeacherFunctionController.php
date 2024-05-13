@@ -535,26 +535,26 @@ class TeacherFunctionController extends Controller
     {
         $miss=LatesMissing::GetMissingIfExist($missID);
         if (!$miss) {
-            return redirect('/tanar/tanorak')->with('failedmessage', "ID nem található");
+            return redirect('tanar/osztalyok')->with('failedmessage', "ID nem található");
         }
         return view('userviews/teacher/school_Classes',['status'=>8,"ownclasses"=>self::HasClass(),'missing'=>$miss,'VerifTypes'=>VerificationType::all()]);
     }
     function EditClassStudentMissing(Request $request) 
     {
         $verificatiopTypeID=null;
-        $minutes=0;
+       
         
         if ($request->verifID!=null) {
             $verificatiopTypeID=$request->verifID;
         }
-        if ($request->minutes!=null) {
-            $minutes=$request->minutes;
-        }
         $c=LatesMissing::GetMissingIfExist($request->missID);
+        if (!$c) {
+            return redirect()->back()->with('failedmessage', "Mentés sikeretlen\n ID nem található!");
+        }
         if ($c->Verified==1&& $verificatiopTypeID==null) {
             return redirect()->back()->with('failedmessage', "Mentés sikeretlen\n igazolást nem lehet visszavonni!");
         }
-        if (!LatesMissing::EditMissing($request->missID,$minutes,$verificatiopTypeID)) {
+        if (!LatesMissing::EditMissing($request->missID, $c->MissedMinute,$verificatiopTypeID)) {
             return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
         }
         return redirect('tanar/osztalyok')->with('successmessage', "sikeres mentés");

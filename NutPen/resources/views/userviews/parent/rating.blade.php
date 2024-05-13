@@ -26,7 +26,8 @@
             <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
                 
                 @if ($status ==4)       <!--//Értékelések listázása a tanórában szereplő diákoknak osztályra szűrve-->
-                    <h2 class="tm-block-title">{{ $student->LName." ".$student->FName }} értékelései</h2>
+                    <h2 class="tm-block-title">{{ $student->FName." ".$student->LName }} értékelései</h2>
+                    @include('gradeinfo')
                     <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                         <thead>
                             <tr>
@@ -40,8 +41,8 @@
                             @foreach ($combinedGrades as $oneGrade)
                             
                                 <tr>
-                                    <td>{{ $oneGrade["subjectName"] }}</td>
                                     <td>{{ $oneGrade["latestGrade"] }}</td>
+                                    <td>{{ $oneGrade["subjectName"] }}</td>
                                     <td>{{ $oneGrade["teacherName"] }}</td>
                                     <td>
                                         @foreach ($oneGrade["grades"] as $grade)

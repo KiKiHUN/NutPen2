@@ -243,7 +243,7 @@ Route::middleware(['blockIP'])->group(function () {
         Route::get('/tanar/osztaly/tanorak/{classID}',[App\Http\Controllers\Teacher\TeacherFunctionController::class,'ClassLessons']);
         Route::get('/tanar/Osztalyhianyzasok/tanora/{lessonID}/osztaly/{classID}',[App\Http\Controllers\Teacher\TeacherFunctionController::class,'StudentMissingsLessons']);
         Route::get('/tanar/osztalyhianyzasmodositas/{missID}',[App\Http\Controllers\Teacher\TeacherFunctionController::class,'EditClassStudentMissingPage']);
-        Route::post('/tanar/osztalyhianyzasmodositas',[App\Http\Controllers\Teacher\TeacherFunctionController::class,'EditStudentMissing']);
+        Route::post('/tanar/osztalyhianyzasmodositas',[App\Http\Controllers\Teacher\TeacherFunctionController::class,'EditClassStudentMissing']);
         Route::get('/tanar/ertekelesek/Osztalytanorak/{lessonID}/osztaly/{classID}',[App\Http\Controllers\Teacher\TeacherFunctionController::class,'RatingsStudentLessons']);
 
         

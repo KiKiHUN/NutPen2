@@ -25,7 +25,8 @@
         <div class="col-12 tm-block-col">
             <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
                 @if ($status == 0)    <!--//tanórák-->
-                    <h2 class="tm-block-title">{{ $student->LName." ".$student->FName }} Tanórái</h2>
+                    <h2 class="tm-block-title">{{ $student->FName." ".$student->LName }} Tanórái</h2>
+                    @include('classinfo')
                     <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                         <thead>
                             <tr>
@@ -65,7 +66,7 @@
                                             
                                         ?>
                                     </td>
-                                    <td><button onclick="location.href = '/diak/naptar/tanorak/{{ $lesson->ID }}';" >Naptár</button></td>
+                                    <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/szulo/naptar/tanorak/{{ $lesson->ID }}';" >Naptár</button></div></td>
                                 </tr>
                                 @endforeach
                             @endforeach

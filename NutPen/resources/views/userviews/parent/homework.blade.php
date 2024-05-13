@@ -24,14 +24,14 @@
         <div class="col-12 tm-block-col">
             <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
                 @if ($status == 0)
-                    <h2 class="tm-block-title">{{ $student->LName." ".$student->FName }} Házifeladatai</h2>
+                    <h2 class="tm-block-title">{{ $student->FName." ".$student->LName }} Házifeladatai</h2>
                     <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                         <thead>
                             <tr>
+                                <th class="th-sm">Intervallum</th>
                                 <th class="th-sm">Tantárgy</th>
                                 <th class="th-sm">Cím</th>
                                 <th class="th-sm">Leírás</th>
-                                <th class="th-sm">Intervallum</th>
                                 <th class="th-sm">Tanár</th>
                                 <th class="th-sm">Megjegyzés</th>
                                 <th class="th-sm">Beküldött házifeladatok</th>
@@ -44,10 +44,10 @@
                                       @foreach ($lesson->get_homeworks as $homework)
                                      
                                         <tr>
+                                            <td>{{ $homework->StartDateTime }} <br> --> <br> {{ $homework->EndDateTime }}</td>
                                             <td>{{ $lesson->get_subject->Name }}</td>
                                             <td>{{ $homework->Name }}</td>
                                             <td>{{ $homework->Description }}</td>
-                                            <td>{{ $homework->StartDateTime }} <br> --> <br> {{ $homework->EndDateTime }}</td>
                                             <td>{{ $lesson->get_teacher->FName." ".$lesson->get_teacher->LName  }}</td>
                                            
                                             @if ($homework->get_submitted_home_works)

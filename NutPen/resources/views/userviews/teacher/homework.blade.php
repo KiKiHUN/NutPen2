@@ -26,13 +26,13 @@
                 @if ($status == 0)
                     <h2 class="tm-block-title">Házifeladatok</h2>
                     <button class="NewItemButton" onclick="location.href = '/tanar/ujhazifeladat/{{ $lessonid }}';" >Hozzáadás</button>
+                  
                     <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                         <thead>
                             <tr>
                                 <th class="th-sm">Intervallum</th>
                                 <th class="th-sm">Cím</th>
                                 <th class="th-sm">Leírás</th>
-                                <th class="th-sm">Osztályok</th>
                                 <th class="th-sm">Engedélyezve</th>
                                 <th class="th-sm">Beküldött házifeladatok</th>
                                 <th class="th-sm">Módosítás</th>
@@ -45,7 +45,6 @@
                                     <td>{{ $item->StartDateTime }} <br> --> <br> {{ $item->EndDateTime }}</td>
                                     <td>{{ $item->Name }}</td>
                                     <td>{{ $item->Description }}</td>
-                                    <td>  <div class="btnplacer"> <button class="OtherFunctionButton" onclick="location.href = '/tanar/hazifeladat/osztalyok/{{ $item->ID }}';" >Osztályok</button> </div> </td>
                                     <td>
                                         @if ($item->Active)
                                             Igen
@@ -135,6 +134,7 @@
                         @else
                             @if ($status ==4)
                                 <h2 class="tm-block-title">Diákok beadott feladatai</h2>
+                                @include('gradeinfoWithEdit')
                                 <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                                     <thead>
                                         <tr>
@@ -156,9 +156,9 @@
                                                 @if ($item["hw"])
                                                     <td>{{ $item["hw"]->SubmitDateTime }}</td>
                                                     @if (isset( $item["hw"]->Answer))
-                                                    <td> <span class="grade-button" onclick="AskForCommentText('{{ $item['hw']->StudentID }}', '{{ $item['hw']->HomeWorkID }}')">{{ $item["hw"]->Answer }}</span></td>
+                                                    <td> <span class="grade-button" onclick="AskForCommentText('{{ $item['hw']->StudentID }}', '{{ $item['hw']->HomeWorkID }}','{{ $item['hw']->Answer }}')">{{ $item["hw"]->Answer }}</span></td>
                                                     @else
-                                                        <td> <span class="noMissing-button" onclick="AskForCommentText('{{ $item['hw']->StudentID }}', '{{ $item['hw']->HomeWorkID }}')">Még nincs hozzászólás</span></td>
+                                                        <td> <span class="noMissing-button" onclick="AskForCommentText('{{ $item['hw']->StudentID }}', '{{ $item['hw']->HomeWorkID }}','{{ $item['hw']->Answer }}')">Még nincs hozzászólás</span></td>
                                                     @endif
                                                     @if (isset($item["hw"]->FileName))
                                                         <td><div class="btnplacer"><p>{{$item["hw"]->FileName }}</p><button class="DownloadButton" title="{{ $item['hw']->FileName }}" onclick="location.href = '/admin/bekuldotthazifeladat/letoltes/{{ $item['hw']->HomeWorkID }}/{{ $item['hw']->StudentID }}';" >Letöltés</button></div></td>

@@ -27,7 +27,7 @@
                 <a class="navbar-brand" href="/">
                     <h1 class="tm-site-title mb-0">Nutpen e-napló</h1>
                 </a>
-                <a id="fullscreentoggle"> <i class="fa-solid fa-expand"></i></a>
+                <a title="Teljes képernyős mód" id="fullscreentoggle"> <i class="fa-solid fa-expand"></i></a>
                
                 <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

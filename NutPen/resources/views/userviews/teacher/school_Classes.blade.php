@@ -20,7 +20,8 @@
                 {{ session()->get('message') }}
             </div>
         @endif
-
+       
+      
         <div class="col-12 tm-block-col">
             <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
                 @if ($status == 0)         <!--//osztályok-->
@@ -146,7 +147,9 @@
                         </tbody>
                     </table>
                 @endif
-                @if ($status ==7)     
+                @if ($status ==7)  
+                  @include('gradeinfoWithEdit')   
+                  @include('gradeinfo')
                     <h2 class="tm-block-title"><b>{{ $classname }}</b> osztály diákjainak késései/hiányzásai <b>{{ $subjectName }}</b> tárgyból</h2>
                     <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                         <thead>
@@ -169,7 +172,7 @@
                                         @else
                                             @foreach ($item["missings"] as $missing)
                                                 @if ($missing->Verified==1)
-                                                    <span class="grade-button" onclick="showGradeDetails('{{ $missing->GetVerificationType->Name }}', '{{ $missing->DateTime }}','{{ '/tanar/hianyzasmodositas/'.$missing->ID }}')">{{ $missing->MissedMinute }} perc, </span>
+                                                    <span class="grade-button" onclick="showMissingDetails('{{ $missing->GetVerificationType->Name }}', '{{ $missing->DateTime }}','{{ '/tanar/hianyzasmodositas/'.$missing->ID }}')">{{ $missing->MissedMinute }} perc, </span>
                                                 
                                                 @else
                                                 <span class="noMissing-button" onclick="showMissingDetailsAndAskToEdit('{{ '/tanar/osztalyhianyzasmodositas/'.$missing->ID }}')">{{ $missing->MissedMinute }} perc, </span>
@@ -193,10 +196,6 @@
                         <input type="hidden" name="missID" id="missID" value="{{ $missing->ID }}">
                         <div class="NewUser">
                             <div class="NewUser">
-                                <div class="inputcolumn">
-                                    <label for="minutes">Késett perc: </label>
-                                    <input type="number" id="minutes" name="minutes" value="{{ $missing->MissedMinute }}">
-                                </div>
                                 <div class="inputcolumn">
                                     <label for="verifID">Hiányzás igazolása: </label>
                                     <select id="verifID" class="textfield" name="verifID">
