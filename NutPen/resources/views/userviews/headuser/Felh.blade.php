@@ -24,11 +24,11 @@
         <div class="col-12 tm-block-col">
             <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
                 @if ($status==1)
-                    <button type="submit" class="filterbtn" value="a">Admin</button>
-                    <button type="submit" class="filterbtn" value="t">Tanár</button>
-                    <button type="submit" class="filterbtn" value="s">Diák</button>
-                    <button type="submit" class="filterbtn" value="p">Szülő</button>
-                    <button type="submit" class="filterbtn" value="h">Fő emberek</button>
+                    <button type="submit" class="fofilterbtn" value="a">Admin</button>
+                    <button type="submit" class="fofilterbtn" value="t">Tanár</button>
+                    <button type="submit" class="fofilterbtn" value="s">Diák</button>
+                    <button type="submit" class="fofilterbtn" value="p">Szülő</button>
+                    <button type="submit" class="fofilterbtn" value="h">Fő emberek</button>
                 @endif
                
                 @if ($status == 0)

@@ -42,12 +42,12 @@ class AdminFunctionsController extends Controller
     //users
         function UsersPage()
         {
-            return view('userviews/admin/felh',['status'=>1]);
+            return view('userviews/admin/Felh',['status'=>1]);
         }
 
         function NewUserPage()
         {
-            return view('userviews/admin/felh',['status'=>2,'roles'=>RoleType::all(),'sextypes'=>SexType::all()]);
+            return view('userviews/admin/Felh',['status'=>2,'roles'=>RoleType::all(),'sextypes'=>SexType::all()]);
         }
 
         function EditUserPage($UserID) {
@@ -96,7 +96,7 @@ class AdminFunctionsController extends Controller
            
             if ($user)
             {
-                return view('userviews/admin/felh',['status'=>3,'roles'=>RoleType::all(),'sextypes'=>SexType::all(),'user'=>$user,'aditionals'=>$additionalAttributesJson]);
+                return view('userviews/admin/Felh',['status'=>3,'roles'=>RoleType::all(),'sextypes'=>SexType::all(),'user'=>$user,'aditionals'=>$additionalAttributesJson]);
             }else {
                 return redirect()->back()->with('failedmessage', "Azonosító nem található");
             }
@@ -355,7 +355,7 @@ class AdminFunctionsController extends Controller
                     }
                     break;
             }
-            return view('userviews/admin/felh',['status'=>0,'users'=>$users]);
+            return view('userviews/admin/Felh',['status'=>0,'users'=>$users]);
         }
 
         function allUsersPage() 
@@ -402,7 +402,7 @@ class AdminFunctionsController extends Controller
                 $users[]=$u;
             }
             dd($users);
-            return view('userviews/admin/felh',['status'=>0,'users'=>$users]);
+            return view('userviews/admin/Felh',['status'=>0,'users'=>$users]);
         }
     //users
 
@@ -732,6 +732,14 @@ class AdminFunctionsController extends Controller
             }
             return redirect('/admin/banner')->with('successmessage', "sikeres mentés");
 
+        }
+
+        function RemoveBanner($bannerID) 
+        {
+            if (!BannerMsg::RemoveMSG($bannerID)) {
+                return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+            }
+            return redirect('/admin/banner')->with('successmessage', "sikeres mentés");
         }
     //banner
 

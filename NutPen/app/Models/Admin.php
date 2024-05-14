@@ -19,6 +19,7 @@ class Admin extends Authenticatable
         'FullAddress',
         'BDay',
         'Email',
+        'AllowMessages',
         'Phone',
         'RoleTypeID',
         'LastLogin',

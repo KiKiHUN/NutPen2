@@ -29,13 +29,18 @@ class MainRouterController extends Controller
      
          $firstCharacter = mb_substr(Auth::user()->UserID, 0, 1);
         
-         $msg=Message::getTopXMessagesByID(Auth::user()->UserID,10);
+         $msg=null;
+        
          switch ($firstCharacter) {
             case 's':
                $user = Student::where(['UserID' => Auth::user()->UserID])->first();
                if ( $this->DefaultCheck($user)) {
                return redirect('/jelszoVisszaallitas');
                }
+               if (  $user->AllowMessages==1) {
+                    $msg= Message::getTopXMessagesByID(Auth::user()->UserID,10);
+               }
+            
                
                $oneWeekAgo = now()->subWeek();
                $warnings=Warning::where('StudentID','=',Auth::user()->UserID)->where('DateTime','>=',$oneWeekAgo)->get();
@@ -61,7 +66,10 @@ class MainRouterController extends Controller
                if ( $this->DefaultCheck($user)) {
                return redirect('/jelszoVisszaallitas');
                }
-
+               if (  $user->AllowMessages==1) {
+                    $msg= Message::getTopXMessagesByID(Auth::user()->UserID,10);
+               }
+               
                $ownchilds=StudentParent::where('ParentID','=',Auth::user()->UserID)->get();
 
 
@@ -104,6 +112,9 @@ class MainRouterController extends Controller
                  if ( $this->DefaultCheck($user)) {
                     return redirect('/jelszoVisszaallitas');
                  }
+                 if (  $user->AllowMessages==1) {
+                    $msg= Message::getTopXMessagesByID(Auth::user()->UserID,10);
+               }
                  $classes=SchoolClass::where("ClassMasterID","=",Auth::user()->UserID)->get();
 
 
@@ -126,6 +137,9 @@ class MainRouterController extends Controller
                  if ( $this->DefaultCheck($user)) {
                     return redirect('/jelszoVisszaallitas');
                  }
+                 if (  $user->AllowMessages==1) {
+                    $msg= Message::getTopXMessagesByID(Auth::user()->UserID,10);
+               }
                  return View('userviews.admin.admin_dashboard',['user'=>$user,'messages'=>$msg]);
                  break;
             case 'h':
@@ -133,6 +147,9 @@ class MainRouterController extends Controller
                 if ( $this->DefaultCheck($user)) {
                     return redirect('/jelszoVisszaallitas');
                  }
+                 if (  $user->AllowMessages==1) {
+                    $msg= Message::getTopXMessagesByID(Auth::user()->UserID,10);
+               }
                 return View('userviews.headuser.dashboard',['user'=>$user,'messages'=>$msg]);
                 break;
          }
@@ -205,5 +222,63 @@ class MainRouterController extends Controller
           }
 
         
+    }
+
+    public function MsgstatusEdit() 
+    {
+          $UserID=Auth::user()->UserID;
+          $u=null;
+          $aditionalAttrinutes=null;
+
+          $azonositoValaszto = mb_substr($UserID, 0, 1);
+          switch ($azonositoValaszto) {
+          case 'a':
+               $user = Admin::where([
+                    'UserID' => $UserID
+               ])->first();
+               
+               break;
+          case 's':
+               $user = Student::where([
+                    'UserID' => $UserID
+               ])->first();
+               break;
+          case 't':
+               $user = Teacher::where([
+                    'UserID' => $UserID
+               ])->first();
+               break;
+          case 'p':
+               $user = StudParent::where([
+                    'UserID' => $UserID
+               ])->first();
+               break;
+          case 'h':
+               $user = HeadUser::where([
+                    'UserID' => $UserID
+               ])->first();
+               break;
+          }
+        
+
+          if ($user)
+          {
+               try {
+                    if ( $user->AllowMessages==1) {
+                         $user->AllowMessages=0;
+                    }else
+                    {
+                         $user->AllowMessages=1;
+                    }
+                    $user->save();
+                    return redirect()->back()->with('successmessage', "Sikeres módosítás");
+               } catch (\Throwable $th) {
+                    return redirect()->back()->with('failedmessage', "Hiba a mentés során");
+               }
+          
+          }else {
+            return redirect()->back()->with('failedmessage', "Azonosító nem található");
+          }
+
     }
 }

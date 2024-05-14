@@ -11,6 +11,7 @@ class Teacher extends Authenticatable
     use HasFactory;
     protected $fillable = [
         'UserID',
+        'AllowMessages',
         'password',
         'FName',
         'LName',

@@ -1,5 +1,8 @@
+
 <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col messagediv">
+   
     <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-overflow">
+        @if (!is_null($messages))
         <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel" aria-hidden="true">  <!--chatmodal--> 
             <div class="modal-dialog" role="document">
               <div class="modal-content modal-bg">
@@ -28,11 +31,12 @@
                     </div>
                   <button type="button" class="btn btn-primary" id="sendReply">Elküld</button>
                 </div>
+               
               </div>
             </div>
         </div>
 
-
+      
         <div class="modal fade" id="newMessageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel" aria-hidden="true"> <!--newchatmodal-->
             <div class="modal-dialog" role="document">
               <div class="modal-content modal-bg">
@@ -58,14 +62,21 @@
             </div>
           </div>
         
-
+         @endif
 
         <div class="msg-title">
-            <h2 class="tm-block-title">Üzenetek</h2>
-            <button type="button" id="btn-newmsg" class="close msg-new" aria-label="Új üzenet">
-                <i class="fa-solid fa-plus"></i>
-            </button>
+           
+            @if (!is_null($messages))
+                <h2 class="tm-block-title">Üzenetek</h2>
+                <button type="button" id="btn-newmsg" class="close msg-new" aria-label="Új üzenet">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+            @else
+                <h2 class="tm-block-title">Üzenetek le vannak tiltva</h2>
+            @endif
+
         </div>
+        @if (!is_null($messages))
         <div class="tm-notification-items">
             @if (count($messages)==0)
                 Nincs üzenet
@@ -122,5 +133,7 @@
             @endif
             
         </div>
+        @endif
     </div>
+  
 </div>

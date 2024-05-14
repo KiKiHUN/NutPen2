@@ -21,6 +21,7 @@ class Student extends Authenticatable
         'BPlace',
         'StudentCardNum',
         'StudentTeachID',
+        'AllowMessages',
         'Email',
         'Phone',
         'RoleTypeID',

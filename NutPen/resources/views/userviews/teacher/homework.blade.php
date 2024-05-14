@@ -134,7 +134,7 @@
                         @else
                             @if ($status ==4)
                                 <h2 class="tm-block-title">Diákok beadott feladatai</h2>
-                                @include('gradeinfoWithEdit')
+                              @include('gradeInfoWithEdit')
                                 <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                                     <thead>
                                         <tr>

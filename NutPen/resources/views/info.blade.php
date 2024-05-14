@@ -1,6 +1,7 @@
 @extends('layout')
 
 @section('navbar')
+<link rel="stylesheet" href="/css/switch.css">
     <li class="nav-item">
         <a class="nav-link" href="/vezerlopult">
             <i class="fa-solid fa-house-chimney"></i>
@@ -38,11 +39,22 @@
                 <p class="text-white mt-5 mb-5">Vezetéknév: <b>{{ $user->LName }}</b></p>
                 <p class="text-white mt-5 mb-5">Keresztnév: <b>{{ $user->FName }}</b></p>
                 <p class="text-white mt-5 mb-5">Azonsoító: <b>{{ $user->UserID }}</b></p>
-
+                <p class="text-white mt-5 mb-5">Születésnap: <b>{{ $user->BDay }}</b></p>
+                <p class="text-white mt-5 mb-5">Üzenet engedélyezve:
+                    <label id="allowswitch" class="switch">
+                        <input id="allowmsg" type="checkbox"  {{ $user->AllowMessages ? 'checked' : '' }}>
+                        <span class="slider round"></span>
+                    </label>
+               </p>
+                
+                <br>
                 <div id="additional-attributes" data-attributes="{{ $aditionals }}"></div>
                 <p class="text-white mt-5 mb-5">Email: <b>{{ $user->Email }}</b></p>
                 <p class="text-white mt-5 mb-5">Telefonszám: <b>{{ $user->Phone }}</b></p>
                 <p class="text-white mt-5 mb-5">Nem: <b>{{ $user->GetSexType->Name }}</b></p>
+                <p class="text-white mt-5 mb-5">Irányítószám: <b>{{ $user->PostalCode }}</b></p>
+                <p class="text-white mt-5 mb-5">Cím: <b>{{ $user->FullAddress }}</b></p>
+                
                 <div id="additional-fields">
        
                 </div>
@@ -57,5 +69,5 @@
 
 @section('script')
     <script src="{{ asset('/js/info.js') }}" type="text/javascript" defer></script>
-   
+  
 @endsection

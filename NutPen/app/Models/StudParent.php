@@ -21,6 +21,7 @@ class StudParent extends Authenticatable
         'Email',
         'Phone',
         'RoleTypeID',
+        'AllowMessages',
         'LastLogin',
         'DefaultPassword'
       ];

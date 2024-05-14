@@ -27,7 +27,7 @@
                 
                 @if ($status ==4)       <!--//Értékelések listázása a tanórában szereplő diákoknak osztályra szűrve-->
                     <h2 class="tm-block-title">{{ $student->FName." ".$student->LName }} értékelései</h2>
-                    @include('gradeinfo')
+                   @include('gradeInfo')
                     <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                         <thead>
                             <tr>

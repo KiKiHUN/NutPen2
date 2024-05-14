@@ -1,7 +1,9 @@
-$('.filterbtn').click(function() {
+$('.adminfilterbtn').click(function() {
     window.location = '/admin/felhasznalok/' + $(this).attr("value");
 });
-
+$('.fofilterbtn').click(function() {
+    window.location = '/fo/felhasznalok/' + $(this).attr("value");
+});
 
 $('#SaveBannBTN').click(function() {
     if (banneds.length==0) {

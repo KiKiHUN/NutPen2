@@ -1,5 +1,7 @@
 $(document).ready(function() {
 
+  
+
     if( $('#role').length )         // use this if you are using id to check
     {
         var additionalAttributes = $('#additional-attributes').data('attributes');
@@ -52,5 +54,13 @@ $(document).ready(function() {
     updateAdditionalFields();
     }
 
+    $('#allowswitch').click(function() {
+    
+        
+        if ($('#allowmsg').is(':checked')) {
+            window.location.href = "/msgstatusedit";
+        }
+        
+    });
 
 });

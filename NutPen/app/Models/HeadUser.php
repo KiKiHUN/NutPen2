@@ -18,6 +18,7 @@ class HeadUser extends Authenticatable
         'SexTypeID',
         'PostalCode',
         'FullAddress',
+        'AllowMessages',
         'BDay',
         'Phone',
         'RoleTypeID',

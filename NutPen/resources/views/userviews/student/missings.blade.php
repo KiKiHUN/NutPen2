@@ -27,7 +27,7 @@
                 @if ($status ==0)   <!--//top X értékelés--> 
                     <h2 class="tm-block-title">Késéseim</h2>
                     <h2 class="tm-block-title">{{ $student->RemainedParentVerification }}db. szülői igazolása maradt</h2>
-                    @include('gradeInfo')
+                   @include('gradeInfo')
                     <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                         <thead>
                             <tr>

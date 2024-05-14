@@ -148,8 +148,8 @@
                     </table>
                 @endif
                 @if ($status ==7)  
-                  @include('gradeinfoWithEdit')   
-                  @include('gradeinfo')
+                @include('gradeInfoWithEdit')   
+                 @include('gradeInfo')
                     <h2 class="tm-block-title"><b>{{ $classname }}</b> osztály diákjainak késései/hiányzásai <b>{{ $subjectName }}</b> tárgyból</h2>
                     <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                         <thead>

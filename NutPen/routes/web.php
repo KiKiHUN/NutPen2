@@ -39,6 +39,7 @@ Route::middleware(['blockIP'])->group(function () {
 
         Route::post('/savemsg',[App\Http\Controllers\MessageController::class,'Savemsg']);
         Route::post('/newmsg',[App\Http\Controllers\MessageController::class,'Savemsg']);
+        Route::get('/msgstatusedit',[App\Http\Controllers\MainRouterController::class,'MsgstatusEdit']);
         
         Route::get('/jelszoVisszaallitas',[App\Http\Controllers\MainRouterController::class,'PWResetPage']);
         Route::post('/jelszoVisszaallitas/save',[App\Http\Controllers\PWResetController::class,'SavePW']);

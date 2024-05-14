@@ -42,12 +42,12 @@ class HeadUSerController extends Controller
    //users
     function UsersPage()
     {
-        return view('userviews/headuser/felh',['status'=>1]);
+        return view('userviews/headuser/Felh',['status'=>1]);
     }
 
     function NewUserPage()
     {
-        return view('userviews/headuser/felh',['status'=>2,'roles'=>RoleType::all(),'sextypes'=>SexType::all()]);
+        return view('userviews/headuser/Felh',['status'=>2,'roles'=>RoleType::all(),'sextypes'=>SexType::all()]);
     }
 
     function EditUserPage($UserID) {
@@ -96,7 +96,7 @@ class HeadUSerController extends Controller
         
         if ($user)
         {
-            return view('userviews/headuser/felh',['status'=>3,'roles'=>RoleType::all(),'sextypes'=>SexType::all(),'user'=>$user,'aditionals'=>$additionalAttributesJson]);
+            return view('userviews/headuser/Felh',['status'=>3,'roles'=>RoleType::all(),'sextypes'=>SexType::all(),'user'=>$user,'aditionals'=>$additionalAttributesJson]);
         }else {
             return redirect()->back()->with('failedmessage', "Azonosító nem található");
         }
@@ -355,7 +355,7 @@ class HeadUSerController extends Controller
                 }
                 break;
         }
-        return view('userviews/headuser/felh',['status'=>0,'users'=>$users]);
+        return view('userviews/headuser/Felh',['status'=>0,'users'=>$users]);
     }
 
     function allUsersPage() 
@@ -402,7 +402,7 @@ class HeadUSerController extends Controller
             $users[]=$u;
         }
         dd($users);
-        return view('userviews/headuser/felh',['status'=>0,'users'=>$users]);
+        return view('userviews/headuser/Felh',['status'=>0,'users'=>$users]);
     }
 //users
 
@@ -637,6 +637,13 @@ class HeadUSerController extends Controller
        }
        return redirect('/fo/banner')->with('successmessage', "sikeres mentés");
 
+   }
+   function RemoveBanner($bannerID) 
+   {
+       if (!BannerMsg::RemoveMSG($bannerID)) {
+           return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+       }
+       return redirect('/fo/banner')->with('successmessage', "sikeres mentés");
    }
 //banner
 

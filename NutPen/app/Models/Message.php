@@ -24,6 +24,8 @@ class Message extends Model
 
     public static function getTopXMessagesByID($UserID,$count)
     {
+
+        
         $messageChats = [];
 
         // $UserID az a küldő vagy a fogadó

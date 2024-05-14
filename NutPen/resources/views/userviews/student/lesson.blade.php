@@ -26,7 +26,7 @@
             <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
                 @if ($status == 0)    <!--//tanórák-->
                     <h2 class="tm-block-title">Tanórák</h2>
-                    @include('classinfo')
+                    @include('classInfo')
 
                     <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                         <thead>
