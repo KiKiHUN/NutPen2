@@ -278,3 +278,58 @@ $('#SaveBannerHeadUserBTN').click(function() {
         }
     });
 });
+
+$('#alleventCalendar').click(function() {
+    
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $.ajax({
+        url: '/admin/naptar/esemenyek', 
+        method: 'GET',
+        success: function(response) {
+        console.log('válasz:', response);
+        if (response.status!=0) {
+            alert("hiba: "+response.message);
+        }else
+        {
+            let eventdata=JSON.parse(response.data);
+            fillevents(eventdata);
+                
+        }
+        },
+        error: function(xhr, status, error) {
+        // Handle error response from the server
+        alert("hiba: \n"+xhr.responseText)
+        }
+    });
+});
+$('#alleventCalendar').click(function() {
+    
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $.ajax({
+        url: '/admin/naptar/esemenyek', 
+        method: 'GET',
+        success: function(response) {
+        console.log('válasz:', response);
+        if (response.status!=0) {
+            alert("hiba: "+response.message);
+        }else
+        {
+            let eventdata=JSON.parse(response.data);
+            fillevents(eventdata);
+                
+        }
+        },
+        error: function(xhr, status, error) {
+        // Handle error response from the server
+        alert("hiba: \n"+xhr.responseText)
+        }
+    });
+});

@@ -1,15 +1,14 @@
 @extends('layout')
 
 @section('navbar')
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
-
+   
     @include('userviews.parent.Navbar')
     
 @endsection
 
 @section('content')
     
-
+  
     <!-- row -->
     <div class="row tm-content-row">
         <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 tm-block-col">
@@ -66,7 +65,8 @@
                                             
                                         ?>
                                     </td>
-                                    <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/szulo/naptar/tanorak/{{ $lesson->ID }}';" >Naptár</button></div></td>
+                                    
+                                    <td><div class="btnplacer"><button class="OtherFunctionButton calendarLesFiltbutton" value="{{ $lesson->ID }}" >Naptár</button></div></td>
                                 </tr>
                                 @endforeach
                             @endforeach
@@ -88,4 +88,5 @@
     <script src="{{ asset('/js/gorgeto.js') }}" type="text/javascript" defer></script>
     <script src="{{ asset('/js/sharedfunctions.js') }}" type="text/javascript" defer></script>
     <script src="{{ asset('/js/adminJS.js') }}" type="text/javascript" defer></script>
+   
 @endsection

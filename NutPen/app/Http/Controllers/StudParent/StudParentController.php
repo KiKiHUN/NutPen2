@@ -7,6 +7,7 @@ use App\Models\Grade;
 use App\Models\HomeWorkStudent;
 use App\Models\LatesMissing;
 use App\Models\Lesson;
+use App\Models\RoleType;
 use App\Models\SchoolClass;
 use App\Models\Student;
 use App\Models\StudentParent;
@@ -204,6 +205,8 @@ class StudParentController extends Controller
         }
         
     }
+
+   
 }
 class CalendarData
 {

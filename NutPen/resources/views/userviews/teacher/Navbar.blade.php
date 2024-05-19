@@ -33,8 +33,8 @@
 
 @endif
 
-<!--<li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="/naptar" id="navbarDropdown" role="button" 
+<li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle calendarbutton" href="#" id="navbarDropdown" role="button" 
         aria-haspopup="true" aria-expanded="false">
         <i class="fa-solid fa-clock"></i>
         <span>
@@ -42,7 +42,7 @@
         </span>
     </a>
    
-</li>-->
+</li>
 
 <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"

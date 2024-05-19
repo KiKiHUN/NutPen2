@@ -37,7 +37,7 @@ class RoleType extends Model
     }
     public function GetEvents()
     {
-        return $this->hasManyThrough(CalendarEvent::class,WhoCanSeeEvent::class);
+        return $this->hasManyThrough(CalendarEvent::class,WhoCanSeeEvent::class,"RoleTypeID","ID","ID","CalendarEventID");
     }
 
 

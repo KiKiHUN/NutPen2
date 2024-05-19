@@ -30,7 +30,7 @@
 </li>
 
 <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="/naptar" id="navbarDropdown" role="button" 
+    <a class="nav-link dropdown-toggle calendarbutton" href="#" id="navbarDropdown" role="button" 
         aria-haspopup="true" aria-expanded="false">
         <i class="fa-solid fa-clock"></i>
         <span>

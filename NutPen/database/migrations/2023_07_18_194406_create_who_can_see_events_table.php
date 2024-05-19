@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('CalendaerEventID');
 
             $table->foreign('RoleTypeID')->references('ID')->on('role_types')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('CalendaerEventID')->references('ID')->on('calendar_events')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('CalendarEventID')->references('ID')->on('calendar_events')->onDelete('cascade')->onUpdate('cascade');
             $table->unique(['RoleTypeID', 'CalendaerEventID'])->primary();
             $table->timestamps();
         });

@@ -1,14 +1,13 @@
 @extends('layout')
 
 @section('navbar')
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
-
+   
     @include('userviews.parent.Navbar')
     
 @endsection
 
 @section('content')
-    
+  
 
     <!-- row -->
     <div class="row tm-content-row">
@@ -36,6 +35,7 @@
                                 <th class="th-sm">Késések/hiányzások</th>
                                 <th class="th-sm">Tanórák</th>
                                 <th class="th-sm">Házifeladatok</th>
+                                <th class="th-sm">Naptár</th>
                             </tr>
                         </thead>
                         <tbody id="myTable">
@@ -45,10 +45,11 @@
                                     <td>{{ $item->GetStudent->FName." ".$item->GetStudent->LName }}</td>
                                     <td>{{ $item->StudentID}}</td>
                                     <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/szulo/ertekelesek/{{ $item->StudentID }}';" >Értékelések</button></div></td>
-                                    <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/szulo/figyelmeztetesek/{{ $item->StudentID }}';" >Figyelmeztetések</button></div></td>
-                                    <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/szulo/kesesek/{{ $item->StudentID }}';" >Késések</button></div></td>
+                                    <td><div class="btnplacer"><button class="RemoveButton" onclick="location.href = '/szulo/figyelmeztetesek/{{ $item->StudentID }}';" >Figyelmeztetések</button></div></td>
+                                    <td><div class="btnplacer"><button class="DownloadButton" onclick="location.href = '/szulo/kesesek/{{ $item->StudentID }}';" >Késések</button></div></td>
                                     <td><div class="btnplacer"><button class="EditButton" onclick="location.href = '/szulo/tanorak/{{ $item->StudentID }}';" >Tanórák</button></div></td>
                                     <td><div class="btnplacer"><button class="EditButton" onclick="location.href = '/szulo/hazifeladatok/{{ $item->StudentID }}';" >Házifeladatok</button></div></td>
+                                    <td><div class="btnplacer"><button class="OtherFunctionButton calendarStudFiltbutton" value="{{ $item->StudentID }}" >Saját naptár</button></div></td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -66,4 +67,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js"></script>
     <script src="{{ asset('/js/gorgeto.js') }}" type="text/javascript" defer></script>
     <script src="{{ asset('/js/adminJS.js') }}" type="text/javascript" defer></script>
+ 
 @endsection

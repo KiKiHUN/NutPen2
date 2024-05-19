@@ -1,13 +1,15 @@
 @extends('layout')
 
 @section('navbar')
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
+   
+  
 
     @include('userviews.student.Navbar')
     
 @endsection
 
 @section('content')
+ 
     <div class="row">
         <div class="col">
             <p class="text-white mt-5 mb-5">Hello, <b>{{ $user->LName }}</b></p>
@@ -38,7 +40,7 @@
         </div>
         
         @include('message')
-
+       
       
     </div>
     </div>
@@ -47,5 +49,5 @@
 @section("script")
    
     <script src="/js/msgModal.js"></script>
-
+ 
 @endsection

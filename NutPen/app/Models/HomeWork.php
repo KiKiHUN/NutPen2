@@ -24,7 +24,7 @@ class HomeWork extends Model
    
     public function GetStudents()
     {
-        return $this->hasManyThrough(Student::class,HomeWorkStudent::class,"HomeWorkID","UserID","ID","StudentID",);
+        return $this->hasManyThrough(Student::class,HomeWorkStudent::class,"HomeWorkID","UserID","ID","StudentID");
     }
     public function GetLesson()
     {

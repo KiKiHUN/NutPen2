@@ -1,14 +1,14 @@
 @extends('layout')
 
 @section('navbar')
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
+   
 
     @include('userviews.headuser.Navbar')
     
 @endsection
 
 @section('content')
-    
+  
 
     <!-- row -->
     <div class="row tm-content-row">
@@ -66,7 +66,7 @@
                                         
                                     ?>
                                     </td>
-                                    <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/fo/naptar/tanorak/{{ $item->ID }}';" >Naptár</button></div></td>
+                                    <td><div class="btnplacer"><button class="OtherFunctionButton calendarLesFiltbutton" value="{{ $item->ID }}" >Naptár</button></div></td>
                                     <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/fo/osztalyok/tanora/{{ $item->ID }}';" >Osztályok listázása</button></div></td>
                                     <td><div class="btnplacer"><button class="EditButton" onclick="location.href = '/fo/tanoramodositas/{{ $item->ID }}';" >Szerkesztés</button></div></td>
                                 </tr>
@@ -328,4 +328,5 @@
     <script src="{{ asset('/js/sharedfunctions.js') }}" type="text/javascript" defer></script>
     <script src="{{ asset('/js/gorgeto.js') }}" type="text/javascript" defer></script>
     <script src="{{ asset('/js/adminJS.js') }}" type="text/javascript" defer></script>
+  
 @endsection

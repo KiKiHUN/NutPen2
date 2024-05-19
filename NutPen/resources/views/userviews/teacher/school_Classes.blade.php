@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('navbar')
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    
 
     @include('userviews.teacher.Navbar')
     
@@ -72,6 +72,7 @@
                 @endif
                 @if ($status ==5)       <!-- //osztályban diákok és törlése és hozzáadása gomb-->
                     <h2 class="tm-block-title">{{ $className }} osztály tanórái</h2>
+                    @include('classInfo')
                     <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                         <thead>
                             <tr>
@@ -117,8 +118,8 @@
                     </table>
                 @endif
                 @if ($status ==6)
+                    @include('gradeInfo')
                     <h2 class="tm-block-title"><b>{{ $classname }}</b> osztály diákjainak értékelései <b>{{ $subjectName }}</b> tárgyból</h2>
-                    <button class="NewItemButton" onclick="location.href = '/tanar/tanorak/ujertekeles/{{ $lessonID }}/osztaly/{{ $classID }}';" >Új értékelés</button>
                     <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                         <thead>
                             <tr>
@@ -138,7 +139,7 @@
                                             Nincs még értékelés
                                         @else
                                             @foreach ($item["grades"] as $grade)
-                                                   {{ $grade->GetGradeType->Value }},
+                                                   <span class="grade-button" onclick="showGradeDetails('{{  $grade->GetGradeType->Name }}', '{{  $grade->DateTime }}','{{ '/tanar/ertekelesmodositas/'.$grade->ID }}')">{{ $grade->GetGradeType->Value }}</span>
                                             @endforeach
                                         @endif
                                     </td>
@@ -172,10 +173,10 @@
                                         @else
                                             @foreach ($item["missings"] as $missing)
                                                 @if ($missing->Verified==1)
-                                                    <span class="grade-button" onclick="showMissingDetails('{{ $missing->GetVerificationType->Name }}', '{{ $missing->DateTime }}','{{ '/tanar/hianyzasmodositas/'.$missing->ID }}')">{{ $missing->MissedMinute }} perc, </span>
+                                                    <span class="grade-button" onclick="showMissingDetails('{{ $missing->GetVerificationType->Name }}', '{{ $missing->DateTime }}','{{ '/tanar/hianyzasmodositas/'.$missing->ID }}')">{{ $missing->MissedMinute }} perc </span>
                                                 
                                                 @else
-                                                <span class="noMissing-button" onclick="showMissingDetailsAndAskToEdit('{{ '/tanar/osztalyhianyzasmodositas/'.$missing->ID }}')">{{ $missing->MissedMinute }} perc, </span>
+                                                <span class="noMissing-button" onclick="showMissingDetailsAndAskToEdit('{{ '/tanar/osztalyhianyzasmodositas/'.$missing->ID }}')">{{ $missing->MissedMinute }} perc </span>
                                                 
                                                 @endif
                                         

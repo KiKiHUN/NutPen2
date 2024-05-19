@@ -14,10 +14,13 @@
     <link rel="stylesheet" href="/css/bannerStyle.css">
     <link rel="stylesheet" href="/css/app.css">
     <link rel="stylesheet" type="text/css" href="/css/datatables.min.css"/>
-    <!--
-	Product Admin CSS Template
-	https://templatemo.com/tm-524-product-admin
-	-->
+
+
+    <link rel="stylesheet" href="/css/jquery-calendar.min.css">
+    <link rel="stylesheet" href="/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/css/solid.min.css">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+   
 </head>
 
 <body id="reportsPage">
@@ -58,6 +61,9 @@
                     {{ session()->get('failedmessage') }}
                 </div>
             @endif
+
+            @include('calendar')
+            
             @yield('content')
         </div>
         <footer class="tm-footer row tm-mt-small">
@@ -83,6 +89,11 @@
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/tooplate-scripts.js"></script>
     <script type="text/javascript" src="/js/datatables.min.js"></script>
+    
+    <script src="/js/jquery-calendar.min.js"></script>
+    <script src="/js/jquery.touchSwipe.min.js"></script>
+    <script src="/js/moment.withlocales.js"></script>
+    <script src="{{ asset('/js/sharedfunctions.js') }}" type="text/javascript" defer></script>
 
     <script>
         $( "#fullscreentoggle" ).on( "click", function() {

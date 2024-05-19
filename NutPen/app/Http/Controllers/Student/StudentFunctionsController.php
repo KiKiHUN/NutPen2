@@ -8,6 +8,7 @@ use App\Models\HomeWork;
 use App\Models\HomeWorkStudent;
 use App\Models\LatesMissing;
 use App\Models\Lesson;
+use App\Models\RoleType;
 use App\Models\SchoolClass;
 use App\Models\Student;
 use App\Models\StudentsClass;
@@ -134,6 +135,8 @@ class StudentFunctionsController extends Controller
     
         return view('calendar',['status'=>0,'eventsData'=> $events]);
     }
+
+  
     function OwnRatings()
     {
         $grades = Grade::with(['GetLesson.GetSubject','GetLesson.GetTeacher','GetGradeType'])->where('StudentID', '=', Auth::user()->UserID)
@@ -170,8 +173,9 @@ class StudentFunctionsController extends Controller
     }
     function HomeWorks()
     {
-       
-       
+      
+      
+      
       
 
         $homeworksConnections = StudentsClass::with(

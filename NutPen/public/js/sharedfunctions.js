@@ -124,6 +124,18 @@ $(document).ready(function() {
     $('#gradedetailsWithEditmodal').on('hidden.bs.modal', function() {
       $('#editButton').show(); // Show the edit button when the modal is closed
     });
+
+    $('.calendarbutton').click(function() {
+      getevents();
+    });
+    $('.calendarStudFiltbutton').click(function() {
+      let studid=$(this).attr("value"); // Hide the edit button
+     getFilteredToStudentevents(studid);
+    });
+    $('.calendarLesFiltbutton').click(function() {
+      let lesid=$(this).attr("value"); // Hide the edit button
+      getlesssoncalendar(lesid);
+    });
   });
 
 function AskForCommentText(studentid,homeworkid,text) {
@@ -177,3 +189,217 @@ function AskForCommentText(studentid,homeworkid,text) {
     });
 }
 
+function fillevents(eventdata)
+{ 
+    moment.locale('hu');
+    var now = moment();
+  console.log(now.startOf('week').add(9, 'h').format('X'));
+    /**
+     * M any events
+     */
+    let events = [];
+    events = eventdata.map(function(event) {
+        return {
+            start: event.start,
+            end: event.end,
+            title: event.title,
+            content: event.content,
+            category: event.category
+        };
+    });
+   
+
+    /**
+     * A daynote
+     */
+    var daynotes = [
+     /* {
+        time: now.startOf('week').add(60, 'h').add(30, 'm').format('X'),
+        title: 'Leo\'s holiday',
+        content: 'yo',
+        category: 'holiday'
+      }*/
+    ];
+
+    /**
+     * Init the calendar
+     */
+    var calendar = $('#calendar').Calendar({
+      locale: 'hu',
+      defaultView: {
+            largeScreen:'week',
+            smallScreen:'week',
+            smallScreenThreshold: 1000
+          },
+        
+      weekday: {
+        timeline: {
+          intervalMinutes: 60,
+          fromHour: 6,
+          format:'HH:mm'
+          
+        },
+        dayline: {
+                weekdays: [0, 1, 2, 3, 4, 5, 6],
+                format:'dddd MM/DD',
+                heightPx: 40,
+                month: {
+                  format:'YYYY MMMM',
+                  heightPx: 30,
+                  weekFormat:'w'
+                }
+              }
+          
+      },
+      month: 
+      {
+          format:'YYYY MMMM',
+          heightPx: 31,
+          weekline: {
+              format:'w',
+              heightPx: 80
+          },
+          dayheader: {
+              weekdays: [0, 1, 2, 3, 4, 5, 6],
+              format:'dddd',
+              heightPx: 30
+          },
+          day: {
+              format:'MM/DD'
+          }
+      },
+      
+        
+
+          
+      events: events,
+      daynotes: daynotes
+    }).init();
+
+    /**
+     * Listening for events
+     */
+
+    $('#calendar').on('Calendar.init', function(event, instance, before, current, after){
+      console.log('event : Calendar.init');
+      console.log(instance);
+      console.log(before);
+      console.log(current);
+      console.log(after);
+    });
+    $('#calendar').on('Calendar.daynote-mouseenter', function(event, instance, elem){
+      console.log('event : Calendar.daynote-mouseenter');
+      console.log(instance);
+      console.log(elem);
+    });
+    $('#calendar').on('Calendar.daynote-mouseleave', function(event, instance, elem){
+      console.log('event : Calendar.daynote-mouseleave');
+      console.log(instance);
+      console.log(elem);
+    });
+    $('#calendar').on('Calendar.event-mouseenter', function(event, instance, elem){
+      console.log('event : Calendar.event-mouseenter');
+      console.log(instance);
+      console.log(elem);
+    });
+    $('#calendar').on('Calendar.event-mouseleave', function(event, instance, elem){
+      console.log('event : Calendar.event-mouseleave');
+      console.log(instance);
+      console.log(elem);
+    });
+    $('#calendar').on('Calendar.daynote-click', function(event, instance, elem, evt){
+      console.log('event : Calendar.daynote-click');
+      console.log(instance);
+      console.log(elem);
+      console.log(evt);
+    });
+    $('#calendar').on('Calendar.event-click', function(event, instance, elem, evt){
+      console.log('event : Calendar.event-click');
+      console.log(instance);
+      console.log(elem);
+      console.log(evt);
+    });
+    $('#calendarmodal').modal('show').find('.modal-dialog').slideDown();
+}
+
+function getevents()
+{
+  $.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+$.ajax({
+    url: '/naptar', 
+    method: 'GET',
+    success: function(response) {
+    console.log('válasz:', response);
+    if (response.status!=0) {
+        alert("hiba: "+response.message);
+    }else
+    {
+        let eventdata=JSON.parse(response.data);
+        fillevents(eventdata);
+            
+    }
+    },
+    error: function(xhr, status, error) {
+    // Handle error response from the server
+    alert("hiba: \n"+xhr.responseText)
+    }
+});
+}
+function getFilteredToStudentevents(studid)
+{
+  $.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
+  $.ajax({
+      url: '/naptar/diak/'+studid, 
+      method: 'GET',
+      success: function(response) {
+      console.log('válasz:', response);
+      if (response.status!=0) {
+          alert("hiba: "+response.message);
+      }else
+      {
+          let eventdata=JSON.parse(response.data);
+          fillevents(eventdata);
+              
+      }
+      },
+      error: function(xhr, status, error) {
+      // Handle error response from the server
+      alert("hiba: \n"+xhr.responseText)
+      }
+  });
+}
+function getlesssoncalendar(lessonid)
+{
+  $.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+$.ajax({
+    url: '/naptar/tanorak/'+lessonid, 
+    method: 'GET',
+    success: function(response) {
+    console.log('válasz:', response);
+    if (response.status!=0) {
+        alert("hiba: "+response.message);
+    }else
+    {
+        let eventdata=JSON.parse(response.data);
+        fillevents(eventdata);
+            
+    }
+    },
+    error: function(xhr, status, error) {
+    // Handle error response from the server
+    alert("hiba: \n"+xhr.responseText)
+    }
+});
+}

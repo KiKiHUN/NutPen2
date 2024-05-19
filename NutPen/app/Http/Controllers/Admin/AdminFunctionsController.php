@@ -9,6 +9,7 @@ use App\Models\Admin;
 use App\Models\BannedIP;
 use App\Models\BannerMsg;
 use App\Models\bannertype;
+use App\Models\CalendarEvent;
 use App\Models\ClassesLessons;
 use App\Models\Grade;
 use App\Models\GradeType;
@@ -1107,55 +1108,181 @@ class AdminFunctionsController extends Controller
             return redirect('/admin/tanorak')->with('successmessage', "sikeres mentés");
 
         }
-
-        function CalendarLesson($lessonID) 
-        {
-            $lesson=Lesson::with(["GetTeacher","GetSubject"])->where('ID', '=', $lessonID)->first();
-            
-            $events = [];
-
-            $unserializedData = unserialize($lesson->WeeklyTimes);
-        
-            // Start date
-            $currentDate = new DateTime($lesson->StartDate);
-            
-            // End date
-            $endDate = new DateTime($lesson->EndDate);
-            $endDate->modify('+1 day');
-        
-            while ($currentDate <= $endDate) {
-
-                $dayOfWeek = $currentDate->format('l');
-
-                if ($unserializedData[$dayOfWeek]) {
-                    $startTime = $unserializedData[$dayOfWeek];
-                
-
-                    list($hours, $minutes) = explode(':', $startTime);
-                    $currentDate->setTime($hours, $minutes);
-                
-
-                    $endDateTime = clone $currentDate;
-                    $endDateTime->modify('+' . $lesson->Minutes . ' minutes');
-
-
-                    $c=new CalendarData();
-                    $c->start= $currentDate->format('U');
-                    $c->end= $endDateTime->format('U');
-                    $c->title=$lesson->GetSubject->Name;
-                    $c->content='Tanár: '.$lesson->GetTeacher->FName." ".$lesson->GetTeacher->LName;
-                    $c->category= 'Tanóra';
-
-
-                    $events[] = $c;
-                }
-            
-                $currentDate->modify('+1 day');
-            } 
-        
-            return view('calendar',['status'=>0,'eventsData'=> $events]);
-        }
     //lessons
+
+    //calendar
+      
+        function CalendarEvents()
+        {
+         
+            // Enable query logging
+            //DB::enableQueryLog();
+
+            // Fetch the events associated with the role
+            //$events = $role->getEvents()->get();
+
+            // Get the executed query
+            //$queries = DB::getQueryLog();
+            //\Illuminate\Support\Facades\Log::info($queries);
+          
+           $roleevents=RoleType::with("GetEvents")->where("ID",Auth::user()->RoleTypeID)->first();
+          
+           $events = [];
+            foreach ($roleevents->GetEvents as $event ) {
+                $startdate = new DateTime($event->StartDateTime);
+                $enddate = new DateTime($event->EndDateTime);
+                $c=new CalendarData();
+                $c->start= $startdate->format('U');
+                $c->end= $enddate->format('U');
+                $c->title=$event->Name;
+                $c->content= $event->Description;
+                $c->category= 'Esemény';
+                $events[] = $c;
+            }
+            $json= json_encode(  $events, JSON_UNESCAPED_SLASHES );
+            //error_log(  $json);
+            return response()->json(['status'=>0,'message' => 'Sikeres módosítás','data'=>  $json], 200);
+            
+        }
+        function Events() 
+        {
+           
+            $events=CalendarEvent::with("GetRoleTypes")->get();
+            return view('userviews/admin/calendarevents',['status'=>0,'events'=> $events]);
+        }
+        function NewEvent() 
+        {
+            return view('userviews/admin/calendarevents',['status'=>2,'roles'=> RoleType::all()]);
+        }
+        function EditEventPage($eventID)  
+        {
+            $event=CalendarEvent::GetEventWithRolesIfExist($eventID);
+            
+            if (!$event) {
+                return redirect('/admin/esemenyek')->with('failedmessage', "ID nem található");
+            }
+            return view('userviews/admin/calendarevents',['status'=>3,'event'=>$event,'roles'=>RoleType::all()]);
+        }
+
+        function EditEvent(Request $request) 
+        {
+            $data = $request->except(['_token','dtBasicExample_length']);
+    
+        
+            // Initialize an empty array to store filtered student grades
+            $filteredRoles = [];
+    
+            // Loop through the request parameters
+            foreach ($data as $key => $value) {
+                // Check if the parameter key starts with 'gradeID_'
+                
+                if (strpos($key, 'roleID_') === 0) {
+                   
+                    // Extract StudentID from the parameter key
+                    $roleID = substr($key, 7); // Assuming the length of 'gradeID_' is 8 characters
+                   
+                    // Check if the grade is not equal to -1
+                    if ($value != -1) {
+                        // Add StudentID and gradeTypeID to the filtered array
+                        $filteredRoles[ $roleID] = $value;
+                    }
+                    
+                }
+            }
+           
+
+            $name="";
+            $desc="";
+            $start=null;
+            $end=null;
+            $active=false;
+            if ($request->name!=null) {
+                $name=$request->name;
+            }
+            if ($request->desc!=null) {
+                $desc=$request->desc;
+            }
+            if ($request->startDate!=null) {
+                $start=$request->startDate;
+            }
+            if ($request->endDate!=null) {
+                $end=$request->endDate;
+            }
+            if (isset($request->activated)) {
+                $active=true;
+            }
+         
+            if (!CalendarEvent::EditEvent($request->eventID,$name,$desc,$start,$end,$active,Auth::user()->UserID,$filteredRoles)) {
+                return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+            }
+            return redirect('/admin/esemenyek')->with('successmessage', "sikeres mentés");
+        }
+
+        
+
+        function SaveEvent(Request $request) 
+        {
+            $data = $request->except(['_token','dtBasicExample_length']);
+    
+        
+            // Initialize an empty array to store filtered student grades
+            $filteredRoles = [];
+    
+            // Loop through the request parameters
+            foreach ($data as $key => $value) {
+                // Check if the parameter key starts with 'gradeID_'
+                
+                if (strpos($key, 'roleID_') === 0) {
+                   
+                    // Extract StudentID from the parameter key
+                    $roleID = substr($key, 7); // Assuming the length of 'gradeID_' is 8 characters
+                   
+                    // Check if the grade is not equal to -1
+                    if ($value != -1) {
+                        // Add StudentID and gradeTypeID to the filtered array
+                        $filteredRoles[ $roleID] = $value;
+                    }
+                    
+                }
+            }
+           
+
+            $name="";
+            $desc="";
+            $start=null;
+            $end=null;
+            $active=false;
+            if ($request->name!=null) {
+                $name=$request->name;
+            }
+            if ($request->desc!=null) {
+                $desc=$request->desc;
+            }
+            if ($request->startDate!=null) {
+                $start=$request->startDate;
+            }
+            if ($request->endDate!=null) {
+                $end=$request->endDate;
+            }
+            if (isset($request->activated)) {
+                $active=true;
+            }
+         
+            if (!CalendarEvent::AddNewEvent($name,$desc,$start,$end,$active,Auth::user()->UserID,$filteredRoles)) {
+                return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+            }
+            return redirect('/admin/esemenyek')->with('successmessage', "sikeres mentés");
+
+        }
+
+        function RemoveEvent($eventID) 
+        {
+            if (!CalendarEvent::RemoveEvent($eventID)) {
+                return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+            }
+            return redirect('/admin/esemenyek')->with('successmessage', "sikeres mentés");
+        }
+    //calendar
 
     //ratingtypes
 
@@ -1608,9 +1735,9 @@ class AdminFunctionsController extends Controller
         }
         function StudentsHomeWorksByLesson($lessonID)
         {
-        $h=HomeWork::with(['GetLesson.GetClasses'])->where("LessonID","=",$lessonID)->get();
-        return view('userviews/admin/homework',['status'=>0,'homeworks'=>$h,'lessonid'=>$lessonID]);
-       
+                $h=HomeWork::with(['GetLesson.GetClasses'])->where("LessonID","=",$lessonID)->get();
+                return view('userviews/admin/homework',['status'=>0,'homeworks'=>$h,'lessonid'=>$lessonID]);
+            
         }
         function StudentsHomeWorks($homewokID)
         {

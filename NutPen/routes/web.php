@@ -44,6 +44,10 @@ Route::middleware(['blockIP'])->group(function () {
         Route::get('/jelszoVisszaallitas',[App\Http\Controllers\MainRouterController::class,'PWResetPage']);
         Route::post('/jelszoVisszaallitas/save',[App\Http\Controllers\PWResetController::class,'SavePW']);
         Route::get('/kijelentkezes',[App\Http\Controllers\LogoutController::class,'logout']);
+
+        Route::get('/naptar',[App\Http\Controllers\MessageController::class,'Calendar']);
+        Route::get('/naptar/diak/{studentID}',[App\Http\Controllers\MessageController::class,'CalendarOnStudent']);
+        Route::get('/naptar/tanorak/{lessonID}',[App\Http\Controllers\MessageController::class,'CalendarLesson']);
     });
 
  
@@ -119,7 +123,7 @@ Route::middleware(['blockIP'])->group(function () {
         Route::get('/admin/tanoramodositas/{tanoraid}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditLessonPage']);
         Route::post('/admin/ujtanoramentes',[App\Http\Controllers\Admin\AdminFunctionsController::class,'SaveLesson']);
         Route::post('/admin/tanoramodositas',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditLesson']);
-        Route::get('/admin/naptar/tanorak/{tanoraid}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'CalendarLesson']);
+       
         Route::get('/admin/tanorak/osztalyhozzad/{lessonID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'AddClassToLesson']);
         Route::post('/admin/tanorak/osztalyhozzad/mentes',[App\Http\Controllers\Admin\AdminFunctionsController::class,'SaveClassToLesson']);
         Route::get('/admin/tanora/{lessonID}/osztalytorles/{classID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'RemoveClassFromLesson']);
@@ -181,6 +185,16 @@ Route::middleware(['blockIP'])->group(function () {
         Route::get('/admin/bekuldotthazifeladat/letoltes/{homewokID}/{studentID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'DownloadHomeWork']);
         Route::get('/admin/bekuldotthazifeladat/torles/{homewokID}/{studentID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'RemoveStudentHomeWork']);
         Route::get('/admin/hazifeladatok/tanora/{lessonID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'StudentsHomeWorksByLesson']);
+
+       
+        Route::get('/admin/naptar/esemenyek',[App\Http\Controllers\Admin\AdminFunctionsController::class,'CalendarEvents']);
+        Route::get('/admin/esemenyek',[App\Http\Controllers\Admin\AdminFunctionsController::class,'Events']);
+        Route::get('/admin/ujesemeny',[App\Http\Controllers\Admin\AdminFunctionsController::class,'NewEvent']);
+        Route::post('/admin/ujesemeny',[App\Http\Controllers\Admin\AdminFunctionsController::class,'SaveEvent']);
+        Route::get('/admin/esemenytorles/{eventID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'RemoveEvent']);
+        Route::get('/admin/esemenymodositas/{eventID}',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditEventPage']);
+        Route::post('/admin/esemenymodositas/',[App\Http\Controllers\Admin\AdminFunctionsController::class,'EditEvent']);
+      
        
     });
    
@@ -193,7 +207,6 @@ Route::middleware(['blockIP'])->group(function () {
             Route::get('/diak/tantargyak',[App\Http\Controllers\Student\StudentFunctionsController::class,'Subjects']);
             Route::get('/diak/osztaly',[App\Http\Controllers\Student\StudentFunctionsController::class,'SchoolClasseWithStudents']);
             Route::get('/diak/osztaly/osztalytarsak/{classID}',[App\Http\Controllers\Student\StudentFunctionsController::class,'ClassStudents']);
-            Route::get('/diak/naptar/tanorak/{tanoraid}',[App\Http\Controllers\Student\StudentFunctionsController::class,'CalendarLesson']);
             Route::get('/diak/tantargy/orak/{tantargyid}',[App\Http\Controllers\Student\StudentFunctionsController::class,'SubjectLessons']);
             Route::post('/diak/hazifeladat/feltoltes',[App\Http\Controllers\Student\StudentFunctionsController::class,'UploadHomeWork'] );
             Route::get('/diak/hazifeladat/letoltes/{homewokID}',[App\Http\Controllers\Student\StudentFunctionsController::class,'DownloadHomeWork']);
@@ -234,7 +247,6 @@ Route::middleware(['blockIP'])->group(function () {
         Route::get('/tanar/bekuldotthazifeladat/letoltes/{homewokID}/{studentID}',[App\Http\Controllers\Teacher\TeacherFunctionController::class,'DownloadHomeWork']);
         Route::get('/tanar/bekuldotthazifeladat/torles/{homewokID}/{studentID}',[App\Http\Controllers\Teacher\TeacherFunctionController::class,'RemoveStudentHomeWork']);
         Route::post('/tanar/hfkomment',[App\Http\Controllers\Teacher\TeacherFunctionController::class,'EditHomeWorkComment']);
-        Route::get('/tanar/naptar/tanorak/{tanoraid}',[App\Http\Controllers\Teacher\TeacherFunctionController::class,'CalendarLesson']);
 
 
 
@@ -260,8 +272,9 @@ Route::middleware(['blockIP'])->group(function () {
         Route::get('/szulo/hazifeladatok/{studID}',[App\Http\Controllers\StudParent\StudParentController::class,'HomeWorks']);
         Route::get('/szulo/hianyzasigazolas/{missID}',[App\Http\Controllers\StudParent\StudParentController::class,'EditMissings']);
 
-        Route::get('/szulo/naptar/tanorak/{tanoraid}',[App\Http\Controllers\StudParent\StudParentController::class,'CalendarLesson']);
         Route::get('/szulo/hazifeladat/letoltes/{homewokID}',[App\Http\Controllers\StudParent\StudParentController::class,'DownloadHomeWork']);
+
+      
     });
     Route::group(['middleware' => 'auth:headUser'], function () {
         //felhasznalo
@@ -330,7 +343,6 @@ Route::middleware(['blockIP'])->group(function () {
         Route::get('/fo/tanoramodositas/{tanoraid}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'EditLessonPage']);
         Route::post('/fo/ujtanoramentes',[App\Http\Controllers\HeadUser\HeadUSerController::class,'SaveLesson']);
         Route::post('/fo/tanoramodositas',[App\Http\Controllers\HeadUser\HeadUSerController::class,'EditLesson']);
-        Route::get('/fo/naptar/tanorak/{tanoraid}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'CalendarLesson']);
         Route::get('/fo/tanorak/osztalyhozzad/{lessonID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'AddClassToLesson']);
         Route::post('/fo/tanorak/osztalyhozzad/mentes',[App\Http\Controllers\HeadUser\HeadUSerController::class,'SaveClassToLesson']);
         Route::get('/fo/tanora/{lessonID}/osztalytorles/{classID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'RemoveClassFromLesson']);
