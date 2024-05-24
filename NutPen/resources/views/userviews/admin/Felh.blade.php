@@ -22,13 +22,17 @@
         @endif
 
         <div class="col-12 tm-block-col">
-            <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
+            <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll ">
                 @if ($status==1)
+                <h2 class="tm-block-title">Felhasználó típus választása</h2>
+                    <div class="filderdiv">
+                   
                     <button type="submit" class="adminfilterbtn" value="a">Admin</button>
                     <button type="submit" class="adminfilterbtn" value="t">Tanár</button>
                     <button type="submit" class="adminfilterbtn" value="s">Diák</button>
                     <button type="submit" class="adminfilterbtn" value="p">Szülő</button>
                     <button type="submit" class="adminfilterbtn" value="h">Fő emberek</button>
+                    </div>
                 @endif
                
                 @if ($status == 0)

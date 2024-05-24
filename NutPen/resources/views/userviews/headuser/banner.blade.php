@@ -113,10 +113,12 @@
                                     <label for="desc">Leírás </label>
                                     <td><input type="text" name="desc" id="desc" class="textfield" value="{{ $banner->Description }}"></td>
                                 </div>
-                                <div class="inputcolumn">
-                                    <label for="oriimg">Eredeti kép: </label>
-                                    <img class='BannerIMG' src='{{ $file }}' id="oriimg", name="oriimg"></img>
-                                </div>
+                                @if ($file!=null)
+                                    <div class="inputcolumn">
+                                        <label for="oriimg">Eredeti kép: </label>
+                                        <img class='BannerIMG' src='{{ $file }}' id="oriimg", name="oriimg"></img>
+                                    </div>
+                                @endif
                                 <div class="inputcolumn">
                                     <label for="file_upload">Kép módosítása</label>
                                     <td><input type="file" name="file_upload" id="file_upload" accept="image/png, image/gif, image/jpeg"></td>

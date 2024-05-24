@@ -118,10 +118,10 @@
                                                     @else
                                                         @foreach ($item["missings"] as $missing)
                                                             @if ($missing->Verified==1)
-                                                                <span class="grade-button" onclick="showMissingDetails('{{ $missing->GetVerificationType->Name }}', '{{ $missing->DateTime }}')">{{ $missing->MissedMinute }}</span>
+                                                                <span class="grade-button" onclick="showMissingDetails('{{ $missing->GetVerificationType->Name }}', '{{ $missing->DateTime }}')">{{ $missing->MissedMinute }} perc</span>
                                                             
                                                             @else
-                                                                {{ $missing->MissedMinute }}
+                                                                {{ $missing->MissedMinute }},
                                                             @endif
                                                     
                                                          @endforeach
@@ -182,7 +182,7 @@
                                     
                                 @else
                                     @if ($status ==6)   
-                                        <h2 class="tm-block-title">Legutóbbi értékelések</h2>
+                                        <h2 class="tm-block-title">Legutóbbi késések/hiányzások </h2>
                                         <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                                             <thead>
                                                 <tr>

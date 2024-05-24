@@ -17,6 +17,7 @@
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
         <a class="dropdown-item" href="/fo/confirm/doevvege">Év lezárása</a>
         <a class="dropdown-item" href="/fo/figyelmeztetesek">Figyelmeztetések</a>
+        <a class="dropdown-item" href="/fo/esemenyek">Naptár események</a>
         <a class="dropdown-item" href="/fo/banner">Banner módosítása</a>
     </div>
 </li>

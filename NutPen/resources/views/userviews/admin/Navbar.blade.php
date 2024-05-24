@@ -82,7 +82,7 @@
         <a class="dropdown-item" href="/admin/felhasznalok">Felhasználók</a>
         <a class="dropdown-item" href="/admin/ujfelhasznalo">Új felhasználó</a>
         <a class="dropdown-item" href="/admin/rangok">Rangok</a>
-        <a class="dropdown-item" href="/admin/ujrang"> { UD } Új rang { UD }</a>
+        <!--<a class="dropdown-item" href="/admin/ujrang"> { UD } Új rang { UD }</a>-->
     </div>
 </li>
 <li class="nav-item dropdown ">

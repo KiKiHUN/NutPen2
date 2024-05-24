@@ -61,6 +61,18 @@ class DatabaseController extends Controller
     }
     public static function DefaultValues() 
     {
+        $currentSessionId = session()->getId();
+        $directory = storage_path('framework/sessions');
+
+        // Get all files in the directory
+        $files = glob($directory . '/*');
+
+        // Loop through each file and delete it if it's not the current session ID
+        foreach($files as $file) {
+            if(is_file($file) && basename($file) !== $currentSessionId) {
+                unlink($file);
+            }
+        }
         try {
             DB::statement("SET foreign_key_checks=0");
 

@@ -403,6 +403,16 @@ Route::middleware(['blockIP'])->group(function () {
         Route::get('/fo/hazifeladattorles/{homewokID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'RemoveHomeWork']);
         Route::get('/fo/bekuldotthazifeladat/letoltes/{homewokID}/{studentID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'DownloadHomeWork']);
         Route::get('/fo/bekuldotthazifeladat/torles/{homewokID}/{studentID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'RemoveStudentHomeWork']);
+        Route::get('/fo/hazifeladatok/tanora/{lessonID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'StudentsHomeWorksByLesson']);
+
+
+        Route::get('/fo/naptar/esemenyek',[App\Http\Controllers\HeadUser\HeadUSerController::class,'CalendarEvents']);
+        Route::get('/fo/esemenyek',[App\Http\Controllers\HeadUser\HeadUSerController::class,'Events']);
+        Route::get('/fo/ujesemeny',[App\Http\Controllers\HeadUser\HeadUSerController::class,'NewEvent']);
+        Route::post('/fo/ujesemeny',[App\Http\Controllers\HeadUser\HeadUSerController::class,'SaveEvent']);
+        Route::get('/fo/esemenytorles/{eventID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'RemoveEvent']);
+        Route::get('/fo/esemenymodositas/{eventID}',[App\Http\Controllers\HeadUser\HeadUSerController::class,'EditEventPage']);
+        Route::post('/fo/esemenymodositas/',[App\Http\Controllers\HeadUser\HeadUSerController::class,'EditEvent']);
     });
 });
 

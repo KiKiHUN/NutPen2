@@ -148,8 +148,9 @@ class StudentFunctionsController extends Controller
         foreach ($grades as $grade => $lessonGrades) {
             $latestGradeDateTime = $lessonGrades->last()->DateTime;
             $subjectName = $lessonGrades->last()->GetLesson->GetSubject->Name;
-            $teacherName = $lessonGrades->last()->GetLesson->GetTeacher->LName." ".$lessonGrades->last()->GetLesson->GetTeacher->FName;
+            $teacherName = $lessonGrades->last()->GetLesson->GetTeacher->FName." ".$lessonGrades->last()->GetLesson->GetTeacher->LName;
             $gradesArray = [];
+            $avg=0;
             foreach ($lessonGrades as $grade) {
                 $gradeTypeValue = $grade->GetGradeType->Value;
                 $gradeTypeName = $grade->GetGradeType->Name;
@@ -160,15 +161,18 @@ class StudentFunctionsController extends Controller
                     'gradeName' => $gradeTypeName,
                     'gradeDateTime' => $gradeDateTime
                 ];
+                $avg+=$grade->GetGradeType->Value;
             }
+            $avg=$avg/count($lessonGrades);
             $groupedGrades[] = [
                 'subjectName' => $subjectName,
                 'latestGrade' => $latestGradeDateTime,
                 'teacherName' => $teacherName,
-                'grades' => $gradesArray
+                'grades' => $gradesArray,
+                'gradeavg'=>$avg
             ];
         }
-       
+      
         return view('userviews/student/rating',['status'=>4,'combinedGrades'=>$groupedGrades]);
     }
     function HomeWorks()

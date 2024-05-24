@@ -68,7 +68,12 @@ class LatesMissing extends Model
       if ($c->VerificationTypeID!=$verificationTypeID) {
         $verifiedupdated=true;
       }
-
+      if ($minutes==0) {
+        if (!self::RemoveMissing($missID)) {
+          return false;
+        }
+        return true;
+      }
 
       try {
         $c->MissedMinute=$minutes;

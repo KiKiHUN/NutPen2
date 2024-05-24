@@ -46,7 +46,7 @@ class Student extends Authenticatable
       }
       public function GetOwnParents()
       {
-        return $this->hasManyThrough(StudParent::class,StudentParent::class);
+        return $this->hasManyThrough(StudParent::class,StudentParent::class,"StudentID","UserID","UserID","ParentID");
       }
       public function GetOwnClass()
       {

@@ -233,7 +233,7 @@ class TeacherFunctionController extends Controller
         
         }
         DB::commit();
-        return redirect('/teacher/hianyzasok/tanora/'.$request->lessonID.'/osztaly/'.$request->classID)->with('successmessage', "sikeres mentés");
+        return redirect('/tanar/hianyzasok/tanora/'.$request->lessonID.'/osztaly/'.$request->classID)->with('successmessage', "sikeres mentés");
     }
 
     function EditStudentMissingPage($missID)  
@@ -469,16 +469,21 @@ class TeacherFunctionController extends Controller
 
     function ClassStudents($classID) 
     {
-        $class=SchoolClass::with('GetStudents')->where('ID', '=', $classID)->first();
+        $class=SchoolClass::with('GetStudents.GetOwnParents')->where('ID', '=', $classID)->first();
         $users = [];
         foreach ($class->GetStudents as $student) {
             $u=new OneUser2();
             $u->UserID=$student->UserID;
             $u->fname=$student->FName;
             $u->lname=$student->LName;
+            $parents=[];
+            foreach ($student->GetOwnParents as $parent ) {
+                $parents[]=$parent->FName." ".$parent->LName."//".$parent->UserID;
+            }
+            $u->parentinfo=$parents;
             $users[]=$u;
         }
-
+      
         return view('userviews/teacher/school_Classes',['status'=>4,"ownclasses"=>self::HasClass(),'users'=>$users,'classID'=>$classID,'className'=> $class->Name]);
     }
 
@@ -505,7 +510,7 @@ class TeacherFunctionController extends Controller
     }
     function ClassLessons($classID)
     {
-        $class=SchoolClass::with('GetLessons.GetSubject')->where('ID', '=', $classID)->first();
+        $class=SchoolClass::with(['GetLessons.GetSubject','GetLessons.GetTeacher'])->where('ID', '=', $classID)->first();
         return view('userviews/teacher/school_Classes',['status'=>5,"ownclasses"=>self::HasClass(),'class'=>$class,"className"=>$class->Name,"ownclasses"=>self::HasClass()]);
     }
     function StudentMissingsLessons($lessonID,$classID)
@@ -604,6 +609,7 @@ class OneUser2
     public $UserID=0;
     public $fname;
     public $lname;
+    public $parentinfo;
     public $role;
 }
 

@@ -306,7 +306,7 @@ $('#alleventCalendar').click(function() {
         }
     });
 });
-$('#alleventCalendar').click(function() {
+$('#alleventCalendarHead').click(function() {
     
     $.ajaxSetup({
         headers: {
@@ -314,7 +314,7 @@ $('#alleventCalendar').click(function() {
         }
     });
     $.ajax({
-        url: '/admin/naptar/esemenyek', 
+        url: '/fo/naptar/esemenyek', 
         method: 'GET',
         success: function(response) {
         console.log('válasz:', response);

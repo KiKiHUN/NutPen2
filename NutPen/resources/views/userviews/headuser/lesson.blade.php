@@ -36,6 +36,7 @@
                                 <th class="th-sm">Napok száma</th>
                                 <th class="th-sm">Naptár megnyitása</th>
                                 <th class="th-sm">Osztályok listázása</th>
+                                <th class="th-sm">Házifeladatok</th>
                                 <th class="th-sm">Óra módosítása</th>
                             </tr>
                         </thead>
@@ -68,6 +69,7 @@
                                     </td>
                                     <td><div class="btnplacer"><button class="OtherFunctionButton calendarLesFiltbutton" value="{{ $item->ID }}" >Naptár</button></div></td>
                                     <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/fo/osztalyok/tanora/{{ $item->ID }}';" >Osztályok listázása</button></div></td>
+                                    <td><div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/fo/hazifeladatok/tanora/{{ $item->ID }}';" >Házifeladatok listázása</button></div></td>
                                     <td><div class="btnplacer"><button class="EditButton" onclick="location.href = '/fo/tanoramodositas/{{ $item->ID }}';" >Szerkesztés</button></div></td>
                                 </tr>
                             @endforeach

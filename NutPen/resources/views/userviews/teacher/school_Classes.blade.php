@@ -55,6 +55,7 @@
                                 <th class="th-sm">Azonosító</th>
                                 <th class="th-sm">Vnév</th>
                                 <th class="th-sm">Knév</th>
+                                <th class="th-sm">Szülő(k)</th>
                                 <th class="th-sm">Figyelmeztetései</th>
                             </tr>
                         </thead>
@@ -64,6 +65,11 @@
                                     <td>{{ $item->UserID }}</td>
                                     <td>{{ $item->lname }}</td>
                                     <td>{{ $item->fname }}</td>
+                                    <td>
+                                        @foreach ($item->parentinfo as $parent )
+                                            {{ $parent }}<br>
+                                        @endforeach
+                                    </td>
                                     <td> <div class="btnplacer"><button class="OtherFunctionButton" onclick="location.href = '/tanar/diak/figyelmeztetesek/{{ $item->UserID }}';" >Figyelmeztetések</button> </div></td>
                                 </tr>
                             @endforeach
@@ -78,6 +84,7 @@
                             <tr>
                                
                                 <th class="th-sm">Tantárgy</th>
+                                <th class="th-sm">Tanár</th>
                                 <th class="th-sm">Hossz</th>
                                 <th class="th-sm">Napok száma</th>
                                 <th class="th-sm">Osztály értékelései</th>
@@ -88,6 +95,7 @@
                             @foreach ($class->GetLessons as $item)
                                 <tr>
                                     <td>{{ $item->GetSubject->Name}}</td>
+                                    <td>{{ $item->TeacherID." // ".$item->GetTeacher->FName." ".$item->GetTeacher->LName}}</td>
                                     <td>{{ $item->Minutes}} perc</td>
                                     <td>
                                         <?php 

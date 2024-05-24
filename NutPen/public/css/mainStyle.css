@@ -66,9 +66,14 @@ button:focus {
   border-width: 1px;
   border-color: #2db118;
 }
+.NewItemButton:hover
+{
+  background-color: rgb(1, 206, 1);
+}
+
 .RemoveButton
 {
-  background-color: rgb(128, 0, 0);
+  background-color: rgb(190, 0, 0);
   float: right;
   border-radius: 0.3em;
   border-style: solid;
@@ -76,6 +81,13 @@ button:focus {
   border-color: #ff3535;
   color: wheat;
 }
+.RemoveButton:hover
+{
+  background-color: rgb(179, 65, 0);
+}
+
+
+
 .EditButton
 {
   background-color: rgb(0, 81, 255);
@@ -86,6 +98,12 @@ button:focus {
   border-color: #35aeff;
   color: rgb(0, 0, 0);
 }
+.EditButton:hover
+{
+  background-color: rgb(0, 204, 255);
+}
+
+
 .DownloadButton
 {
   background-color: rgb(183, 0, 255);
@@ -98,6 +116,12 @@ button:focus {
   width: 60%;
   height: 3em;
 }
+.DownloadButton:hover
+{
+  background-color: rgb(99, 0, 212);
+}
+
+
 .OtherFunctionButton
 {
   background-color: rgb(0, 255, 200);
@@ -108,6 +132,12 @@ button:focus {
   border-color: #a5ffe4;
   color: rgb(0, 0, 0);
 }
+.OtherFunctionButton:hover
+{
+  background-color: rgb(0, 153, 255);
+}
+
+
 .UploadFunctionButton
 {
   margin-top: 15px;
@@ -121,6 +151,12 @@ button:focus {
   width: 50%;
   height: 3em;
 }
+.UploadFunctionButton
+{
+  background-color: rgb(0, 255, 157);
+}
+
+
 .rightspacer
 {
   margin-right: 10px;
@@ -1141,4 +1177,32 @@ input[type="time"] {
 .modal-content
 {
   background-color: #416d85;
+}
+
+#chartdiv {
+  justify-content: center;
+  width: 100%;
+  height: 400px;
+  border-color: #ffffff;
+  border-style: solid;
+  border-width: 2px;
+}
+.adminfilterbtn
+{
+  height: fit-content;
+  border-radius: 0.5em;
+  background-color:#7dc700;
+}
+.adminfilterbtn:hover
+{
+ 
+  background-color:#c79800;
+}
+.filderdiv
+{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: space-around;
 }

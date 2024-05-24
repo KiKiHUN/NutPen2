@@ -598,6 +598,9 @@ class AdminFunctionsController extends Controller
             {
                 $file=asset("storage/images/LoginBanner/{$banner->ImagePath}");
 
+            }else
+            {
+                $file=null;
             }
             return view('userviews/admin/banner',['status'=>3,'banner'=>$banner,'file'=>$file]);
         }
