@@ -122,8 +122,8 @@
                                         @foreach ($users as $item)
                                             <tr>
                                                 <td>{{ $item->UserID }}</td>
-                                                <td>{{ $item->lname }}</td>
                                                 <td>{{ $item->fname }}</td>
+                                                <td>{{ $item->lname }}</td>
                                                 <td> <div class="btnplacer"><button class="RemoveButton" onclick="location.href = '/admin/osztaly/{{ $classID }}/diaktorles/{{ $item->UserID }}';" >Kapcsolat bontása</button> </div></td>
                                             </tr>
                                         @endforeach

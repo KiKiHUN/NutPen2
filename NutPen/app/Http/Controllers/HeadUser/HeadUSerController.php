@@ -48,7 +48,8 @@ class HeadUSerController extends Controller
 
     function NewUserPage()
     {
-        return view('userviews/headuser/Felh',['status'=>2,'roles'=>RoleType::all(),'sextypes'=>SexType::all()]);
+        $roles = RoleType::where('Name', '!=', 'Admin')->get();
+        return view('userviews/headuser/Felh',['status'=>2,'roles'=> $roles,'sextypes'=>SexType::all()]);
     }
 
     function EditUserPage($UserID) {
@@ -700,17 +701,25 @@ class HeadUSerController extends Controller
       
        if (isset($request->file_upload)) {
           
-           $request->validate([
-               'file_upload' => 'required|file|mimes:jpg,png|max:2048',
-           ]);
+        $request->validate([
+            'file_upload' => 'required|file|mimes:jpg,png|max:2048',
+        ],
+        [
+            'file_upload.required' => 'A fájl feltöltése kötelező.',
+            'file_upload.file' => 'A feltöltendő fájl formátuma nem megfelelő.',
+            'file_upload.mimes' => 'A feltöltendő fájl csak jpg és png formátumú lehet.',
+            'file_upload.max' => 'A feltöltendő fájl mérete legfeljebb 2MB lehet.',
+        ]);
            $folderPath = '\public\images\LoginBanner';
            $folderStructurePath = storage_path().'\app'. $folderPath;
 
            if (! File::exists($folderStructurePath)) {
-               if (!File::makeDirectory($folderStructurePath)) {
+               if (!File::makeDirectory($folderStructurePath,0755,true)) {
                    return redirect()->back()->with('failedmessage', "Sikertelen mentés, szerver IO hiba");
                }
            }
+           $banner=BannerMsg::where("ID",$request->bannerID)->first();
+           $lastimagename=$banner->ImagePath;
            
            // Store the file in storage\app\public folder
            $file = $request->file('file_upload');
@@ -733,6 +742,14 @@ class HeadUSerController extends Controller
           {
            return redirect()->back()->with('failedmessage', "Sikertelen mentés, szerver IO hiba");
           }
+           // Get all files in the directory
+           $files = glob($folderStructurePath . '/*');
+           foreach($files as $file) {
+               if(is_file($file) && basename($file) ==  $lastimagename) {
+                   unlink($file);
+                   break;
+               }
+           }
        }
        if (!BannerMsg::EditMSG($request->bannerID,$name,$desc,$finalname)) {
            return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
@@ -762,66 +779,83 @@ class HeadUSerController extends Controller
    function SaveBanner(Request $request) 
    {
      
-       $name="";
-       $desc="";
-       $finalname=null;
-       if ($request->header!=null) {
-           $name=$request->header;
-       }
+    $name="";
+    $desc="";
+    $finalname=null;
+    if ($request->header!=null) {
+        $name=$request->header;
+    }
+    
+    if ($request->desc!=null) {
+        $desc=$request->desc;
+    }
+    
+    if (isset($request->file_upload)) {
+        $request->validate([
+            'file_upload' => 'required|file|mimes:jpg,png|max:2048',
+        ],
+        [
+            'file_upload.required' => 'A fájl feltöltése kötelező.',
+            'file_upload.file' => 'A feltöltendő fájl formátuma nem megfelelő.',
+            'file_upload.mimes' => 'A feltöltendő fájl csak jpg és png formátumú lehet.',
+            'file_upload.max' => 'A feltöltendő fájl mérete legfeljebb 2MB lehet.',
+        ]);
        
-       if ($request->desc!=null) {
-           $desc=$request->desc;
-       }
-       
-       if (isset($request->file_upload)) {
-          
-           $request->validate([
-               'file_upload' => 'required|file|mimes:jpg,png|max:2048',
-           ]);
-          
-           $folderPath = '\public\images\LoginBanner';
-           $folderStructurePath = storage_path().'\app'. $folderPath;
+        $folderPath = '\public\images\LoginBanner';
+        $folderStructurePath = storage_path().'\app'. $folderPath;
 
-           if (! File::exists($folderStructurePath)) {
-               if (!File::makeDirectory($folderStructurePath)) {
-                   return redirect()->back()->with('failedmessage', "Sikertelen mentés, szerver IO hiba");
-               }
-           }
-           
-           // Store the file in storage\app\public folder
-           $file = $request->file('file_upload');
-           $fileDetails=pathinfo($file->getClientOriginalName());
-           
-           $guessExtension = $file->guessExtension();
-           
-         
-           $finalname=Auth::user()->UserID."_".$fileDetails["filename"].".";
-           
-           if ( $guessExtension!=null) {
-               $finalname=$finalname.$guessExtension;
-           }else
-           {
-               $finalname=$finalname.$fileDetails["extension"];
-           }
-          try 
-          {
-           $filePath = $file->storeAs($folderPath,  $finalname );
-          } catch (\Throwable $th) 
-          {
-           return redirect()->back()->with('failedmessage', "Sikertelen mentés, szerver IO hiba");
-          }
+        if (! File::exists($folderStructurePath)) {
+            if (!File::makeDirectory($folderStructurePath,0755,true)) {
+                return redirect()->back()->with('failedmessage', "Sikertelen mentés, szerver IO hiba");
+            }
+        }
+        
+        // Store the file in storage\app\public folder
+        $file = $request->file('file_upload');
+        $fileDetails=pathinfo($file->getClientOriginalName());
+        
+        $guessExtension = $file->guessExtension();
+        
+      
+        $finalname=Auth::user()->UserID."_".$fileDetails["filename"].".";
+        
+        if ( $guessExtension!=null) {
+            $finalname=$finalname.$guessExtension;
+        }else
+        {
+            $finalname=$finalname.$fileDetails["extension"];
+        }
+       try 
+       {
+        $filePath = $file->storeAs($folderPath,  $finalname );
+       } catch (\Throwable $th) 
+       {
+        return redirect()->back()->with('failedmessage', "Sikertelen mentés, szerver IO hiba");
        }
-       if (!BannerMsg::AddNewMSG($name,$desc,$finalname,0)) {
-           return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
-       }
+    }
+    if (!BannerMsg::AddNewMSG($name,$desc,$finalname,0)) {
+        return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+    }
        return redirect('/fo/banner')->with('successmessage', "sikeres mentés");
 
    }
    function RemoveBanner($bannerID) 
    {
-       if (!BannerMsg::RemoveMSG($bannerID)) {
-           return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
-       }
+    $folderPath = '\public\images\LoginBanner';
+    $folderStructurePath = storage_path().'\app'. $folderPath;
+    $banner=BannerMsg::where("ID",$bannerID)->first();
+    $lastimagename=$banner->ImagePath;
+    // Get all files in the directory
+    $files = glob($folderStructurePath . '/*');
+    foreach($files as $file) {
+        if(is_file($file) && basename($file) ==  $lastimagename) {
+            unlink($file);
+            break;
+        }
+    }
+    if (!BannerMsg::RemoveMSG($bannerID)) {
+        return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
+    }
        return redirect('/fo/banner')->with('successmessage', "sikeres mentés");
    }
 //banner
@@ -1015,7 +1049,7 @@ class HeadUSerController extends Controller
        if (!ClassesLessons::RemoveClassFromLesson($lessonID,$classID)) {
            return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
        }
-       return redirect('/fo/tanora/osztalyok/'.$lessonID)->with('successmessage', "sikeres mentés");
+       return redirect('/fo/osztalyok/tanora/'.$lessonID)->with('successmessage', "sikeres mentés");
    }
    
 
@@ -1046,7 +1080,7 @@ class HeadUSerController extends Controller
        if (!ClassesLessons::AddClassToLesson($lessonID,$classID)) {
            return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
        }
-       return redirect('/fo/osztalyok/diakhozzad/'.$classID)->with('successmessage', "sikeres mentés");
+       return redirect('/fo/osztalyok/tanora/'.$classID)->with('successmessage', "sikeres mentés");
    }
    
 
@@ -1512,7 +1546,7 @@ class HeadUSerController extends Controller
    {
        $class=SchoolClass::with('GetStudents')->where('ID', '=', $classID)->first();
        // Initialize an empty array to store grades
-       $gradesByStudent = [];
+       $missingsByStudent = [];
        $lesson=Lesson::with('GetSubject')->where('ID', $lessonID)->first();
        // Loop through each student in the class
        foreach ($class->GetStudents as $student) {
@@ -1610,10 +1644,10 @@ class HeadUSerController extends Controller
                'name' => $warning->Name,
                'description' => $warning->Description,
                'datetime' => $warning->DateTime,
-               'whogavename' => $whogave->LName." ". $whogave->FName,
+               'whogavename' => $whogave->FName." ". $whogave->LName,
                'whogaveID' => $warning->WhoGaveID,
                'studentID'=>$warning->StudentID,
-               'studentname'=>$warning->GetStudent->LName." ". $warning->GetStudent->FName
+               'studentname'=>$warning->GetStudent->FName." ". $warning->GetStudent->LName
            ];
        }
        return view('userviews/headuser/warning',['status'=>0,'warnings'=>$wariningswithUsers]);

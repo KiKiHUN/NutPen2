@@ -86,12 +86,12 @@ class PWResetController extends Controller
                 Auth::guard('student')->login($user);
                 break;
             case 'p':
-                Auth::guard('parent')->login($user);
+                Auth::guard('studparent')->login($user);
                 break;
             case 't':
                 Auth::guard('teacher')->login($user);
                 break;
         }
-       
+      
     }
 }

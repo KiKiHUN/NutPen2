@@ -1193,7 +1193,18 @@ input[type="time"] {
   border-radius: 0.5em;
   background-color:#7dc700;
 }
+.fofilterbtn
+{
+  height: fit-content;
+  border-radius: 0.5em;
+  background-color:#7dc700;
+}
 .adminfilterbtn:hover
+{
+ 
+  background-color:#c79800;
+}
+.fofilterbtn:hover
 {
  
   background-color:#c79800;
@@ -1205,4 +1216,10 @@ input[type="time"] {
   flex-wrap: nowrap;
   align-items: flex-start;
   justify-content: space-around;
+}
+.calendar .event-name {
+  font-size: 80% !important;
+}
+.calendar .event-date {
+  font-size: 100% !important;
 }

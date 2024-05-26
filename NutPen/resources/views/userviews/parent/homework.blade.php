@@ -53,7 +53,7 @@
                                             @if ($homework->get_submitted_home_works)
                                             <td>{{ $homework->get_submitted_home_works[0]->Answer? $homework->get_submitted_home_works[0]->Answer:" " }}</td>
                                                 @if (isset($homework->get_submitted_home_works[0]->FileName))
-                                                    <td><div class="btnplacer"><p>{{ $homework->get_submitted_home_works[0]->FileName }}</p><button class="DownloadButton" title="{{ $homework->get_submitted_home_works[0]->FileName }}" onclick="location.href = '/diak/hazifeladat/letoltes/{{ $homework->ID }}';" >Letöltés</button></div></td>
+                                                    <td><div class="btnplacer"><p>{{ $homework->get_submitted_home_works[0]->FileName }}</p><button class="DownloadButton" title="{{ $homework->get_submitted_home_works[0]->FileName }}" onclick="location.href = '/szulo/hazifeladat/letoltes/{{ $homework->ID }}/{{ $student->UserID }}';" >Letöltés</button></div></td>
                                                 @else
                                                     <td>Beadva, nincs beküldött házifeladat</td>
                                                 @endif

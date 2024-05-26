@@ -25,6 +25,9 @@
             <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
                 @if ($status == 0)
                     <h2 class="tm-block-title">Házifeladataim</h2>
+                    @error('file_upload')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
                     <table id='dtBasicExample' class="table table-bordered table-striped table-sm ">
                         <thead>
                             <tr>
@@ -38,6 +41,7 @@
                             </tr>
                         </thead>
                         <tbody id="myTable">
+                           
                             @foreach ($combinedHomeWorks as $class)
                             
                                   @foreach ($class->get_class->get_lessons as $lesson)

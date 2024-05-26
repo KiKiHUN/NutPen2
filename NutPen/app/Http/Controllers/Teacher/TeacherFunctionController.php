@@ -406,7 +406,32 @@ class TeacherFunctionController extends Controller
         }
         return redirect('/tanar/tanorak')->with('successmessage', "sikeres mentés");
     }
+    function DownloadHomeWork($homewokID,$studID)
+    {
+       
+        $c=null;
+        if ( !($c=HomeWorkStudent::GetHomeworkIfExist($homewokID,$studID)) ) {
+            return redirect()->back()->with('failedmessage', "Letöltés sikeretlen");
+        }
+        if ($c->FileName==""||$c->FileName==" "||$c->FileName==null) {
+            return redirect()->back()->with('failedmessage', "Hibás fájlnév az adatbázisban.");
+        }
 
+        $folderPath = '\public\homeworks\id_'.$homewokID;
+        $folderStructurePath = storage_path().'\app'. $folderPath;
+
+        $file= $folderStructurePath."\\".$c->FileName;
+       
+      
+
+        if ( file_exists($file)) {
+            return response()->download($file);
+        }else
+        {
+            return redirect()->back()->with('failedmessage', "Fájl nem található");
+        }
+        
+    }
     function CalendarLesson($lessonID) 
     {
         $lesson=Lesson::with(["GetTeacher","GetSubject"])->where('ID', '=', $lessonID)->first();

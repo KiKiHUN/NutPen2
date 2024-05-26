@@ -58,6 +58,7 @@ class VerificationType extends Model
         $c->Description=$description;
         $c->save();
       } catch (\Throwable $th) {
+        
         return false;
       }
       return true;
@@ -77,7 +78,7 @@ class VerificationType extends Model
         $c->Description=$description;
         $c->save();
       } catch (\Throwable $th) {
-        
+       
         return false;
       }
       return true;

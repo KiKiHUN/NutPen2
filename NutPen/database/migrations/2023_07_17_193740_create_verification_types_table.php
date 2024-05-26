@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('verification_types', function (Blueprint $table) {
             $table->id('ID');
-            $table->string('Name',20);
+            $table->string('Name',50);
             $table->string('Description',200)->nullable();
             $table->timestamps();
         });

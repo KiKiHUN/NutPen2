@@ -24,11 +24,14 @@
         <div class="col-12 tm-block-col">
             <div class="tm-bg-primary-dark tm-block tm-block-taller tm-block-scroll">
                 @if ($status==1)
+                <h2 class="tm-block-title">Felhasználó típus választása</h2>
+                <div class="filderdiv">
                     <button type="submit" class="fofilterbtn" value="a">Admin</button>
                     <button type="submit" class="fofilterbtn" value="t">Tanár</button>
                     <button type="submit" class="fofilterbtn" value="s">Diák</button>
                     <button type="submit" class="fofilterbtn" value="p">Szülő</button>
                     <button type="submit" class="fofilterbtn" value="h">Fő emberek</button>
+                </div>
                 @endif
                
                 @if ($status == 0)
@@ -134,7 +137,7 @@
                     </div>
                 @endif
                 @if ($status == 3)
-                    <h2 class="tm-block-title">Felhasználó módisítás</h2>
+                    <h2 class="tm-block-title">Felhasználó módisítása</h2>
                     <div id="additional-attributes" data-attributes="{{ $aditionals }}"></div>
                         <form id="ujFelh" class="formCenterContent" action="/fo/felhasznalomodositas/mentes" method="post">
                             @csrf
@@ -153,8 +156,17 @@
                                 <div class="inputcolumn">
                                     <label for="role">Típus: </label>
                                     <select id="role" class="textfield" name="role" disabled>
+                                        @php
+                                            $pweditable=true;
+                                        @endphp
                                         @foreach ($roles as $role)
                                             <option value="{{ $role->ID }}" {{ $user->RoleTypeID == $role->ID ? 'selected' : '' }}>{{ $role->Name }}</option>
+                                            @php
+                                                if (($user->RoleTypeID == $role->ID)&&($role->Name=="Admin"||$role->Name=="Fő felhasználó"))
+                                                {
+                                                    $pweditable=false;
+                                                }
+                                            @endphp
                                         @endforeach
                                     </select>
                                 </div>
@@ -177,12 +189,14 @@
                                     <label for="phone">Telefonszám: </label>
                                     <input type="text" class="textfield" id="phone" name="phone" value="{{ $user->Phone }}" required>
                                 </div>
-
-
-                                <div class="inputcolumn">
-                                    <label for="pw">Jelszó: (üresen hagyva nem módosul)</label>
-                                    <input type="password" class="textfield" id="pw" name="pw" value="">
-                                </div>
+                               
+                                @if ($pweditable)
+                                    <div class="inputcolumn">
+                                        <label for="pw">Jelszó: (üresen hagyva nem módosul)</label>
+                                        <input type="password" class="textfield" id="pw" name="pw" value="">
+                                    </div>
+                                @endif
+                              
                                 
                                 <div id="additional-fields">
                                     

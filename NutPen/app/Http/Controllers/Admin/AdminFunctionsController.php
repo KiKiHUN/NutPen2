@@ -565,6 +565,7 @@ class AdminFunctionsController extends Controller
         {
             if(DatabaseController::EndYearBackup())
             {
+
                 return redirect('/vezerlopult')->with('successmessage', "sikeres mentés");
             }else {
                 return redirect('/vezerlopult')->with('failedmessage', "sikertelen mentés");
@@ -605,6 +606,8 @@ class AdminFunctionsController extends Controller
             return view('userviews/admin/banner',['status'=>3,'banner'=>$banner,'file'=>$file]);
         }
 
+
+
         function EditBanner(Request $request) 
         {
             $name="";
@@ -622,16 +625,27 @@ class AdminFunctionsController extends Controller
                
                 $request->validate([
                     'file_upload' => 'required|file|mimes:jpg,png|max:2048',
+                ],
+                [
+                    'file_upload.required' => 'A fájl feltöltése kötelező.',
+                    'file_upload.file' => 'A feltöltendő fájl formátuma nem megfelelő.',
+                    'file_upload.mimes' => 'A feltöltendő fájl csak jpg és png formátumú lehet.',
+                    'file_upload.max' => 'A feltöltendő fájl mérete legfeljebb 2MB lehet.',
                 ]);
                 $folderPath = '\public\images\LoginBanner';
                 $folderStructurePath = storage_path().'\app'. $folderPath;
     
                 if (! File::exists($folderStructurePath)) {
-                    if (!File::makeDirectory($folderStructurePath)) {
+                    if (!File::makeDirectory($folderStructurePath,0755,true)) {
                         return redirect()->back()->with('failedmessage', "Sikertelen mentés, szerver IO hiba");
                     }
                 }
-                
+
+             
+                $banner=BannerMsg::where("ID",$request->bannerID)->first();
+                $lastimagename=$banner->ImagePath;
+
+
                 // Store the file in storage\app\public folder
                 $file = $request->file('file_upload');
                 $fileDetails=pathinfo($file->getClientOriginalName());
@@ -653,6 +667,17 @@ class AdminFunctionsController extends Controller
                {
                 return redirect()->back()->with('failedmessage', "Sikertelen mentés, szerver IO hiba");
                }
+             
+
+               // Get all files in the directory
+               $files = glob($folderStructurePath . '/*');
+               foreach($files as $file) {
+                   if(is_file($file) && basename($file) ==  $lastimagename) {
+                       unlink($file);
+                       break;
+                   }
+               }
+
             }
             if (!BannerMsg::EditMSG($request->bannerID,$name,$desc,$finalname)) {
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
@@ -694,16 +719,21 @@ class AdminFunctionsController extends Controller
             }
             
             if (isset($request->file_upload)) {
-               
                 $request->validate([
                     'file_upload' => 'required|file|mimes:jpg,png|max:2048',
+                ],
+                [
+                    'file_upload.required' => 'A fájl feltöltése kötelező.',
+                    'file_upload.file' => 'A feltöltendő fájl formátuma nem megfelelő.',
+                    'file_upload.mimes' => 'A feltöltendő fájl csak jpg és png formátumú lehet.',
+                    'file_upload.max' => 'A feltöltendő fájl mérete legfeljebb 2MB lehet.',
                 ]);
                
                 $folderPath = '\public\images\LoginBanner';
                 $folderStructurePath = storage_path().'\app'. $folderPath;
     
                 if (! File::exists($folderStructurePath)) {
-                    if (!File::makeDirectory($folderStructurePath)) {
+                    if (!File::makeDirectory($folderStructurePath,0755,true)) {
                         return redirect()->back()->with('failedmessage', "Sikertelen mentés, szerver IO hiba");
                     }
                 }
@@ -740,6 +770,18 @@ class AdminFunctionsController extends Controller
 
         function RemoveBanner($bannerID) 
         {
+            $folderPath = '\public\images\LoginBanner';
+            $folderStructurePath = storage_path().'\app'. $folderPath;
+            $banner=BannerMsg::where("ID",$bannerID)->first();
+            $lastimagename=$banner->ImagePath;
+            // Get all files in the directory
+            $files = glob($folderStructurePath . '/*');
+            foreach($files as $file) {
+                if(is_file($file) && basename($file) ==  $lastimagename) {
+                    unlink($file);
+                    break;
+                }
+            }
             if (!BannerMsg::RemoveMSG($bannerID)) {
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
             }
@@ -805,7 +847,7 @@ class AdminFunctionsController extends Controller
             if (!StudentsClass::AddNewStudent($ClassID,$StudentID)) {
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
             }
-            return redirect('/admin/osztalyok/diakhozzad/'.$ClassID)->with('successmessage', "sikeres mentés");
+            return redirect('/admin/osztaly/diakok/'.$ClassID)->with('successmessage', "sikeres mentés");
         }
         
        
@@ -936,7 +978,7 @@ class AdminFunctionsController extends Controller
             if (!ClassesLessons::RemoveClassFromLesson($lessonID,$classID)) {
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
             }
-            return redirect('/admin/tanora/osztalyok/'.$lessonID)->with('successmessage', "sikeres mentés");
+            return redirect('/admin/osztalyok/tanora/'.$lessonID)->with('successmessage', "sikeres mentés");
         }
         
 
@@ -967,7 +1009,7 @@ class AdminFunctionsController extends Controller
             if (!ClassesLessons::AddClassToLesson($lessonID,$classID)) {
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
             }
-            return redirect('/admin/osztalyok/diakhozzad/'.$classID)->with('successmessage', "sikeres mentés");
+            return redirect('/admin/osztalyok/tanora/'.$classID)->with('successmessage', "sikeres mentés");
         }
         
 
@@ -1488,6 +1530,7 @@ class AdminFunctionsController extends Controller
             if ($request->description!=null) {
                 $description=$request->description;
             }
+            dd("a");
             if (!VerificationType::AddNewVerif($name,$description)) {
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
             }
@@ -1505,6 +1548,7 @@ class AdminFunctionsController extends Controller
             if ($request->description!=null) {
                 $description=$request->description;
             }
+            
             if (!VerificationType::EditVerif($request->verificationID,$name,$description)) {
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
             }
@@ -1657,10 +1701,10 @@ class AdminFunctionsController extends Controller
                     'name' => $warning->Name,
                     'description' => $warning->Description,
                     'datetime' => $warning->DateTime,
-                    'whogavename' => $whogave->LName." ". $whogave->FName,
+                    'whogavename' => $whogave->FName." ". $whogave->LName,
                     'whogaveID' => $warning->WhoGaveID,
                     'studentID'=>$warning->StudentID,
-                    'studentname'=>$warning->GetStudent->LName." ". $warning->GetStudent->FName
+                    'studentname'=>$warning->GetStudent->FName." ". $warning->GetStudent->LName
                 ];
             }
             return view('userviews/admin/warning',['status'=>0,'warnings'=>$wariningswithUsers]);

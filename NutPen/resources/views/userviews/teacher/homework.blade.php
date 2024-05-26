@@ -161,7 +161,7 @@
                                                         <td> <span class="noMissing-button" onclick="AskForCommentText('{{ $item['hw']->StudentID }}', '{{ $item['hw']->HomeWorkID }}','{{ $item['hw']->Answer }}')">Még nincs hozzászólás</span></td>
                                                     @endif
                                                     @if (isset($item["hw"]->FileName))
-                                                        <td><div class="btnplacer"><p>{{$item["hw"]->FileName }}</p><button class="DownloadButton" title="{{ $item['hw']->FileName }}" onclick="location.href = '/admin/bekuldotthazifeladat/letoltes/{{ $item['hw']->HomeWorkID }}/{{ $item['hw']->StudentID }}';" >Letöltés</button></div></td>
+                                                        <td><div class="btnplacer"><p>{{$item["hw"]->FileName }}</p><button class="DownloadButton" title="{{ $item['hw']->FileName }}" onclick="location.href = '/tanar/bekuldotthazifeladat/letoltes/{{ $item['hw']->HomeWorkID }}/{{ $item['hw']->StudentID }}';" >Letöltés</button></div></td>
                                                     @else
                                                         <td>Nincs beküldött házifeladat</td>
                                                     @endif

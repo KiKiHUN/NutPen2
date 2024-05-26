@@ -72,7 +72,6 @@
 
                 @if ($status == 2)
                     <h2 class="tm-block-title">Új banner üzenet</h2>
-                    
                         <form id="ujFelh" class="formCenterContent" action="/admin/ujbannermentes" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="NewUser">
@@ -85,6 +84,9 @@
                                     <label for="desc">Leírás </label>
                                     <td><input type="text" name="desc" id="desc" class="textfield"></td>
                                 </div>
+                                @error('file_upload')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
                                 <div class="inputcolumn">
                                     <label for="file_upload">Kép</label>
                                     <td><input type="file" name="file_upload" id="file_upload" accept="image/png, image/gif, image/jpeg"></td>
@@ -99,7 +101,7 @@
                 @endif
                 @if ($status ==3)
                     <h2 class="tm-block-title">Banner üzenet módosítása</h2>
-                    
+
                         <form id="ujRang" class="formCenterContent" action="/admin/bannermodositas" method="post" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="bannerID" id="bannerID" value="{{ $banner->ID }}">
@@ -119,7 +121,9 @@
                                         <img class='BannerIMG' src='{{ $file }}' id="oriimg", name="oriimg"></img>
                                     </div>
                                 @endif
-                               
+                                @error('file_upload')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
                                 <div class="inputcolumn">
                                     <label for="file_upload">Kép módosítása</label>
                                     <td><input type="file" name="file_upload" id="file_upload" accept="image/png, image/gif, image/jpeg"></td>

@@ -36,6 +36,7 @@
                                 @csrf
                                 <div class="form-group">
                                     <label for="ID">Azonosító</label>
+                                    <input type="hidden" name="userid" value="a00000" id="userid"> 
                                     <input name="ID" type="text" class="form-control validate" id="ID"
                                         value="a00000" disabled required />
                                 </div>

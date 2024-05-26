@@ -272,7 +272,7 @@ Route::middleware(['blockIP'])->group(function () {
         Route::get('/szulo/hazifeladatok/{studID}',[App\Http\Controllers\StudParent\StudParentController::class,'HomeWorks']);
         Route::get('/szulo/hianyzasigazolas/{missID}',[App\Http\Controllers\StudParent\StudParentController::class,'EditMissings']);
 
-        Route::get('/szulo/hazifeladat/letoltes/{homewokID}',[App\Http\Controllers\StudParent\StudParentController::class,'DownloadHomeWork']);
+        Route::get('/szulo/hazifeladat/letoltes/{homewokID}/{studentID}',[App\Http\Controllers\StudParent\StudParentController::class,'DownloadHomeWork']);
 
       
     });

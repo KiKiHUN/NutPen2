@@ -25,7 +25,7 @@
                 <div class="MainWarnings">
                     @if ($newwarnings)
                         @foreach ( $newwarnings as $warning)
-                            <h5>Figyelmzettése van {{ $warning["whogavename"] }}({{ $warning["whogaveID"] }}) dolgozótól! : {{ $warning["name"] }}</h5>
+                            <h5>Figyelmeztetése van {{ $warning["whogavename"] }}({{ $warning["whogaveID"] }}) dolgozótól! : {{ $warning["name"] }}</h5>
                         @endforeach
                     @endif
                 </div> 

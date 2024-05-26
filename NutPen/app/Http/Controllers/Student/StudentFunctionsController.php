@@ -224,13 +224,18 @@ class StudentFunctionsController extends Controller
             $request->validate([
                 //'file_upload' => 'required|mimes:pdf,jpg,png,txt|max:8192',
                 'file_upload' => 'max:8192',
+            ],
+            [
+                'file_upload.max' => 'A feltöltendő fájl mérete legfeljebb 8MB lehet.',
             ]);
+            
+          
            
             $folderPath = '\public\homeworks\id_'.$request->homeworkID;
             $folderStructurePath = storage_path().'\app'. $folderPath;
 
             if (! File::exists($folderStructurePath)) {
-                if (!File::makeDirectory($folderStructurePath)) {
+                if (!File::makeDirectory($folderStructurePath,0755,true)) {
                     return redirect()->back()->with('failedmessage', "Sikertelen mentés, szerver IO hiba");
                 }
             }

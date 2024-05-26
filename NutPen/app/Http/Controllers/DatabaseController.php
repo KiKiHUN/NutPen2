@@ -36,7 +36,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
-
+use ZipArchive;
 class DatabaseController extends Controller
 {
     public static function IsFirstRun()
@@ -72,6 +72,18 @@ class DatabaseController extends Controller
             if(is_file($file) && basename($file) !== $currentSessionId) {
                 unlink($file);
             }
+        } 
+        $dbfolderStructurePath = storage_path().'\app\SChoolYearDBBackup';
+        $HomwWorkfolderStructurePath = storage_path().'\app\public\homeworks';
+        $bannerfolderStructurePath = storage_path().'\app\public\images\LoginBanner';
+        if (File::exists($HomwWorkfolderStructurePath)) {
+            File::deleteDirectory($HomwWorkfolderStructurePath);
+        }
+        if (File::exists($dbfolderStructurePath)) {
+            File::deleteDirectory($dbfolderStructurePath);
+        }
+        if (File::exists($bannerfolderStructurePath)) {
+            File::deleteDirectory($bannerfolderStructurePath);
         }
         try {
             DB::statement("SET foreign_key_checks=0");
@@ -199,10 +211,10 @@ class DatabaseController extends Controller
             }
         }
 
-        $folderStructurePath = storage_path().'\app\SChoolYearBackup';
+        $folderStructurePath = storage_path().'\app\SChoolYearDBBackup';
 
         if (! File::exists($folderStructurePath)) {
-            if (!File::makeDirectory($folderStructurePath)) {
+            if (!File::makeDirectory($folderStructurePath,0755,true)) {
                 return redirect()->back()->with('failedmessage', "Sikertelen mentés, szerver IO hiba");
             }
         }
@@ -244,6 +256,19 @@ class DatabaseController extends Controller
 
         // Check if the command was executed successfully
         if ($returnVar === 0) {
+            $HomwWorkfolderStructurePath = storage_path().'\app\public\homeworks';
+            if ( !self::ArchiveFiles($HomwWorkfolderStructurePath,$outfilepath)) {
+                return  false;
+            }
+           
+            
+            if (File::exists($HomwWorkfolderStructurePath)) {
+                File::deleteDirectory($HomwWorkfolderStructurePath);
+            }
+            if (File::exists($folderStructurePath)) {
+                File::deleteDirectory($folderStructurePath);
+            }
+           
             if ( self::EndYearNuke()) {
                 if ($type) {
                     $pp=PublicPermissions::where('PermissionType', '=', $type->ID)->latest()->first();
@@ -258,6 +283,62 @@ class DatabaseController extends Controller
         } else {
            
             return  false;
+        }
+    }
+    public static function ArchiveFiles($homeworkpath,$dbfilepath)
+    {
+        
+        $folderStructurePath = storage_path().'\app\SChoolYearBackupArchive';
+
+        if (! File::exists($folderStructurePath)) {
+            if (!File::makeDirectory($folderStructurePath,0755,true)) {
+                return false;
+            }
+        }
+        // Zip file path
+        $filename = date('Ym').'_backup_' . date('Ymd_His') . '.zip';
+        $zipFilePath =   $folderStructurePath ."\\".$filename;
+
+        // Create a new zip archive
+        $zip = new \ZipArchive;
+
+        if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
+            // Add homework folder
+            if (File::exists($homeworkpath)) {
+                self::addFolderToZip($homeworkpath, $zip, 'homeworks');
+            }
+          
+            // Add DB file
+            if (file_exists($dbfilepath)) {
+                $zip->addFile($dbfilepath, 'SChoolYearBackup/' . basename($dbfilepath));
+            }
+            // Close the zip archive
+            $zip->close();
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private static function addFolderToZip($folder, $zipArchive, $zipFolder)
+    {
+        $files = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($folder),
+            \RecursiveIteratorIterator::SELF_FIRST
+        );
+        foreach ($files as $file)
+        {
+            // Skip directories (they would be added automatically)
+            if (!$file->isDir())
+            {
+                // Get real and relative path for current file
+                $filePath = $file->getRealPath();
+                $relativePath = $zipFolder . '/' . substr($filePath, strlen($folder) + 1);
+                $str = str_replace('\\', '/',  $relativePath);
+                // Add current file to archive
+                $zipArchive->addFile($filePath,  $str);
+            }
         }
     }
 

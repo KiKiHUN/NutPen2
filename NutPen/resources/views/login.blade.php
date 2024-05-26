@@ -57,10 +57,11 @@
                             </form>
                         </div>
                         admin: a00000 alma12345<br>
-                        szülő: p0q4a7k0 alma12345<br>
-                        tanár: t9p6c2r2 alma12345<br>
-                        fő felhasználó: h9w4s2g1 alma12345<br>
-                        diák: s7y2u4e3 alma12345
+                        szülő: p1b4j8u2 alma12345<br>
+                        tanár: t5v5l8g6 alma12345<br>
+                        osztályfőnök tanár: t8d3n2t0 alma12345<br>
+                        fő felhasználó: h2h5c6q3 alma12345<br>
+                        diák: s2m9u0f7 alma12345
                     </div>
                 </div>
             </div>
