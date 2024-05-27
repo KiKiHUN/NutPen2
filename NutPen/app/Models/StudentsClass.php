@@ -57,7 +57,7 @@ class StudentsClass extends Model
           }
        
       } catch (\Throwable $th) {
-        dd($th);
+        //dd($th);
        return false;
       }
       

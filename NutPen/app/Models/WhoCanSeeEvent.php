@@ -61,7 +61,7 @@ class WhoCanSeeEvent extends Model
         }
       
       } catch (\Throwable $th) {
-        dd($th);
+        //dd($th);
         return false;
       }
     

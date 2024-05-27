@@ -74,33 +74,54 @@ class LoginController extends Controller
             switch ($azonositoValaszto) {
                 case 'a':
                     $user = Admin::where([
-                        'UserID' => $request['ID'],
-                        'password' => PwHasher::hasheles($request['password'])
+                        'UserID' => $request['ID']
                     ])->first();
+                    if ($user) {
+                        if (!PwHasher::PWCompare($request['password'],$user->password)) {
+                            $user=null;
+                        }
+                    }
+                        
                     break;
                 case 's':
                     $user = Student::where([
-                        'UserID' => $request['ID'],
-                        'password' => PwHasher::hasheles($request['password'])
+                        'UserID' => $request['ID']
                     ])->first();
+                    if ($user) {
+                        if (!PwHasher::PWCompare($request['password'],$user->password)) {
+                            $user=null;
+                        }
+                    }
                     break;
                 case 't':
                     $user = Teacher::where([
-                        'UserID' => $request['ID'],
-                        'password' => PwHasher::hasheles($request['password'])
+                        'UserID' => $request['ID']
                     ])->first();
+                    if ($user) {
+                        if (!PwHasher::PWCompare($request['password'],$user->password)) {
+                            $user=null;
+                        }
+                    }
                     break;
                 case 'p':
                     $user = StudParent::where([
-                        'UserID' => $request['ID'],
-                        'password' => PwHasher::hasheles($request['password'])
+                        'UserID' => $request['ID']
                     ])->first();
+                    if ($user) {
+                        if (!PwHasher::PWCompare($request['password'],$user->password)) {
+                            $user=null;
+                        }
+                    }
                     break;
                 case 'h':
                     $user = HeadUser::where([
-                        'UserID' => $request['ID'],
-                        'password' => PwHasher::hasheles($request['password'])
+                        'UserID' => $request['ID']
                     ])->first();
+                    if ($user) {
+                        if (!PwHasher::PWCompare($request['password'],$user->password)) {
+                            $user=null;
+                        }
+                    }
                     break;
             }
 
@@ -128,10 +149,10 @@ class LoginController extends Controller
     
     public function ensureIsNotRateLimited($key,$IP)
     {
-        if (!RateLimiter::tooManyAttempts($key, 5)) {
+        if (!RateLimiter::tooManyAttempts($key, 50)) {
             return -1;
         }
-        if (RateLimiter::tooManyAttempts($key, 10)) {
+        if (RateLimiter::tooManyAttempts($key, 100)) {
            
             if (!BannedIP::EditUUIDBannIfExist($key,1)) {
                 if (!BannedIP::AddNewBann($key,1,$IP,0)) {

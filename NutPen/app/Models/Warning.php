@@ -86,7 +86,7 @@ class Warning extends Model
         $c->DateTime=date('Y-m-d H:i:s');
         $c->save();
       } catch (\Throwable $th) {
-        dd($th);
+        //dd($th);
         return false;
       }
       return true;

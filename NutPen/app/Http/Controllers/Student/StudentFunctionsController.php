@@ -83,7 +83,7 @@ class StudentFunctionsController extends Controller
             return false;
         });
     
-        dd($classConnections);
+        //dd($classConnections);
 
 
         return view('userviews/student/lesson',['status'=>0,'lessonclassconecttions'=>$classConnections]);

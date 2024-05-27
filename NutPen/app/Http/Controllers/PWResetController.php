@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\CustomClasses\PwHasher;
 use App\Models\Admin;
 use App\Models\HeadUser;
 use App\Models\Student;
@@ -43,7 +44,7 @@ class PWResetController extends Controller
 
         if ($user)
         {
-            $user->password =$this->hasheles( $pw);
+            $user->password =PwHasher::HashPWText($pw);
             $user->DefaultPassword =false;
             try {
                 $user->save();
@@ -62,16 +63,7 @@ class PWResetController extends Controller
         //return view('flights.show',['flight'=>$flight]);
     }
     
-    function hasheles($be)
-    {
-        $prefix = '$2y$';
-        $cost = '10';
-        $salt = '$GodLuckCrackingThePW69$';
-        $blowfishPrefix = $prefix.$cost.$salt;
-        $password = $be;
-        $hash = crypt($password, $blowfishPrefix);
-       return  $hash;
-    }
+   
 
     function registerGuard($firstChar,$user)
     {

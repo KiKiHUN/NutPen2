@@ -37,7 +37,7 @@ class BannerMsg extends Model
       
         $c->save();
       } catch (\Throwable $th) {
-        dd($th);
+        //dd($th);
         return false;
       }
       return true;

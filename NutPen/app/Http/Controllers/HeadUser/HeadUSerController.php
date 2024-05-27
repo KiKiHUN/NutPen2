@@ -147,7 +147,7 @@ class HeadUSerController extends Controller
             
             if ((!empty($request->pw))&&$request->pw!=" ") {
                 
-                $hashedpw=PwHasher::hasheles($request->pw);
+                $hashedpw=PwHasher::HashPWText($request->pw);
                 $user->password= $hashedpw;
                 $user->DefaultPassword= 1;
                 
@@ -155,7 +155,7 @@ class HeadUSerController extends Controller
             try { 
                 $user->save();
             } catch (\Throwable $th) {
-                dd($th);
+                //dd($th);
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
             }
             return redirect('/fo/felhasznalok/'.$azonositoValaszto)->with('successmessage', "Sikeres mentés.");
@@ -275,7 +275,7 @@ class HeadUSerController extends Controller
         }
     
         if ($good) {
-            $hashedpw=PwHasher::hasheles($request->pw);
+            $hashedpw=PwHasher::HashPWText($request->pw);
             try {
                 $f->FName=$request->fname;
                 $f->LName=$request->lname;
@@ -293,7 +293,7 @@ class HeadUSerController extends Controller
                 $a='Sikeres mentés. Azonosító: '.$ID;
                 return redirect('/fo/felhasznalok')->with('successmessage', $a);
             } catch (\Throwable $th) {
-                dd($th);
+                //dd($th);
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
             }
         }
@@ -403,7 +403,7 @@ class HeadUSerController extends Controller
             $u->role=(RoleType::where('ID',$user->RoleTypeID)->first())->Name;
             $users[]=$u;
         }
-        dd($users);
+        //dd($users);
         return view('userviews/headuser/Felh',['status'=>0,'users'=>$users]);
     }
 //users

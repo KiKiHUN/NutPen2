@@ -146,7 +146,7 @@ class AdminFunctionsController extends Controller
                
                 if ((!empty($request->pw))&&$request->pw!=" ") {
                   
-                    $hashedpw=PwHasher::hasheles($request->pw);
+                    $hashedpw=PwHasher::HashPWText($request->pw);
                     $user->password= $hashedpw;
                     $user->DefaultPassword= 1;
                     
@@ -154,7 +154,7 @@ class AdminFunctionsController extends Controller
                 try { 
                     $user->save();
                 } catch (\Throwable $th) {
-                    dd($th);
+                    //dd($th);
                     return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
                 }
                 return redirect('/admin/felhasznalok/'.$azonositoValaszto)->with('successmessage', "Sikeres mentés.");
@@ -274,7 +274,7 @@ class AdminFunctionsController extends Controller
             }
         
             if ($good) {
-                $hashedpw=PwHasher::hasheles($request->pw);
+                $hashedpw=PwHasher::HashPWText($request->pw);
                 try {
                     $f->FName=$request->fname;
                     $f->LName=$request->lname;
@@ -292,7 +292,7 @@ class AdminFunctionsController extends Controller
                     $a='Sikeres mentés. Azonosító: '.$ID;
                     return redirect('/admin/felhasznalok')->with('successmessage', $a);
                 } catch (\Throwable $th) {
-                    dd($th);
+                    //dd($th);
                     return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
                 }
             }
@@ -402,7 +402,7 @@ class AdminFunctionsController extends Controller
                 $u->role=(RoleType::where('ID',$user->RoleTypeID)->first())->Name;
                 $users[]=$u;
             }
-            dd($users);
+            //dd($users);
             return view('userviews/admin/Felh',['status'=>0,'users'=>$users]);
         }
     //users
@@ -1530,7 +1530,7 @@ class AdminFunctionsController extends Controller
             if ($request->description!=null) {
                 $description=$request->description;
             }
-            dd("a");
+            //dd("a");
             if (!VerificationType::AddNewVerif($name,$description)) {
                 return redirect()->back()->with('failedmessage', "Mentés sikeretlen");
             }

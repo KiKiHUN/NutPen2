@@ -26,7 +26,7 @@ class RegisterController extends Controller
         if (DatabaseController::IsFirstRun()) {
             $a=new Admin();
             $a->UserID=$request->userid;
-            $a->password=PwHasher::hasheles($request->password);
+            $a->password=PwHasher::HashPWText($request->password);
             $a->FName=$request->fname;
             $a->LName=$request->lname;
             $a->email=$request->email;
