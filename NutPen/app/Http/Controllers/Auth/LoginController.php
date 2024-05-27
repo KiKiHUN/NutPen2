@@ -149,10 +149,10 @@ class LoginController extends Controller
     
     public function ensureIsNotRateLimited($key,$IP)
     {
-        if (!RateLimiter::tooManyAttempts($key, 50)) {
+        if (!RateLimiter::tooManyAttempts($key, 5)) {
             return -1;
         }
-        if (RateLimiter::tooManyAttempts($key, 100)) {
+        if (RateLimiter::tooManyAttempts($key, 10)) {
            
             if (!BannedIP::EditUUIDBannIfExist($key,1)) {
                 if (!BannedIP::AddNewBann($key,1,$IP,0)) {
